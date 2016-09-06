@@ -33,7 +33,7 @@
                         </div>
 
                         <div class="form-group">
-                            {{ Form::label('code', trans('admin.page.file.edit.size'), ['class' => 'col-sm-4 control-label colon-after']) }}
+                            {{ Form::label('size', trans('admin.page.file.edit.size'), ['class' => 'col-sm-4 control-label colon-after']) }}
                             <div class="col-sm-6">
                                 <p class="form-control-static">{{ $file->size ? StringHelper::formatFileSize($file->size) : '-' }}</p>
                             </div>
@@ -73,7 +73,7 @@
 
                         @if (in_array($page->type, ['Certificates of Data Wipe','Certificates of Recycling','Settlements'], true))
                             <div class="form-group{{----}}@if($errors->has('shipment')) has-error @endif">
-                                {{ Form::label('name', trans('admin.page.file.edit.shipment'), ['class' => 'col-sm-4 control-label colon-after']) }}
+                                {{ Form::label('shipment', trans('admin.page.file.edit.shipment'), ['class' => 'col-sm-4 control-label colon-after']) }}
                                 <div class="col-sm-6">
                                     {{ Form::text('shipment', $file->shipment->lotNumber, ['class' => 'form-control']) }}
                                     @if ($errors->has('shipment'))

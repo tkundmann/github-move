@@ -38,12 +38,14 @@
                                             </div>
                                         </div>
 
+                                        {{--
                                         <div class="form-group">
                                             {{ Form::label('type', trans('admin.page.page.type'), ['class' => 'col-sm-3 control-label colon-after']) }}
                                             <div class="col-sm-6">
                                                 <p class="form-control-static">{{ $page->type }}</p>
                                             </div>
                                         </div>
+                                        --}}
 
                                         <div class="form-group{{----}}@if($errors->has('name')) has-error @endif">
                                             {{ Form::label('name', trans('admin.page.page.name'), ['class' => 'col-sm-3 control-label colon-after']) }}
@@ -119,71 +121,11 @@
                                         <hr/>
 
                                         <div class="text-center">
-                                            <button type="submit" class="btn btn-success single-click"><i
-                                                        class="fa fa-btn fa-floppy-o"></i>@lang('common.save')
-                                            </button>
+                                            <button type="submit" class="btn btn-success single-click"><i class="fa fa-btn fa-floppy-o"></i>@lang('common.save')</button>
+                                            <a href="{{ route('admin.page.file.list', [ 'id' => $page->id]) }}" class="btn btn-primary margin-left-md"><i class="fa fa-btn fa-file-o"></i>@lang('admin.page.page.view_files')</a>
                                         </div>
 
                                         {{ Form::close() }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        @lang('admin.page.edit.files')
-                                    </div>
-                                    <div class="panel-body">
-                                        <a href="{{ route('admin.page.file.create', ['id' => $page->id]) }}" class="btn btn-success">
-                                            <i class="fa fa-btn fa-upload"></i>@lang('common.upload')
-                                        </a>
-
-                                        <hr />
-
-                                        <table class="table table-striped table-bordered withHover">
-                                            <thead>
-                                                <tr>
-                                                    <th>@lang('admin.page.file.edit.name')</th>
-                                                    <th>@lang('admin.page.file.edit.filename')</th>
-                                                    <th>@lang('admin.page.file.edit.size')</th>
-                                                    @if (in_array($page->type, ['Certificates of Data Wipe','Certificates of Recycling','Settlements'], true))
-                                                    <th>@lang('admin.page.file.edit.shipment')</th>
-                                                    @endif
-                                                    @if ($page->type == 'Standard')
-                                                    <th>@lang('admin.page.file.edit.file_date')</th>
-                                                    @endif
-                                                    <th>@lang('common.actions')</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            @foreach ($page->files as $file)
-                                                <tr>
-                                                    <td class="pointer" onclick="window.document.location='{{ route('admin.page.file.edit', ['fileId' => $file->id, 'pageId' => $page->id]) }}';">{{ $file->name ? str_limit($file->name, $limit) : '-' }}</td>
-                                                    <td class="pointer" onclick="window.document.location='{{ route('admin.page.file.edit', ['fileId' => $file->id, 'pageId' => $page->id]) }}';">{{ $file->filename ? str_limit($file->filename, $limit) : '-' }}</td>
-                                                    <td class="pointer" onclick="window.document.location='{{ route('admin.page.file.edit', ['fileId' => $file->id, 'pageId' => $page->id]) }}';">{{ $file->size ? StringHelper::formatFileSize($file->size) : '-' }}</td>
-                                                    @if (in_array($page->type, ['Certificates of Data Wipe','Certificates of Recycling','Settlements'], true))
-                                                    <td class="pointer" onclick="window.document.location='{{ route('admin.page.file.edit', ['fileId' => $file->id, 'pageId' => $page->id]) }}';">{{ $file->shipment ? $file->shipment->lotNumber : '-' }}</td>
-                                                    @endif
-                                                    @if ($page->type == 'Standard')
-                                                    <td class="pointer" onclick="window.document.location='{{ route('admin.page.file.edit', ['fileId' => $file->id, 'pageId' => $page->id]) }}';">{{ $file->fileDate ? $file->fileDate->format('m/Y') : '-' }}</td>
-                                                    @endif
-                                                    <td class="text-center">
-                                                        <a href="{{ route('admin.page.file.remove', ['fileId' => $file->id, 'pageId' => $page->id]) }}"
-                                                           class="btn btn-danger btn-xs file-remove"
-                                                           data-file="{{ $file->name }}">
-                                                            <i class="fa fa-btn fa-trash"></i>@lang('common.remove')
-                                                        </a>
-                                                        <a href="{{ $file->url }}" target="_blank"
-                                                           class="btn btn-primary btn-xs">
-                                                            <i class="fa fa-btn fa-download"></i>@lang('common.download')
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                            </tbody>
-                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -193,37 +135,4 @@
             </div>
         </div>
     </div>
-@endsection
-
-@section('js')
-<script>
-$(document).ready(function() {
-    $(".file-remove").click(function (event) {
-        event.preventDefault();
-
-        var url = $(this).attr("href");
-
-        bootbox.dialog({
-            message: $(this).attr('data-file'),
-            title: "@lang('admin.page.edit.confirm_remove')",
-            buttons: {
-                ok: {
-                    label: '@lang('common.remove')',
-                    className: 'btn-danger',
-                    callback: function() {
-                        document.location.href = url;
-                    }
-                },
-                cancel: {
-                    label: '@lang('common.cancel')',
-                    className: 'btn-default',
-                    callback: function() {
-                        // nothing
-                    }
-                }
-            }
-        });
-    });
-});
-</script>
 @endsection

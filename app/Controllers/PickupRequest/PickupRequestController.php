@@ -194,11 +194,11 @@ class PickupRequestController extends ContextController
                 if ($siteName) {
                     $pickupRequestAddress->name = $siteName;
                 }
-            
+
                 $pickupRequestAddress->company_name = trim(Input::get('company_name'));
-                $pickupRequestAddress->contact_name = trim(Input::get('contact_name'));
-                $pickupRequestAddress->contact_address_1 = trim(Input::get('contact_address_1'));
-                $pickupRequestAddress->contact_address_2 = trim(Input::get('contact_address_2'));
+                $pickupRequestAddress->contact_name = Crypt::encrypt(trim(Input::get('contact_name')));
+                $pickupRequestAddress->contact_address_1 = Crypt::encrypt(trim(Input::get('contact_address_1')));
+                $pickupRequestAddress->contact_address_2 = Crypt::encrypt(trim(Input::get('contact_address_2')));
                 $pickupRequestAddress->contact_city = trim(Input::get('contact_city'));
                 $pickupRequestAddress->contact_state = trim(Input::get('contact_state'));
                 $pickupRequestAddress->contact_zip = trim(Input::get('contact_zip'));
@@ -211,9 +211,9 @@ class PickupRequestController extends ContextController
                     $pickupRequestAddress->company_division = trim(Input::get('company_division'));
                 }
 
-                $pickupRequestAddress->contact_phone_number = trim(Input::get('contact_phone_number'));
-                $pickupRequestAddress->contact_cell_number = trim(Input::get('contact_cell_number'));
-                $pickupRequestAddress->contact_email_address = trim(Input::get('contact_email_address'));
+                $pickupRequestAddress->contact_phone_number = Crypt::encrypt(trim(Input::get('contact_phone_number')));
+                $pickupRequestAddress->contact_cell_number = Crypt::encrypt(trim(Input::get('contact_cell_number')));
+                $pickupRequestAddress->contact_email_address = Crypt::encrypt(trim(Input::get('contact_email_address')));
             
                 $pickupRequestAddress->site_id = $this->site->id;
                 $pickupRequestAddress->save();

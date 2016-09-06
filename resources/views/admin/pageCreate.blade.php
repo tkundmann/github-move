@@ -28,6 +28,7 @@
                                 </div>
                             </div>
 
+                            {{--
                             <div class="form-group @if($errors->has('type')) has-error @endif">
                                 {{ Form::label('type', trans('admin.page.page.type'), ['class' => 'col-sm-3 control-label colon-after']) }}
                                 <div class="col-sm-6">
@@ -38,6 +39,8 @@
                                     @endif
                                 </div>
                             </div>
+                            --}}
+                            <input type="hidden" name="type" value="Standard">
 
                             <div class="form-group{{----}}@if($errors->has('name')) has-error @endif">
                                 {{ Form::label('name', trans('admin.page.page.name'), ['class' => 'col-sm-3 control-label colon-after']) }}
@@ -212,7 +215,8 @@
             }
 
             typeSelect.on('loaded.bs.select', function (event) {
-                determineVisibility(typeSelect.val());
+                // determineVisibility(typeSelect.val());
+                determineVisibility('Standard');
             });
         });
     </script>

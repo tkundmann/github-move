@@ -26,6 +26,9 @@
                                         formaction="{{ route('asset.search.export') }}" class="btn btn-primary single-click">
                                     <i class="fa fa-btn fa-table"></i> @lang('asset.search.export_assets')
                                 </button>
+                                <button type="button" class="btn btn-primary resetButton">
+                                    <i class="fa fa-btn fa-undo"></i> @lang('common.reset')
+                                </button>
                             </div>
 
                             <hr>
@@ -291,6 +294,11 @@
             });
         @endif
         @endforeach
+
+         $('.resetButton').click(function (event) {
+            $('#form')[0].reset();
+            $('select.selectpicker').selectpicker('val', null);
+        });
     });
 </script>
 @endsection

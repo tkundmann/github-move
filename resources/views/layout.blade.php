@@ -101,13 +101,18 @@
             });
 
             function goBack() {
-                var backUrl = '{!! Session::get('backUrl') !!}';
-                if (backUrl) {
-                    location.href = backUrl;
-                }
-                else {
-                    window.history.back();
-                }
+                @if (isset($context))
+                $.get('{{route('main.back', [Constants::CONTEXT_PARAMETER => $context]) }}', function (data) {
+                    if (data) {
+                        location.href = data;
+                    }
+                    else {
+                        window.history.back();
+                    }
+                });
+                @else
+                window.history.back();
+                @endif
             }
         </script>
         @yield('js')

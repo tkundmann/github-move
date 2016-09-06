@@ -33,7 +33,8 @@ class MenuComposer
                 $this->menu = [
                     ['url' => route('admin.account.list'), 'label' => 'main.layout.menu.accounts', 'icon' => 'fa-users', 'active' => in_array($this->currentRoute->getName(), ['admin.account.list', 'admin.account.create', 'admin.account.edit'])],
                     ['url' => route('admin.remove'), 'label' => 'main.layout.menu.remove_from_site', 'icon' => 'fa-trash', 'active' => in_array($this->currentRoute->getName(), ['admin.remove'])],
-                    ['url' => route('admin.page.list'), 'label' => 'main.layout.menu.pages', 'icon' => 'fa-list', 'active' => in_array($this->currentRoute->getName(), ['admin.page.list', 'admin.page.create', 'admin.page.edit', 'admin.page.file.create', 'admin.page.file.edit'])]
+                    ['url' => route('admin.page.list'), 'label' => 'main.layout.menu.pages', 'icon' => 'fa fa-files-o', 'active' => in_array($this->currentRoute->getName(), ['admin.page.list', 'admin.page.create', 'admin.page.edit', 'admin.page.file.list', 'admin.page.file.create', 'admin.page.file.edit'])],
+                    ['url' => route('admin.file.list'), 'label' => 'main.layout.menu.files', 'icon' => 'fa fa-file-o', 'active' => in_array($this->currentRoute->getName(), ['admin.file.list', 'admin.file.create', 'admin.file.edit'])]
                 ];
             } else if (Auth::user()->hasRole([ Role::USER, Role::SUPERUSER ]) && ContextHelper::isSiteContext($this->context))   {
                 $this->menu = [
@@ -66,19 +67,20 @@ class MenuComposer
                 if ($site->hasFeature(Feature::HAS_PAGES)) {
                     foreach ($site->pages as $page) {
                         if ($page->type == 'Standard') {
-                            $canAccessPage = true;
+                            $canAccessPageUserRestricted = true;
+                            $canAccessPageLotNumberRestricted = true;
 
                             if (!Auth::user()->hasRole([ Role::SUPERUSER ])) {
                                 if ($page->userRestricted) {
-                                    $canAccessPage = false;
+                                    $canAccessPageUserRestricted = false;
 
                                     if (Auth::user()->pages->where('id', $page->id)->first()) {
-                                        $canAccessPage = true;
+                                        $canAccessPageUserRestricted = true;
                                     }
                                 }
 
                                 if ($page->lotNumberRestricted) {
-                                    $canAccessPage = false;
+                                    $canAccessPageLotNumberRestricted = false;
 
                                     $userLotNumbers = Auth::user()->lotNumbers->pluck('prefix')->toArray();
                                     $fileLotNumbers = [];
@@ -92,12 +94,12 @@ class MenuComposer
                                     $intersection = array_intersect($fileLotNumbers, $userLotNumbers);
 
                                     if (count($intersection) > 0) {
-                                        $canAccessPage = true;
+                                        $canAccessPageLotNumberRestricted = true;
                                     }
                                 }
                             }
 
-                            if ($canAccessPage) {
+                            if ($canAccessPageUserRestricted && $canAccessPageLotNumberRestricted) {
                                 array_push($this->menu, ['url' => route('page', ['page' => $page->code]), 'label' => $page->name, 'icon' => 'fa fa-files-o', 'active' => (($this->currentRoute->getName() == 'page') && ($this->currentRoute->getParameter('page') == $page->code))]);
                             }
                         }

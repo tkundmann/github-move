@@ -19,6 +19,7 @@
                             <div class="col-md-8 text-center">
                                 <form method="GET" action="{{ route('admin.page.list') }}" class="form-inline">
                                     <div class="form-group margin-right-md">
+                                        <label for="site" class="control-label colon-after margin-right-md">@lang('admin.page.list.site')</label>
                                         {{ Form::select('site', $sites, Input::get('site'), ['class' => 'selectpicker form-control', 'title' => trans('common.select'), 'data-width' => 'auto']) }}
                                     </div>
 
@@ -42,17 +43,21 @@
                             <table id="pageSearchTable" class="table table-striped table-bordered withHover">
                                 <thead>
                                 <tr>
+                                    {{--
                                     <th width="22%">@sortablelink('type', Lang::get('admin.page.page.type'), 'fa fa-sort-alpha', $order)</th>
-                                    <th width="22%">@sortablelink('name', Lang::get('admin.page.page.name'), 'fa fa-sort-alpha', $order)</th>
-                                    <th width="22%">@sortablelink('name', Lang::get('admin.page.page.code'), 'fa fa-sort-alpha', $order)</th>
-                                    <th width="22%">@sortablelink('text', Lang::get('admin.page.page.description'), 'fa fa-sort-alpha', $order)</th>
-                                    <th width="12%">{{ trans('common.actions') }}</th>
+                                    --}}
+                                    <th width="30%">@sortablelink('name', Lang::get('admin.page.page.name'), 'fa fa-sort-alpha', $order)</th>
+                                    <th width="30%">@sortablelink('code', Lang::get('admin.page.page.code'), 'fa fa-sort-alpha', $order)</th>
+                                    <th width="30%">@sortablelink('text', Lang::get('admin.page.page.description'), 'fa fa-sort-alpha', $order)</th>
+                                    <th width="10%">{{ trans('common.actions') }}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach ($pages as $page)
                                     <tr>
+                                        {{--
                                         <td class="pointer" onclick="window.document.location='{{ route('admin.page.edit', ['id' => $page->id]) }}';">{{ $page->type ?: '-' }}</td>
+                                        --}}
                                         <td class="pointer" onclick="window.document.location='{{ route('admin.page.edit', ['id' => $page->id]) }}';">{{ $page->name ?: '-' }}</td>
                                         <td class="pointer" onclick="window.document.location='{{ route('admin.page.edit', ['id' => $page->id]) }}';">{{ $page->code ?: '-' }}</td>
                                         <td class="pointer" onclick="window.document.location='{{ route('admin.page.edit', ['id' => $page->id]) }}';">{{ $page->description ?: '-' }}</td>

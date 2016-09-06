@@ -39,6 +39,7 @@ Route::group(['prefix' => '{'.Constants::CONTEXT_PARAMETER.'}'], function() {
     });
     Route::get('home', 'Main\HomeController@home')->name('main.home');
     Route::get('terms-and-notices', 'Main\TermsAndNoticesController@terms')->name('main.termsAndNotices');
+    Route::get('back', 'Controller@goBack')->name('main.back');
 
     // Shipment
     Route::get('shipment/search', 'Shipment\ShipmentController@getSearch')->name('shipment.search');
@@ -55,17 +56,6 @@ Route::group(['prefix' => '{'.Constants::CONTEXT_PARAMETER.'}'], function() {
     Route::get('asset/{id}', 'Asset\AssetController@getDetails')->name('asset.details');
     
     // Admin
-    Route::get('page/list', 'Admin\PageController@getList')->name('admin.page.list');
-    Route::get('page/create', 'Admin\PageController@getCreate')->name('admin.page.create');
-    Route::post('page/create', 'Admin\PageController@postCreate')->name('admin.page.create');
-    Route::get('page/{id}/edit', 'Admin\PageController@getEdit')->name('admin.page.edit');
-    Route::post('page/{id}/edit', 'Admin\PageController@postEdit')->name('admin.page.edit');
-    Route::get('page/{id}/remove', 'Admin\PageController@getRemove')->name('admin.page.remove');
-    Route::get('page/{id}/file/create', 'Admin\PageController@getFileCreate')->name('admin.page.file.create');
-    Route::post('page/{id}/file/create', 'Admin\PageController@postFileCreate')->name('admin.page.file.create');
-    Route::get('page/{pageId}/file/{fileId}/edit', 'Admin\PageController@getFileEdit')->name('admin.page.file.edit');
-    Route::post('page/{pageId}/file/{fileId}/edit', 'Admin\PageController@postFileEdit')->name('admin.page.file.edit');
-    Route::get('page/{pageId}/file/{fileId}/remove', 'Admin\PageController@getFileRemove')->name('admin.page.file.remove');
     Route::get('account/list', 'Admin\AccountController@getList')->name('admin.account.list');
     Route::get('account/create', 'Admin\AccountController@getCreate')->name('admin.account.create');
     Route::post('account/create', 'Admin\AccountController@postCreate')->name('admin.account.create');
@@ -76,6 +66,24 @@ Route::group(['prefix' => '{'.Constants::CONTEXT_PARAMETER.'}'], function() {
     Route::get('remove', 'Admin\RemoveFromSiteController@getRemove')->name('admin.remove');
     Route::post('remove/assets', 'Admin\RemoveFromSiteController@postRemoveAssets')->name('admin.remove.assets');
     Route::post('remove/by-lot-number', 'Admin\RemoveFromSiteController@postRemoveByLotNumber')->name('admin.remove.byLotNumber');
+    Route::get('page/list', 'Admin\PageController@getList')->name('admin.page.list');
+    Route::get('page/create', 'Admin\PageController@getCreate')->name('admin.page.create');
+    Route::post('page/create', 'Admin\PageController@postCreate')->name('admin.page.create');
+    Route::get('page/{id}/edit', 'Admin\PageController@getEdit')->name('admin.page.edit');
+    Route::post('page/{id}/edit', 'Admin\PageController@postEdit')->name('admin.page.edit');
+    Route::get('page/{id}/remove', 'Admin\PageController@getRemove')->name('admin.page.remove');
+    Route::get('page/{id}/file/list', 'Admin\PageController@getFileList')->name('admin.page.file.list');
+    Route::get('page/{id}/file/create', 'Admin\PageController@getFileCreate')->name('admin.page.file.create');
+    Route::post('page/{id}/file/create', 'Admin\PageController@postFileCreate')->name('admin.page.file.create');
+    Route::get('page/{pageId}/file/{fileId}/edit', 'Admin\PageController@getFileEdit')->name('admin.page.file.edit');
+    Route::post('page/{pageId}/file/{fileId}/edit', 'Admin\PageController@postFileEdit')->name('admin.page.file.edit');
+    Route::get('page/{pageId}/file/{fileId}/remove', 'Admin\PageController@getFileRemove')->name('admin.page.file.remove');
+    Route::get('file/list', 'Admin\FileController@getList')->name('admin.file.list');
+    Route::get('file/create', 'Admin\FileController@getCreate')->name('admin.file.create');
+    Route::post('file/create', 'Admin\FileController@postCreate')->name('admin.file.create');
+    Route::get('file/{id}/edit', 'Admin\FileController@getEdit')->name('admin.file.edit');
+    Route::post('file/{id}/edit', 'Admin\FileController@postEdit')->name('admin.file.edit');
+    Route::get('file/{id}/remove', 'Admin\FileController@getRemove')->name('admin.file.remove');
 
     // Page
     Route::get('page/{page}', 'Page\PageController@getPage')->name('page');

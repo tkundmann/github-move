@@ -22,6 +22,7 @@ return [
             'remove_from_site' => 'Remove from Site',
             'accounts' => 'Accounts',
             'pages' => 'Pages',
+            'files' => 'Files',
             'pickup_request' => 'Pickup Request'
         ],
         'footer' => [

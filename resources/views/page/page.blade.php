@@ -14,33 +14,33 @@
 
                         <hr />
 
-                        @if ($page->files->count() > 0)
+                        @if ($files->count() > 0)
                             <table id="fileTable" class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>@lang('page.file')</th>
-                                        <th>@lang('page.name')</th>
-                                        <th>@lang('page.size')</th>
+                                        <th>@sortablelink('filename', Lang::get('page.file'), 'fa fa-sort-alpha', $order)</th>
+                                        <th>@sortablelink('name', Lang::get('page.name'), 'fa fa-sort-alpha', $order)</th>
+                                        <th>@sortablelink('size', Lang::get('page.size'), 'fa fa-sort-numeric', $order)</th>
                                         @if ($hasFilesWithDate)
-                                        <th>@lang('page.date')</th>
+                                        <th>@sortablelink('fileDate', Lang::get('page.date'), 'fa fa-sort-numeric', $order)</th>
                                         @endif
                                     </tr>
                                 </thead>
                                 <tbody>
-                            @foreach ($page->files as $file)
+                            @foreach ($files as $file)
                                 @if (!$page->lotNumberRestricted || ($page->lotNumberRestricted && $fileAccess[$file->id]))
                                 <tr>
                                     <td>
                                         <i class="fa fa-file-o margin-right-sm"></i>
                                         @if ($fileAvailability[$file->id])
-                                            <a href="{{ $file->url }}" target="_blank">{{ $file->filename }}</a>
+                                            <a href="{{ $file->url }}" target="_blank">{{ str_limit($file->filename, $limit) }}</a>
                                         @else
                                             <i class="fa fa-exclamation-triangle margin-right-sm" title="@lang('page.file_not_found')"></i>
-                                            <span>{{ $file->filename }}</span>
+                                            <span>{{ str_limit($file->filename, $limit) }}</span>
                                         @endif
                                     </td>
                                     <td>
-                                        <span>{{ $file->name ? $file->name : '-' }}</span>
+                                        <span>{{ $file->name ? str_limit($file->name, $limit) : '-' }}</span>
                                     </td>
                                     <td>
                                         <span>{{ StringHelper::formatFileSize($file->size) }}</span>
@@ -55,6 +55,11 @@
                             @endforeach
                                 </tbody>
                             </table>
+
+                            <div class="text-center">
+                                {{ $files->appends(\Input::except('page'))->links() }}
+                            </div>
+
                         @else
                             <div class="alert alert-info fade">
                                 <strong>@lang('common.nothing_found')</strong>

@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Data\Constants;
 use App\Data\Models\Site;
 use App\Helpers\ContextHelper;
 use Illuminate\Http\Request;
@@ -19,13 +18,7 @@ class ContextController extends Controller
         parent::__construct($request);
         
         $route = Route::current();
-        if ($route) {
-            $parameters = Route::current()->parameters();
-    
-            if ($parameters && array_key_exists(Constants::CONTEXT_PARAMETER, $parameters)) {
-                $this->context = $parameters[Constants::CONTEXT_PARAMETER];
-            }
-        }
+        $this->context = ContextHelper::getContextByRoute($route);
         
         view()->share('context', $this->context);
         

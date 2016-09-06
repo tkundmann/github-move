@@ -89,7 +89,8 @@ return [
             'description' => 'Description',
             'site' => 'Site',
             'user_restricted' => 'Restrict access per account',
-            'lot_number_restricted' => 'Restrict access per lot number prefix'
+            'lot_number_restricted' => 'Restrict access per lot number prefix',
+            'view_files' => 'View files'
         ],
         'list' => [
             'page_list' => 'Page list',
@@ -104,7 +105,6 @@ return [
             'not_exist' => 'Page does not exist.',
             'details' => 'Page Details',
             'files' => 'Page Files',
-            'confirm_remove' => 'Are you sure you want to remove this File?'
         ],
         'create' => [
             'create_page' => 'Create Page',
@@ -117,6 +117,11 @@ return [
             'not_exist' => 'Page does not exist.',
         ],
         'file' => [
+            'list' => [
+                'file_list' => 'Page File list: :page',
+                'confirm_remove' => 'Are you sure you want to remove this File?',
+                'file' => '{0}files|{1}file|[2,Inf]files',
+            ],
             'create' => [
                 'upload_file_to_page' => 'Upload file to Page: :page',
                 'file' => 'File',
@@ -145,6 +150,44 @@ return [
                 'not_exist' => 'File does not exist.',
                 'file_removed' => 'File removed.'
             ]
+        ]
+    ],
+    'file' => [
+        'list' => [
+            'file_list' => 'File list',
+            'site' => 'Site',
+            'confirm_remove' => 'Are you sure you want to remove this File?',
+            'file' => '{0}files|{1}file|[2,Inf]files',
+            'choose_site' => 'Choose a Site.'
+        ],
+        'create' => [
+            'upload_file' => 'Upload file',
+            'file' => 'File',
+            'site' => 'Site',
+            'type' => 'Type',
+            'file_name' => 'Name',
+            'file_date' => 'File Date',
+            'file_date_optional' => 'Optional',
+            'shipment' => 'Shipment Lot Number',
+            'file_created' => 'File created.',
+            'site_reload_warning' => 'Change will reload page!'
+        ],
+        'edit' => [
+            'edit_file' => 'Edit file: :file',
+            'site' => 'Site',
+            'type' => 'Type',
+            'filename' => 'Filename',
+            'name' => 'Name',
+            'size' => 'Size',
+            'file_date' => 'Date',
+            'file_date_optional' => 'Optional',
+            'shipment' => 'Shipment Lot Number',
+            'not_exist' => 'File does not exist.',
+            'file_saved' => 'File saved.',
+        ],
+        'remove' => [
+            'not_exist' => 'File does not exist.',
+            'file_removed' => 'File removed.'
         ]
     ]
 

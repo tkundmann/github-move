@@ -32,4 +32,18 @@ class ContextHelper
             return false;
         }
     }
+
+    public static function getContextByRoute($route)
+    {
+        $context = null;
+        if ($route) {
+            $parameters = $route->parameters();
+
+            if ($parameters && array_key_exists(Constants::CONTEXT_PARAMETER, $parameters)) {
+                $context = $parameters[Constants::CONTEXT_PARAMETER];
+            }
+        }
+
+        return $context;
+    }
 }
