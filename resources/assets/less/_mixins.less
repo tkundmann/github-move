@@ -1,0 +1,141 @@
+﻿@import "_colors";
+
+// MIXINS
+
+.transition(@vars) {
+  -moz-transition: @vars;
+  -o-transition: @vars;
+  -webkit-transition: @vars;
+  transition: @vars;
+}
+
+.transform(@vars) {
+  -moz-transform: @vars;
+  -ms-transform: @vars;
+  -o-transform: @vars;
+  -webkit-transform: @vars;
+  transform: @vars;
+}
+
+.rotate(@angle) {
+  -webkit-transform: rotate(@angle);
+  -moz-transform: rotate(@angle);
+  -ms-transform: rotate(@angle);
+  -o-transform: rotate(@angle);
+  transform: rotate(@angle);
+}
+
+.scaleX(@factor) {
+  -webkit-transform: scaleX(@factor);
+  -moz-transform: scaleX(@factor);
+  -ms-transform: scaleX(@factor);
+  -o-transform: scaleX(@factor);
+}
+
+.scaleY(@factor) {
+  -webkit-transform: scaleY(@factor);
+  -moz-transform: scaleY(@factor);
+  -ms-transform: scaleY(@factor);
+  -o-transform: scaleY(@factor);
+}
+
+.spin(@time) {
+  -moz-animation: spin-moz @time infinite linear;
+  -webkit-animation: spin-webkit @time infinite linear;
+  -o-animation: spin @time infinite linear;
+  animation: spin @time infinite linear;
+}
+
+.transform-origin(@vars: ~"50% 50%") {
+  -moz-transform-origin: @vars;
+  -ms-transform-origin: @vars;
+  -o-transform-origin: @vars;
+  -webkit-transform-origin: @vars;
+  transform-origin: @vars;
+}
+
+.top-down-gradient(@from, @to) {
+  background: -webkit-gradient(linear, 50% 0, 50% 100%, color-stop(0, @from), color-stop(100%, @to));
+  background: -webkit-linear-gradient(top, @from 0,@to 100%);
+  background: -moz-linear-gradient(top, @from 0,@to 100%);
+  background: -ms-linear-gradient(top, @from 0,@to 100%);
+  background: -o-linear-gradient(top, @from 0,@to 100%);
+  background: linear-gradient(top, @from 0,@to 100%);
+  -ms-filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr='@{from}', endColorstr='@{to}', GradientType=0)";
+  filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr='@{from}', endColorstr='@{to}', GradientType=0)";
+  behavior: url('../../lib/css3pie/PIE_uncompressed.htc');
+}
+
+.box-shadow(@arguments) {
+  -webkit-box-shadow: @arguments;
+  -moz-box-shadow:    @arguments;
+  box-shadow: @arguments;
+  behavior: url('../../lib/css3pie/PIE_uncompressed.htc');
+}
+
+.box-sizing(@value){
+  -moz-box-sizing: @value;
+  -webkit-box-sizing: @value;
+  box-sizing: @value;
+}
+
+.opacity(@opacity) {
+  -moz-opacity: @opacity;
+  -khtml-opacity: @opacity;
+  -webkit-opacity: @opacity;
+  opacity: @opacity;
+  @opperc: @opacity * 100;
+  -ms-filter: ~"progid:DXImageTransform.Microsoft.Alpha(opacity=@{opperc})";
+  filter: ~"alpha(opacity=@{opperc})";
+}
+
+.user-select(@val) {
+  -webkit-user-select: @val;
+  -moz-user-select: @val;
+  -ms-user-select: @val;
+  -o-user-select: @val;
+  user-select: @val;
+}
+
+.glyphicon() {
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.align-content(@val) {
+  -ms-align-content: @val;
+  -webkit-align-content: @val;
+  align-content: @val;
+}
+
+.clearfix() {
+  &:after {
+    content:" ";
+    clear: both;
+    display: table;
+  }
+}
+
+.margin-horizontal(@val) {
+  margin-left: @val !important;
+  margin-right: @val !important;
+}
+
+.margin-vertical(@val) {
+  margin-top: @val !important;
+  margin-bottom: @val !important;
+}
+
+.padding-horizontal(@val) {
+  padding-left: @val !important;
+  padding-right: @val !important;
+}
+
+.padding-vertical(@val) {
+  padding-top: @val !important;
+  padding-bottom: @val !important;
+}

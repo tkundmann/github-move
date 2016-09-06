@@ -1,0 +1,17 @@
+.header {
+  height: 80px;
+  background-color: #000000;
+}
+.header .container {
+  position: relative;
+}
+.header .container .logo {
+  position: absolute;
+  top: 5px;
+  left: 10px;
+}
+.header .container .companyName {
+  text-align: center;
+  color: #999999;
+  margin-top: 25px;
+}

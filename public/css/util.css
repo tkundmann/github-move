@@ -1,0 +1,214 @@
+.margin-none {
+  margin: 0px !important;
+}
+.margin-sm {
+  margin: 5px !important;
+}
+.margin-md {
+  margin: 10px !important;
+}
+.margin-lg {
+  margin: 20px !important;
+}
+.margin-top-none {
+  margin-top: 0px !important;
+}
+.margin-top-sm {
+  margin-top: 5px !important;
+}
+.margin-top-md {
+  margin-top: 10px !important;
+}
+.margin-top-lg {
+  margin-top: 20px !important;
+}
+.margin-bottom-none {
+  margin-bottom: 0px !important;
+}
+.margin-bottom-sm {
+  margin-bottom: 5px !important;
+}
+.margin-bottom-md {
+  margin-bottom: 10px !important;
+}
+.margin-bottom-lg {
+  margin-bottom: 20px !important;
+}
+.margin-left-none {
+  margin-left: 0px !important;
+}
+.margin-left-sm {
+  margin-left: 5px !important;
+}
+.margin-left-md {
+  margin-left: 10px !important;
+}
+.margin-left-lg {
+  margin-left: 20px !important;
+}
+.margin-right-none {
+  margin-right: 0px !important;
+}
+.margin-right-sm {
+  margin-right: 5px !important;
+}
+.margin-right-md {
+  margin-right: 10px !important;
+}
+.margin-right-lg {
+  margin-right: 20px !important;
+}
+.margin-vertical-none {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+}
+.margin-vertical-sm {
+  margin-top: 5px !important;
+  margin-bottom: 5px !important;
+}
+.margin-vertical-md {
+  margin-top: 10px !important;
+  margin-bottom: 10px !important;
+}
+.margin-vertical-lg {
+  margin-top: 20px !important;
+  margin-bottom: 20px !important;
+}
+.margin-horizontal-none {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+.margin-horizontal-sm {
+  margin-left: 5px !important;
+  margin-right: 5px !important;
+}
+.margin-horizontal-md {
+  margin-left: 10px !important;
+  margin-right: 10px !important;
+}
+.margin-horizontal-lg {
+  margin-left: 20px !important;
+  margin-right: 20px !important;
+}
+.padding-none {
+  padding: 0px !important;
+}
+.padding-sm {
+  padding: 5px !important;
+}
+.padding-md {
+  padding: 10px !important;
+}
+.padding-lg {
+  padding: 20px !important;
+}
+.padding-top-none {
+  padding-top: 0px !important;
+}
+.padding-top-sm {
+  padding-top: 5px !important;
+}
+.padding-top-md {
+  padding-top: 10px !important;
+}
+.padding-top-lg {
+  padding-top: 20px !important;
+}
+.padding-bottom-none {
+  padding-bottom: 0px !important;
+}
+.padding-bottom-sm {
+  padding-bottom: 5px !important;
+}
+.padding-bottom-md {
+  padding-bottom: 10px !important;
+}
+.padding-bottom-lg {
+  padding-bottom: 20px !important;
+}
+.padding-left-none {
+  padding-left: 0px !important;
+}
+.padding-left-sm {
+  padding-left: 5px !important;
+}
+.padding-left-md {
+  padding-left: 10px !important;
+}
+.padding-left-lg {
+  padding-left: 20px !important;
+}
+.padding-right-none {
+  padding-right: 0px !important;
+}
+.padding-right-sm {
+  padding-right: 5px !important;
+}
+.padding-right-md {
+  padding-right: 10px !important;
+}
+.padding-right-lg {
+  padding-right: 20px !important;
+}
+.padding-vertical-none {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+.padding-vertical-sm {
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+}
+.padding-vertical-md {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+.padding-vertical-lg {
+  padding-top: 20px !important;
+  padding-bottom: 20px !important;
+}
+.padding-horizontal-none {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+.padding-horizontal-sm {
+  padding-left: 5px !important;
+  padding-right: 5px !important;
+}
+.padding-horizontal-md {
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+.padding-horizontal-lg {
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+}
+.font-size-xs {
+  font-size: 10px;
+}
+.font-size-sm {
+  font-size: 12px;
+}
+.font-size-md {
+  font-size: 13px;
+}
+.font-size-lg {
+  font-size: 14px;
+}
+.font-size-xl {
+  font-size: 20px;
+}
+.block {
+  display: block !important;
+}
+.bold {
+  font-weight: bold;
+}
+.upperCase {
+  text-transform: uppercase;
+}
+.pointer {
+  cursor: pointer;
+}
+.colon-after:after {
+  content: ':';
+}

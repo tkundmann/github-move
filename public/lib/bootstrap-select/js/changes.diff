@@ -1,0 +1,65 @@
+--- bootstrap-select-custom.js	2016-08-10 02:07:39.000000000 +0200
++++ bootstrap-select.js	2016-02-17 10:18:50.000000000 +0100
+@@ -304,7 +304,6 @@
+     },
+     selectAllText: 'Select All',
+     deselectAllText: 'Deselect All',
+-    deselectText: 'Deselect',
+     doneButton: false,
+     doneButtonText: 'Close',
+     multipleSeparator: ', ',
+@@ -458,15 +457,6 @@
+       '</div>' +
+       '</div>'
+           : '';
+-      var deselectbox = !this.multiple && this.options.actionsBox ?
+-      '<div class="bs-actionsbox deselect-box">' +
+-      '<div class="btn-group btn-group-sm btn-block">' +
+-      '<button type="button" class="actions-btn bs-deselect btn btn-default">' +
+-      this.options.deselectText +
+-      '</button>' +
+-      '</div>' +
+-      '</div>'
+-          : '';
+       var donebutton = this.multiple && this.options.doneButton ?
+       '<div class="bs-donebutton">' +
+       '<div class="btn-group btn-block">' +
+@@ -488,7 +478,6 @@
+           header +
+           searchbox +
+           actionsbox +
+-          deselectbox +
+           '<ul class="dropdown-menu inner" role="menu">' +
+           '</ul>' +
+           donebutton +
+@@ -737,13 +726,6 @@
+       this.$button.children('.filter-option').html(title);
+ 
+       this.$element.trigger('rendered.bs.select');
+-
+-      if (this.$element.val() && (this.$element.val().length > 0)) {
+-        $(this.$menu).find('.deselect-box').show();
+-      }
+-      else {
+-        $(this.$menu).find('.deselect-box').hide();
+-      }
+     },
+ 
+     /**
+@@ -1267,15 +1249,8 @@
+ 
+         if ($(this).hasClass('bs-select-all')) {
+           that.selectAll();
+-          that.toggle();
+-        }
+-        else if ($(this).hasClass('bs-deselect')) {
+-          that.deselectAll();
+-          that.toggle();
+-        }
+-        else {
++        } else {
+           that.deselectAll();
+-          that.toggle();
+         }
+       });
+ 

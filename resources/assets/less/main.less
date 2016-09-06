@@ -1,0 +1,155 @@
+@import "_variables";
+@import "_colors";
+@import "_mixins";
+
+body {
+  font-family: 'Lato';
+  background-color: @body-background-color;
+}
+
+/* layout */
+
+#main {
+  padding-top: 20px;
+}
+
+.toast-center {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -25px;
+  margin-left: -150px;
+}
+
+#advancedSearchContainer {
+  display: none;
+}
+
+
+/* fade animation */
+
+.alert {
+  &.fade {
+    opacity: 0;
+    -webkit-transition: opacity 1s linear;
+    -o-transition: opacity 1s linear;
+    transition: opacity 1s linear;
+
+    &.in {
+      opacity: 1;
+    }
+  }
+}
+
+/* bootstrap tweaks */
+
+table {
+  &.table {
+    &.withHover {
+      tbody {
+        tr:hover {
+          background-color: @light-grey;
+        }
+      }
+    }
+
+    tr {
+      td {
+        vertical-align: middle !important;
+        white-space: nowrap;
+      }
+      th {
+        vertical-align: middle !important;
+        white-space: nowrap;
+      }
+    }
+  }
+
+  thead {
+    background-color: white;
+  }
+}
+
+ul {
+  &.pagination {
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+}
+
+button.single-click {
+  &.disabled {
+    cursor: not-allowed;
+    .opacity(0.8);
+    pointer-events: none;
+  }
+}
+
+.formDetails {
+  .form-group {
+    margin-bottom: 0px;
+  }
+
+  .control-label {
+    padding-top: 3px;
+  }
+
+  .form-control-static {
+    margin-bottom: 0px;
+    min-height: 24px;
+    padding-bottom: 0px;
+    padding-top: 3px;
+  }
+
+  hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}
+
+.alert-field {
+  margin-bottom: 0px !important;
+  padding: 6px !important;
+}
+
+.form-control {
+  &.no-float {
+    float: none;
+  }
+}
+
+/* bigger bootstrap fixed-width responsive container */
+
+@media (min-width: 1400px) {
+  .container {
+    width: 1350px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .container {
+    width: 1500px;
+  }
+}
+
+/* font awesome tweaks */
+
+.fa-btn {
+  margin-right: 6px;
+}
+
+/* bootstrap select tweak */
+
+.bs-actionsbox.deselect-box {
+  .btn-group {
+    button {
+      width: 100%;
+    }
+  }
+}
+
+/* bootstrap date picker tweak (chrome) */
+
+.datepicker.datepicker-dropdown.dropdown-menu {
+  z-index: 1000 !important;
+}

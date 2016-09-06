@@ -1,0 +1,24 @@
+@import "_variables";
+@import "_colors";
+@import "_mixins";
+
+.header {
+  height:80px;
+  background-color: @black;
+
+  .container {
+    position: relative;
+
+    .logo {
+      position: absolute;
+      top: 5px;
+      left: 10px;
+    }
+
+    .companyName {
+      text-align: center;
+      color: @grey;
+      margin-top: 25px;
+    }
+  }
+}

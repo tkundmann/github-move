@@ -1,0 +1,143 @@
+@import "_variables";
+@import "_colors";
+@import "_mixins";
+
+.navbar {
+  margin-bottom: 0px;
+}
+
+.navbar-left {
+  float: left;
+  margin-left: 15px;
+  border-color: #c0c0c0;
+}
+
+.navbar-default {
+  background-image: none;
+  background-color: #5e5e5e;
+  box-shadow: none;
+  border-top: #aaaaaa solid 1px;
+  border-bottom: @black solid 1px;
+  min-height: 52px;
+
+  .navbar-nav {
+    > li {
+      > a {
+        color: #ffffff;
+        text-shadow: none;
+      }
+
+      > a:hover, > a:focus {
+        color: #BBBBBB;
+      }
+
+      span {
+        padding: 15px;
+        line-height: 20px;
+        display: block;
+        position: relative;
+        color: @light-grey;
+        text-shadow: none;
+      }
+    }
+
+    .active {
+      > a {
+        background-image: none;
+        box-shadow: none;
+        background-color: @black;
+        color: @white;
+      }
+
+      > a:hover, > a:focus {
+        background-color: @black;
+        color: @white;
+      }
+    }
+
+    .open {
+      > a, > a:hover, > a:focus {
+        background-image: none;
+        color: #ffffff;
+        background-color: #404040;
+      }
+    }
+  }
+
+  .navbar-toggle {
+    border-color: @white;
+
+    .icon-bar {
+      background-color: @white;
+    }
+
+    &:hover {
+      background-color: @white;
+
+      .icon-bar {
+        background-color: @black;
+      }
+    }
+  }
+}
+
+.dropdown-menu {
+  > li {
+    a:hover, a:focus {
+      color: #262626;
+      text-decoration: none;
+      background-color: #e8e8e8;
+      background-image: none;
+    }
+  }
+}
+
+.navbar-brand {
+  padding: 0px;
+
+  > img {
+    height: 100%;
+    width: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-default .navbar-nav {
+    .open {
+      .dropdown-menu {
+        background-color: #404040;
+
+        > li  {
+          > a {
+            color: white;
+          }
+          > a:hover, > a:focus {
+            color: #BBBBBB;
+          }
+        }
+      }
+
+      > a.dropdown-toggle {
+        box-shadow: none;
+      }
+    }
+    .active {
+      .dropdown-menu {
+        background-color: #404040;
+
+        > li  {
+          > a {
+            color: white;
+          }
+          > a:hover, > a:focus {
+            color: #BBBBBB;
+          }
+        }
+      }
+
+      > a.dropdown-toggle {
+        box-shadow: none;
+      }
+    }
+  }
+}
