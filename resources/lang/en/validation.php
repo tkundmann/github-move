@@ -99,7 +99,7 @@ return [
         'shipment' => [
             'exists' => 'No Shipment with specified Lot Number!',
             'required' => 'Please provide an existing Shipment Lot Number.'
-        ],
+        ]
     ],
 
     /*

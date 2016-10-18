@@ -26,6 +26,8 @@
         <link href="{{ asset("/lib/bootstrap/css/bootstrap-theme.css") }}" rel="stylesheet">
         <!-- Bootstrap Jasny -->
         <link href="{{ asset("/lib/bootstrap-jasny/css/bootstrap-jasny.css") }}" rel="stylesheet">
+        <!-- Bootstrap Colorpicker -->
+        <link href="{{ asset("/lib/bootstrap-colorpicker/css/bootstrap-colorpicker.css") }}" rel="stylesheet">
         <!-- Bootstrap Datepicker -->
         <link href="{{ asset("/lib/bootstrap-datepicker/css/bootstrap-datepicker.css") }}" rel="stylesheet">
         <!-- Bootstrap Select -->
@@ -71,6 +73,7 @@
         <script src="{{ asset("/lib/jquery-stickyTableHeaders/js/jquery-stickyTableHeaders.js") }}"></script>
         <script src="{{ asset("/lib/bootstrap/js/bootstrap.js") }}"></script>
         <script src="{{ asset("/lib/bootstrap-jasny/js/bootstrap-jasny.js") }}"></script>
+        <script src="{{ asset("/lib/bootstrap-colorpicker/js/bootstrap-colorpicker.js") }}"></script>
         <script src="{{ asset("/lib/bootstrap-datepicker/js/bootstrap-datepicker.js") }}"></script>
         <script src="{{ asset("/lib/bootstrap-select/js/bootstrap-select-custom.js") }}"></script>
         <script src="{{ asset("/lib/toastr/js/toastr.js") }}"></script>
@@ -83,7 +86,10 @@
         </script>
         @endif{{--
     --}}<script>
-            $('.alert.fade').addClass('in');
+            $('.alert.animate').fadeIn(2000);
+            setTimeout(function() {
+                $('.alert.animate').fadeOut(2000);
+            }, 5000);
         </script>
 
         <script>

@@ -8,11 +8,11 @@
                     <div class="panel-heading">@lang('pickup_request.title', [ 'title' => $data['title']])</div>
                     <div class="panel-body">
                         @if (Session::has('success'))
-                            <div class="alert alert-success fade">{{ session('success') }}</div>
+                            <div class="alert alert-success animate">{{ session('success') }}</div>
                         @endif
 
                         @if (!$errors->isEmpty())
-                            <div class="alert alert-danger fade">
+                            <div class="alert alert-danger animate">
                                 <strong>@lang('pickup_request.error')</strong>
                             </div>
                         @endif
@@ -118,6 +118,7 @@
                                             @if($site->getFeature(Feature::PICKUP_REQUEST_ADDRESS_BOOK)->pivot->data['allow_change'])
                                                 <div class="checkbox @if($errors->has('allow_change')) has-error @endif">
                                                     <label><input type="checkbox" name="allow_change"
+                                                                  @if (old('allow_change')) checked="true" @endif
                                                                   id="allow_change">@lang('pickup_request.change_address_book_checkbox')
                                                     </label>
                                                     @if ($errors->has('allow_change'))

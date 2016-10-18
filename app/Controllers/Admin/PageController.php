@@ -180,29 +180,29 @@ class PageController extends ContextController
 
             $page->save();
 
-            if (!Storage::exists(Constants::UPLOAD_DIRECTORY . $page->site->code)) {
+            if (!Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $page->site->code)) {
                 Storage::cloud()->makeDirectory(Constants::UPLOAD_DIRECTORY . $page->site->code);
             }
 
             if ($page->type == 'Standard') {
-                if (!Storage::exists(Constants::UPLOAD_DIRECTORY . $page->site->code . '/page')) {
+                if (!Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $page->site->code . '/page')) {
                     Storage::cloud()->makeDirectory(Constants::UPLOAD_DIRECTORY . $page->site->code . '/page');
                 }
 
                 Storage::cloud()->makeDirectory(Constants::UPLOAD_DIRECTORY . $page->site->code . '/page/' . $page->code);
             }
             else if ($page->type == 'Certificates of Data Wipe') {
-                if (!Storage::exists(Constants::UPLOAD_DIRECTORY . $page->site->code . '/certificate_of_data_wipe')) {
+                if (!Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $page->site->code . '/certificate_of_data_wipe')) {
                     Storage::cloud()->makeDirectory(Constants::UPLOAD_DIRECTORY . $page->site->code . '/certificate_of_data_wipe');
                 }
             }
             else if ($page->type == 'Certificates of Recycling') {
-                if (!Storage::exists(Constants::UPLOAD_DIRECTORY . $page->site->code . '/certificate_of_destruction')) {
+                if (!Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $page->site->code . '/certificate_of_destruction')) {
                     Storage::cloud()->makeDirectory(Constants::UPLOAD_DIRECTORY . $page->site->code . '/certificate_of_destruction');
                 }
             }
             else if ($page->type == 'Settlements') {
-                if (!Storage::exists(Constants::UPLOAD_DIRECTORY . $page->site->code . '/settlement')) {
+                if (!Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $page->site->code . '/settlement')) {
                     Storage::cloud()->makeDirectory(Constants::UPLOAD_DIRECTORY . $page->site->code . '/settlement');
                 }
             }
@@ -276,16 +276,24 @@ class PageController extends ContextController
         }
 
         if ($page->type == 'Standard') {
-            Storage::cloud()->deleteDirectory(Constants::UPLOAD_DIRECTORY . $page->site->code . '/page/' . $page->code);
+            if (Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $page->site->code . '/page/' . $page->code)) {
+                Storage::cloud()->deleteDirectory(Constants::UPLOAD_DIRECTORY . $page->site->code . '/page/' . $page->code);
+            }
         }
         else if ($page->type == 'Certificates of Data Wipe') {
-            Storage::cloud()->deleteDirectory(Constants::UPLOAD_DIRECTORY . $page->site->code . '/certificate_of_data_wipe');
+            if (Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $page->site->code . '/certificate_of_data_wipe')) {
+                Storage::cloud()->deleteDirectory(Constants::UPLOAD_DIRECTORY . $page->site->code . '/certificate_of_data_wipe');
+            }
         }
         else if ($page->type == 'Certificates of Recycling') {
-            Storage::cloud()->deleteDirectory(Constants::UPLOAD_DIRECTORY . $page->site->code . '/certificate_of_destruction');
+            if (Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $page->site->code . '/certificate_of_destruction')) {
+                Storage::cloud()->deleteDirectory(Constants::UPLOAD_DIRECTORY . $page->site->code . '/certificate_of_destruction');
+            }
         }
         else if ($page->type == 'Settlements') {
-            Storage::cloud()->deleteDirectory(Constants::UPLOAD_DIRECTORY . $page->site->code . '/settlement');
+            if (Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $page->site->code . '/settlement')) {
+                Storage::cloud()->deleteDirectory(Constants::UPLOAD_DIRECTORY . $page->site->code . '/settlement');
+            }
         }
 
         $page->delete();
@@ -584,16 +592,24 @@ class PageController extends ContextController
         $pageId = $file->pageId;
 
         if ($file->page->type == 'Standard') {
-            Storage::cloud()->delete(Constants::UPLOAD_DIRECTORY . $file->page->site->code . '/page/' . $file->page->code . '/' . $file->filename);
+            if (Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $file->page->site->code . '/page/' . $file->page->code . '/' . $file->filename)) {
+                Storage::cloud()->delete(Constants::UPLOAD_DIRECTORY . $file->page->site->code . '/page/' . $file->page->code . '/' . $file->filename);
+            }
         }
         else if ($file->page->type == 'Certificates of Data Wipe') {
-            Storage::cloud()->delete(Constants::UPLOAD_DIRECTORY . $file->page->site->code . '/certificate_of_data_wipe/' . $file->filename);
+            if (Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $file->page->site->code . '/certificate_of_data_wipe/' . $file->filename)) {
+                Storage::cloud()->delete(Constants::UPLOAD_DIRECTORY . $file->page->site->code . '/certificate_of_data_wipe/' . $file->filename);
+            }
         }
         else if ($file->page->type == 'Certificates of Recycling') {
-            Storage::cloud()->delete(Constants::UPLOAD_DIRECTORY . $file->page->site->code . '/certificate_of_destruction/' . $file->filename);
+            if (Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $file->page->site->code . '/certificate_of_destruction/' . $file->filename)) {
+                Storage::cloud()->delete(Constants::UPLOAD_DIRECTORY . $file->page->site->code . '/certificate_of_destruction/' . $file->filename);
+            }
         }
         else if ($file->page->type == 'Settlements') {
-            Storage::cloud()->delete(Constants::UPLOAD_DIRECTORY . $file->page->site->code . '/settlement/' . $file->filename);
+            if (Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $file->page->site->code . '/settlement/' . $file->filename)) {
+                Storage::cloud()->delete(Constants::UPLOAD_DIRECTORY . $file->page->site->code . '/settlement/' . $file->filename);
+            }
         }
 
         if (count($file->lotNumbers) > 0) {

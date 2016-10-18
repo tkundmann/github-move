@@ -10,13 +10,13 @@
                 <div class="panel-body">
 
                     @if (session('status'))
-                        <div class="alert alert-success fade">
+                        <div class="alert alert-success animate">
                             {{ session('status') }}
                         </div>
                     @endif
 
                     @if (isset($prevalidateResult) && !empty($prevalidateResult))
-                        <div class="alert alert-danger margin-bottom-none fade">
+                        <div class="alert alert-danger margin-bottom-none animate">
                             {{ trans($prevalidateResult) }}
                         </div>
                     @else

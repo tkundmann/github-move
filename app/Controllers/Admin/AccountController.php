@@ -461,7 +461,7 @@ class AccountController extends ContextController
         }
     }
 
-    public function postRemove($context, $id)
+    public function getRemove($context, $id)
     {
         $account = User::find($id);
 

@@ -80,6 +80,76 @@ return [
             'not_exist' => 'User does not exist.',
         ]
     ],
+    'site' => [
+        'site_list' => 'Site list',
+        'record' => '{0}records|{1}record|[2,Inf]records',
+        'site' => [
+            'title' => 'Title',
+            'code' => 'Code',
+            'type' => 'Type',
+            'logo' => 'Logo',
+            'color' => 'Color',
+        ],
+        'edit' => [
+            'editing_site' => 'Editing Site: :site',
+            'site_saved' => 'Site saved.',
+            'not_exist' => 'Site does not exist.',
+            'change' => 'Change',
+            'view_vendor_clients' => 'View Vendor Clients',
+            'view_lot_numbers' => 'View Lot Numbers',
+            'confirm_remove' => 'Are you sure you want to remove this Site?'
+        ],
+        'create' => [
+            'create' => 'Create Site',
+            'custom_logo' => 'Custom Logo',
+            'custom_logo_required' => 'The Custom Logo field is required.',
+            'site_created' => 'Site created'
+        ],
+        'remove' => [
+            'site_removed' => 'Site removed.',
+            'not_exist' => 'Site does not exist.'
+        ],
+        'vendor_client' => [
+            'vendor_client_list' => ':site - Vendor Client list',
+            'record' => '{0}records|{1}record|[2,Inf]records',
+            'assign' => 'Assign',
+            'unassign' => 'Unassign',
+            'confirm_remove' => 'Are you sure you want to unassign this Vendor Client?',
+            'vendor_client' => [
+                'name' => 'Name'
+            ],
+            'create' => [
+                'vendor_client' => 'Vendor Client(s)',
+                'create' => 'Assign Vendor Client(s) to :site',
+                'info' => 'Please separate multiple Vendor Clients by either a comma, semi-colon or by listing them one per line.',
+                'vendor_client_created' => 'Vendor Client(s) assigned.'
+            ],
+            'remove' => [
+                'vendor_client_removed' => 'Vendor Client unassigned.',
+                'not_exist' => 'Vendor Client does not exist.'
+            ],
+        ],
+        'lot_number' => [
+            'lot_number_list' => ':site - Lot Number list',
+            'record' => '{0}records|{1}record|[2,Inf]records',
+            'assign' => 'Assign',
+            'unassign' => 'Unassign',
+            'confirm_remove' => 'Are you sure you want to unassign this Lot Number?',
+            'lot_number' => [
+                'prefix' => 'Prefix'
+            ],
+            'create' => [
+                'lot_number' => 'Lot Number(s)',
+                'create' => 'Assign Lot Number(s) to :site',
+                'info' => 'Please separate multiple Lot Numbers by either a comma, semi-colon or by listing them one per line.',
+                'lot_number_created' => 'Lot Number(s) assigned.'
+            ],
+            'remove' => [
+                'lot_number_removed' => 'Lot Number unassigned.',
+                'not_exist' => 'Lot Number does not exist.'
+            ],
+        ]
+    ],
     'page' => [
         'page' => [
             'type' => 'Type',

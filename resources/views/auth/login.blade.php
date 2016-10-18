@@ -18,31 +18,31 @@
                         {{ csrf_field() }}
 
                         @if (session('status'))
-                            <div class="alert alert-success fade">
+                            <div class="alert alert-success animate">
                                 {{ session('status') }}
                             </div>
                         @endif
 
                         @if ($errors->has('failed'))
-                            <div class="alert alert-danger fade">
+                            <div class="alert alert-danger animate">
                                 <strong>{{ $errors->first('failed') }}</strong>
                             </div>
                         @endif
 
                         @if ($errors->has('lockout'))
-                            <div class="alert alert-danger fade">
+                            <div class="alert alert-danger animate">
                                 <strong>{{ $errors->first('lockout') }}</strong>
                             </div>
                         @endif
 
                         @if ($errors->has('disabled'))
-                            <div class="alert alert-danger fade">
+                            <div class="alert alert-danger animate">
                                 <strong>{{ $errors->first('disabled') }}</strong>
                             </div>
                         @endif
 
                         @if ($errors->has('access_denied'))
-                            <div class="alert alert-danger fade">
+                            <div class="alert alert-danger animate">
                                 <strong>{{ $errors->first('access_denied') }}</strong>
                             </div>
                         @endif

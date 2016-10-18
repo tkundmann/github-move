@@ -32,11 +32,11 @@
                         <hr>
 
                         @if (Session::has('success'))
-                            <div class="alert alert-success fade">{{ session('success') }}</div>
+                            <div class="alert alert-success animate">{{ session('success') }}</div>
                         @endif
 
                         @if (Session::has('fail'))
-                            <div class="alert alert-danger fade">{{ session('fail') }}</div>
+                            <div class="alert alert-danger animate">{{ session('fail') }}</div>
                         @endif
 
                         @if ($pages && $pages->count() > 0)
@@ -76,11 +76,11 @@
                             </div>
                         @else
                             @if (Input::get('site'))
-                                <div class="alert alert-info fade">
+                                <div class="alert alert-info animate">
                                     <strong>@lang('common.nothing_found')</strong>
                                 </div>
                             @else
-                                <div class="alert alert-info fade">
+                                <div class="alert alert-info animate">
                                     <strong>@lang('admin.page.list.choose_site')</strong>
                                 </div>
                             @endif

@@ -14,7 +14,7 @@
                         <p>@lang('pickup_request.login.info')</p>
 
                         @if ($errors->has('access_denied'))
-                            <div class="alert alert-danger fade">
+                            <div class="alert alert-danger animate">
                                 <strong>{{ $errors->first('access_denied') }}</strong>
                             </div>
                         @endif

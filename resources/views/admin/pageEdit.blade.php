@@ -15,11 +15,11 @@
                         <div class="row">
                             <div class="col-md-12">
                                 @if (Session::has('success'))
-                                    <div class="alert alert-success fade">{{ session('success') }}</div>
+                                    <div class="alert alert-success animate">{{ session('success') }}</div>
                                 @endif
 
                                 @if (Session::has('fail'))
-                                    <div class="alert alert-danger fade">{{ session('fail') }}</div>
+                                    <div class="alert alert-danger animate">{{ session('fail') }}</div>
                                 @endif
                             </div>
                         </div>

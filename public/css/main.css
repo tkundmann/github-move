@@ -17,12 +17,8 @@ body {
   display: none;
 }
 /* fade animation */
-.alert.fade {
-  opacity: 0;
-  transition: opacity 1s linear;
-}
-.alert.fade.in {
-  opacity: 1;
+.alert.animate {
+  display: none;
 }
 /* bootstrap tweaks */
 table.table.withHover tbody tr:hover {

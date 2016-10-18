@@ -11,23 +11,23 @@
                         <div class="row">
                             <div class="col-md-12">
                             @if (session()->has('assets_removed') && !empty(session('assets_removed')['successful']))
-                                <div class="alert alert-success fade">
+                                <div class="alert alert-success animate">
                                     @lang('admin.remove.remove_assets.successful_remove', ['quantity' => count(session('assets_removed')['successful']), 'asset' => trans_choice('admin.remove.remove_assets.asset', count(session('assets_removed')['successful']))])
                                 </div>
                             @endif
                             @if (session()->has('assets_removed') && !empty(session('assets_removed')['unsuccessful']))
-                                <div class="alert alert-danger fade">
+                                <div class="alert alert-danger animate">
                                     <span>@lang('admin.remove.remove_assets.unsuccessful_remove')</span>
                                     <span>@lang('admin.remove.remove_assets.barcodes_not_found') @foreach(session('assets_removed')['unsuccessful'] as $key => $barcode){{$barcode}}@if($key != count(session('assets_removed')['unsuccessful']) - 1), @endif{{----}}@endforeach.</span>
                                 </div>
                             @endif
                             @if (session()->has('by_lot_number_removed') && !empty(session('by_lot_number_removed')) && (session('by_lot_number_removed')['asset'] > 0 || session('by_lot_number_removed')['shipment'] > 0))
-                                <div class="alert alert-success fade">
+                                <div class="alert alert-success animate">
                                     @lang('admin.remove.remove_by_lot_number.successful_remove', ['quantity_asset' => session('by_lot_number_removed')['asset'], 'asset' => trans_choice('admin.remove.remove_by_lot_number.asset', session('by_lot_number_removed')['asset']), 'quantity_shipment' => session('by_lot_number_removed')['shipment'], 'shipment' => trans_choice('admin.remove.remove_by_lot_number.shipment', session('by_lot_number_removed')['shipment'])])
                                 </div>
                             @endif
                             @if ((session()->has('by_lot_number_error') && !empty(session('by_lot_number_error')) && session('by_lot_number_error') === true) || (session('by_lot_number_removed')['asset'] === 0 && session('by_lot_number_removed')['shipment'] === 0))
-                                <div class="alert alert-danger fade">
+                                <div class="alert alert-danger animate">
                                     {{ trans('admin.remove.remove_by_lot_number.unsuccessful_remove', [ 'lot_number' => session('lot_number')]) }}
                                 </div>
                             @endif

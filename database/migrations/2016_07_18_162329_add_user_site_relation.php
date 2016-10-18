@@ -14,7 +14,7 @@ class AddUserSiteRelation extends Migration
         Schema::table('user', function ($table) {
             $table->integer('site_id')->unsigned()->nullable()->after('remember_token');
 
-            $table->foreign('site_id')->references('id')->on('site')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('site_id')->references('id')->on('site')->onUpdate('cascade')->onDelete('SET NULL');
         });
     }
 

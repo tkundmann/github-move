@@ -380,12 +380,12 @@ class FeatureTableSeeder extends Seeder
         ]);
     
         $site2->features()->updateExistingPivot($featureHasPickupRequest->id, ['data' => serialize([
-            'password' => 'eyJpdiI6Imw5T0l3STNDRFc3N3VGYlRSbmg2eGc9PSIsInZhbHVlIjoidUlQak9rMFA3cjdSNUc4NmNrYVBOcGxtRzZOeTJjNkFjeDcwenZtdEZDdz0iLCJtYWMiOiJlNzFmNjIzNmU0YzhkYzU0Y2Q3ZWY1MmJmN2ZlMTlmNGNkODExYzJkZDNhOGRmYWIyNzkwODljZTM2OTNmNDZhIn0=',
+            'password' => '$2y$10$/3dBspSYyO9xTc1vcjdzH.Zeg0a1lDSqkMV8kpgto/7ZHZg7wDt1q',
             'title' => 'Belmont Technology Remarketing/Ebay Pickup Request',
             'use_company_division' => false,
             'use_contact_section_title' => false,
             'use_state_as_select' => false,
-            'use_country' => true,
+            'use_country' => false,
             'use_reference_number' => false,
             'use_alternative_piece_count_form' => true,
             'use_preferred_pickup_date' => true,

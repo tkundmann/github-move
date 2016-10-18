@@ -162,10 +162,10 @@ class PickupRequestController extends ContextController
                 $file->filename = $fileName;
                 $file->size = $uploadedFile->getSize();
     
-                if (!Storage::exists(Constants::UPLOAD_DIRECTORY . $this->site->code)) {
+                if (!Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $this->site->code)) {
                     Storage::cloud()->makeDirectory(Constants::UPLOAD_DIRECTORY . $this->site->code);
                 }
-                if (!Storage::exists(Constants::UPLOAD_DIRECTORY . $this->site->code . '/pickup_request')) {
+                if (!Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $this->site->code . '/pickup_request')) {
                     Storage::cloud()->makeDirectory(Constants::UPLOAD_DIRECTORY . $this->site->code . '/pickup_request');
                 }
     

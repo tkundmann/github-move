@@ -19,8 +19,9 @@ return [
         'menu' => [
             'search_shipments' => 'Search Shipments',
             'search_assets' => 'Search Assets',
-            'remove_from_site' => 'Remove from Site',
             'accounts' => 'Accounts',
+            'sites' => 'Sites',
+            'remove_from_site' => 'Remove from Site',
             'pages' => 'Pages',
             'files' => 'Files',
             'pickup_request' => 'Pickup Request'

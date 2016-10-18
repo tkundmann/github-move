@@ -29,32 +29,33 @@ class MenuComposer
         }
 
         if (Auth::check()) {
-            if (Auth::user()->hasRole([ Role::ADMIN, Role::SUPERADMIN ]) && ContextHelper::isAdminContext($this->context)) {
-                $this->menu = [
-                    ['url' => route('admin.account.list'), 'label' => 'main.layout.menu.accounts', 'icon' => 'fa-users', 'active' => in_array($this->currentRoute->getName(), ['admin.account.list', 'admin.account.create', 'admin.account.edit'])],
-                    ['url' => route('admin.remove'), 'label' => 'main.layout.menu.remove_from_site', 'icon' => 'fa-trash', 'active' => in_array($this->currentRoute->getName(), ['admin.remove'])],
-                    ['url' => route('admin.page.list'), 'label' => 'main.layout.menu.pages', 'icon' => 'fa fa-files-o', 'active' => in_array($this->currentRoute->getName(), ['admin.page.list', 'admin.page.create', 'admin.page.edit', 'admin.page.file.list', 'admin.page.file.create', 'admin.page.file.edit'])],
-                    ['url' => route('admin.file.list'), 'label' => 'main.layout.menu.files', 'icon' => 'fa fa-file-o', 'active' => in_array($this->currentRoute->getName(), ['admin.file.list', 'admin.file.create', 'admin.file.edit'])]
-                ];
-            } else if (Auth::user()->hasRole([ Role::USER, Role::SUPERUSER ]) && ContextHelper::isSiteContext($this->context))   {
-                $this->menu = [
-                    ['url' => route('shipment.search'), 'label' => 'main.layout.menu.search_shipments', 'icon' => 'fa-truck', 'active' => in_array($this->currentRoute->getName(), ['shipment.search', 'shipment.search.result', 'shipment.details'])],
-                    ['url' => route('asset.search'), 'label' => 'main.layout.menu.search_assets', 'icon' => 'fa-laptop', 'active' => in_array($this->currentRoute->getName(), ['asset.search', 'asset.search.result', 'asset.details'])]
-                ];
+                if (Auth::user()->hasRole([ Role::ADMIN, Role::SUPERADMIN ]) && ContextHelper::isAdminContext($this->context)) {
+                    $this->menu = [
+                        ['url' => route('admin.account.list'), 'label' => 'main.layout.menu.accounts', 'icon' => 'fa-users', 'active' => in_array($this->currentRoute->getName(), ['admin.account.list', 'admin.account.create', 'admin.account.edit'])],
+                        ['url' => route('admin.site.list'), 'label' => 'main.layout.menu.sites', 'icon' => 'fa-university', 'active' => in_array($this->currentRoute->getName(), ['admin.site.list', 'admin.site.create', 'admin.site.edit', 'admin.site.vendorClient.list', 'admin.site.vendorClient.create', 'admin.site.lotNumber.list', 'admin.site.lotNumber.create'])],
+                        ['url' => route('admin.remove'), 'label' => 'main.layout.menu.remove_from_site', 'icon' => 'fa-trash', 'active' => in_array($this->currentRoute->getName(), ['admin.remove'])],
+                        ['url' => route('admin.page.list'), 'label' => 'main.layout.menu.pages', 'icon' => 'fa fa-files-o', 'active' => in_array($this->currentRoute->getName(), ['admin.page.list', 'admin.page.create', 'admin.page.edit', 'admin.page.file.list', 'admin.page.file.create', 'admin.page.file.edit'])],
+                        ['url' => route('admin.file.list'), 'label' => 'main.layout.menu.files', 'icon' => 'fa fa-file-o', 'active' => in_array($this->currentRoute->getName(), ['admin.file.list', 'admin.file.create', 'admin.file.edit'])]
+                    ];
+                } else if (Auth::user()->hasRole([ Role::USER, Role::SUPERUSER ]) && ContextHelper::isSiteContext($this->context) && (ContextHelper::doesContextMatchUserSite(Auth::user(), $this->context) || (Auth::user()->hasRole([Role::SUPERUSER])))) {
+                    $this->menu = [
+                        ['url' => route('shipment.search'), 'label' => 'main.layout.menu.search_shipments', 'icon' => 'fa-truck', 'active' => in_array($this->currentRoute->getName(), ['shipment.search', 'shipment.search.result', 'shipment.details'])],
+                        ['url' => route('asset.search'), 'label' => 'main.layout.menu.search_assets', 'icon' => 'fa-laptop', 'active' => in_array($this->currentRoute->getName(), ['asset.search', 'asset.search.result', 'asset.details'])]
+                    ];
+                }
+            }
+            else {
+                // nothing
             }
         }
-        else {
-            // nothing
-        }
-    }
 
-    /**
-     * Bind data to the view.
-     *
-     * @param  View  $view
-     * @return void
-     */
-    public function compose(View $view)
+        /**
+         * Bind data to the view.
+         *
+         * @param  View  $view
+         * @return void
+         */
+        public function compose(View $view)
     {
         $site = null;
 
@@ -63,7 +64,7 @@ class MenuComposer
         }
 
         if ($site) {
-            if (Auth::check() && Auth::user()->hasRole([ Role::USER, Role::SUPERUSER ]) && ContextHelper::isSiteContext($this->context)) {
+            if (Auth::check() && Auth::user()->hasRole([ Role::USER, Role::SUPERUSER ]) && ContextHelper::isSiteContext($this->context) && (ContextHelper::doesContextMatchUserSite(Auth::user(), $this->context) || (Auth::user()->hasRole([Role::SUPERUSER])))) {
                 if ($site->hasFeature(Feature::HAS_PAGES)) {
                     foreach ($site->pages as $page) {
                         if ($page->type == 'Standard') {

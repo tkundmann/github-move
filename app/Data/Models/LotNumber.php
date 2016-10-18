@@ -2,6 +2,7 @@
 
 namespace App\Data\Models;
 
+use App\Extensions\Eloquent\Sortable;
 use Illuminate\Database\Eloquent\Model;
 use Sofa\Eloquence\Eloquence;
 use Sofa\Eloquence\Mappable;
@@ -19,7 +20,7 @@ use Sofa\Eloquence\Mappable;
  */
 class LotNumber extends Model
 {
-    use Eloquence, Mappable;
+    use Eloquence, Mappable, Sortable;
 
     protected $table = 'lot_number';
 

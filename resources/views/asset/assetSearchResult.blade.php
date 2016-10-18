@@ -237,7 +237,7 @@
         {{ $assets->appends(\Input::except('page'))->links() }}
     </div>
     @else
-        <div class="alert alert-info fade">
+        <div class="alert alert-info animate">
             <strong>@lang('common.nothing_found')</strong>
         </div>
     @endif

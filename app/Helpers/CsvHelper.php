@@ -89,6 +89,6 @@ class CsvHelper
 
         $fileObject = new SplFileInfo(storage_path('app/public/export.csv'));
 
-        return \Response::download($fileObject, $filename, $headers);
+        return \Response::download($fileObject, $filename, $headers)->deleteFileAfterSend(true);
     }
 }
