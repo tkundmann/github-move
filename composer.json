@@ -6,14 +6,14 @@
     "type": "project",
     "require": {
         "php": ">=5.5.9",
-        "laravel/framework": "5.3.*",
+        "laravel/framework": "5.2.*",
 		"sofa/eloquence": "~5.2@dev",
         "barryvdh/laravel-ide-helper": "^2.2",
         "doctrine/dbal": "^2.5",
         "santigarcor/laratrust": "^2.0",
         "league/flysystem-aws-s3-v3": "^1.0",
         "schuppo/password-strength": "~1.5",
-        "laravelcollective/html": "5.3.*",
+        "laravelcollective/html": "5.2.*",
         "raveren/kint": "^1.0",
         "orangehill/iseed": "^2.1"
     },
