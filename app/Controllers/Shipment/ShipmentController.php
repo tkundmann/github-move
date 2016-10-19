@@ -100,7 +100,21 @@ class ShipmentController extends ContextController
     protected $modelSearchResultFields = [];
     protected $modelExportFields = [];
 
-    protected $fieldCategories = self::USE_SELECT_EXACT_VALUES ?
+    protected $fieldCategories = [];
+    
+    protected $vendorClients = [];
+    protected $lotNumberPrefixes = [];
+
+    /**
+     * Create a new controller instance.
+     * @param  \Illuminate\Http\Request $request
+     * @return void
+     */
+    public function __construct(Request $request)
+    {
+        parent::__construct($request);
+        
+        $this->fieldCategories = self::USE_SELECT_EXACT_VALUES ?
         [
             'exact' => ['freight_carrier', 'site_coordinator', 'city_of_origin'],
             'string_like' => ['po_number', 'vendor_shipment_number', 'cost_center', 'vendor', 'bill_of_lading', 'freight_invoice_number',
@@ -126,18 +140,7 @@ class ShipmentController extends ContextController
             'float_less_greater' => ['freight_charge', 'total_weight_received'],
             'custom' => ['vendor_client']
         ];
-    
-    protected $vendorClients = [];
-    protected $lotNumberPrefixes = [];
-
-    /**
-     * Create a new controller instance.
-     * @param  \Illuminate\Http\Request $request
-     * @return void
-     */
-    public function __construct(Request $request)
-    {
-        parent::__construct($request);
+        
         $this->middleware('auth');
         $this->middleware('context.permissions:' . $this->context);
         $this->middleware('role:' . Role::USER . '|' . Role::SUPERUSER);
