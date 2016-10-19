@@ -190,7 +190,21 @@ class AssetController extends ContextController
     protected $modelSearchResultFields = [];
     protected $modelExportFields = [];
     
-    protected $fieldCategories = self::USE_SELECT_EXACT_VALUES ?
+    protected $fieldCategories = [];
+    
+    protected $vendorClients = [];
+    protected $lotNumberPrefixes = [];
+
+    /**
+     * Create a new controller instance.
+     * @param  \Illuminate\Http\Request $request
+     * @return void
+     */
+    public function __construct(Request $request)
+    {
+        parent::__construct($request);
+        
+        $this->fieldCategories = self::USE_SELECT_EXACT_VALUES ?
         [
             'exact' => ['carrier', 'manufacturer', 'product_family', 'condition', 'date_code', 'status'],
             'string_like' => ['vendor_order_number', 'vendor', 'barcode_number', 'manufacturer_model_num', 'manufacturer_part_num',
@@ -234,19 +248,7 @@ class AssetController extends ContextController
                 'custom' => []
             ]
         ];
-
-    
-    protected $vendorClients = [];
-    protected $lotNumberPrefixes = [];
-
-    /**
-     * Create a new controller instance.
-     * @param  \Illuminate\Http\Request $request
-     * @return void
-     */
-    public function __construct(Request $request)
-    {
-        parent::__construct($request);
+        
         $this->middleware('auth');
         $this->middleware('context.permissions:' . $this->context);
         $this->middleware('role:' . Role::USER . '|' . Role::SUPERUSER);
