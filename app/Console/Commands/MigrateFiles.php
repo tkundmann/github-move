@@ -46,7 +46,8 @@ class MigrateFiles extends Command
         $allSiteDirectories = Storage::cloud()->directories(Constants::UPLOAD_DIRECTORY);
 
         foreach($allSiteDirectories as $siteDirectory) {
-            $siteName = substr($siteDirectory, strrpos($siteDirectory, '/') + 1);
+            $siteDirectoryPos = (strrpos($siteDirectory, '/')) ? strrpos($siteDirectory, '/') + 1 : 0;
+            $siteName = substr($siteDirectory, $siteDirectoryPos);
 
             $site = Site::where('code', $siteName)->first();
 
