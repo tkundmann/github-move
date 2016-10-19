@@ -24,6 +24,6 @@ class Constants
     const MIGRATE_PICKUP_REQUESTS_COMMAND  = 'app:migrate-pickuprequests';
     const MIGRATE_FILES_COMMAND = 'app:migrate-files';
     const PRUNE_ASSETS_COMMAND = 'app:prune-assets';
-    
-    const UPLOAD_DIRECTORY = '_dev/';
+
+    const UPLOAD_DIRECTORY = '';
 }
