@@ -44,8 +44,8 @@ class MigrateShipmentsAndAssets extends Command
     {
         $this->info('Performing the migration process...');
 
-        $this->migrateShipments();
-        $this->migrateShipmentArchives();
+        //$this->migrateShipments();
+        //$this->migrateShipmentArchives();
         $this->migrateAssets();
         $this->migrateAssetArchives();
 
