@@ -137,9 +137,9 @@
                                     @endif
                                 @endif
                                 <td class="text-center text-nowrap">
-                                    @if ($shipment->assets->count() > 0)
-                                    <a href="{{ route('asset.search.result', ['page' => 1, 'lot_number' => $shipment->lot_number, 'lot_number_select' => 'equals']) }}" class="btn btn-primary btn-xs margin-vertical-sm"><i class="fa fa-btn fa-laptop"></i>@lang('shipment.search_result.view_assets') ({{ $shipment->assets->count() }})</a>
-                                    <a href="{{ route('asset.search.export', ['lot_number' => $shipment->lot_number, 'lot_number_select' => 'equals']) }}" class="btn btn-primary btn-xs"><i class="fa fa-btn fa-table"></i>@lang('shipment.search_result.export_assets') ({{ $shipment->assets->count() }})</a>
+                                    @if ($shipment->assets_count > 0)
+                                    <a href="{{ route('asset.search.result', ['page' => 1, 'lot_number' => $shipment->lot_number, 'lot_number_select' => 'equals']) }}" class="btn btn-primary btn-xs margin-vertical-sm"><i class="fa fa-btn fa-laptop"></i>@lang('shipment.search_result.view_assets') ({{ $shipment->assets_count }})</a>
+                                    <a href="{{ route('asset.search.export', ['lot_number' => $shipment->lot_number, 'lot_number_select' => 'equals']) }}" class="btn btn-primary btn-xs"><i class="fa fa-btn fa-table"></i>@lang('shipment.search_result.export_assets') ({{ $shipment->assets_count }})</a>
                                     @else
                                         <span>@lang('shipment.search_result.no_assets_found')</span>
                                     @endif

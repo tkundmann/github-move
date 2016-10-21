@@ -22,7 +22,7 @@ class ShipmentController extends ContextController
     const RESULTS_PER_PAGE = 50;
     const USE_SELECT_EXACT_VALUES = false;
     const STRING_LIMIT = 50;
-    
+
     protected $defaultSearchFields = [
         'vendor_client' => 'vendor_client',
         'lot_date' => 'lot_date',
@@ -43,7 +43,7 @@ class ShipmentController extends ContextController
         'cert_of_data_wipe_num' => 'cert_of_data_wipe_num',
         'cert_of_destruction_num' => 'cert_of_destruction_num'
     ];
-    
+
     protected $defaultSimpleSearchFields = [
         'vendor_client' => 'vendor_client',
         'lot_date' => 'lot_date',
@@ -52,7 +52,7 @@ class ShipmentController extends ContextController
         'cert_of_data_wipe_num' => 'cert_of_data_wipe_num',
         'cert_of_destruction_num' => 'cert_of_destruction_num'
     ];
-    
+
     protected $defaultSearchResultFields = [
         'lot_date' => 'lot_date',
         'lot_number' => 'lot_number',
@@ -73,7 +73,7 @@ class ShipmentController extends ContextController
         'cert_of_data_wipe_num' => 'cert_of_data_wipe_num',
         'cert_of_destruction_num' => 'cert_of_destruction_num'
     ];
-    
+
     protected $defaultExportFields = [
         'lot_date' => 'lot_date',
         'lot_number' => 'lot_number',
@@ -94,14 +94,14 @@ class ShipmentController extends ContextController
         'cert_of_data_wipe_num' => 'cert_of_data_wipe_num',
         'cert_of_destruction_num' => 'cert_of_destruction_num'
     ];
-    
+
     protected $modelSearchFields = [];
     protected $modelSimpleSearchFields = [];
     protected $modelSearchResultFields = [];
     protected $modelExportFields = [];
 
     protected $fieldCategories = [];
-    
+
     protected $vendorClients = [];
     protected $lotNumberPrefixes = [];
 
@@ -113,7 +113,7 @@ class ShipmentController extends ContextController
     public function __construct(Request $request)
     {
         parent::__construct($request);
-        
+
         $this->fieldCategories = self::USE_SELECT_EXACT_VALUES ?
         [
             'exact' => ['freight_carrier', 'site_coordinator', 'city_of_origin'],
@@ -140,11 +140,11 @@ class ShipmentController extends ContextController
             'float_less_greater' => ['freight_charge', 'total_weight_received'],
             'custom' => ['vendor_client']
         ];
-        
+
         $this->middleware('auth');
         $this->middleware('context.permissions:' . $this->context);
         $this->middleware('role:' . Role::USER . '|' . Role::SUPERUSER);
-        
+
         $this->modelSearchFields = $this->site->hasFeature(Feature::SHIPMENT_CUSTOM_SEARCH_FIELDS) ? $this->site->getFeature(Feature::SHIPMENT_CUSTOM_SEARCH_FIELDS)->pivot->data : $this->defaultSearchFields;
         $this->modelSimpleSearchFields = $this->site->hasFeature(Feature::SHIPMENT_CUSTOM_SIMPLE_SEARCH_FIELDS) ? $this->site->getFeature(Feature::SHIPMENT_CUSTOM_SIMPLE_SEARCH_FIELDS)->pivot->data : $this->defaultSimpleSearchFields;
         $this->modelSearchResultFields = $this->site->hasFeature(Feature::SHIPMENT_CUSTOM_SEARCH_RESULT_FIELDS) ? $this->site->getFeature(Feature::SHIPMENT_CUSTOM_SEARCH_RESULT_FIELDS)->pivot->data : $this->defaultSearchResultFields;
@@ -165,7 +165,7 @@ class ShipmentController extends ContextController
             // $this->lotNumberPrefixes = $this->site->lotNumbers->lists('prefix', 'prefix')->toArray();
         }
     }
-    
+
     /**
      * @return \Illuminate\Http\Response
      */
@@ -195,7 +195,7 @@ class ShipmentController extends ContextController
                 $uniqueCitiesOfOrigin = array_pluck($uniqueCitiesOfOriginQuery->get(), 'city_of_origin');
             }
         }
-    
+
         return view('shipment.shipmentSearch', [
             'fields' => $this->modelSearchFields,
             'simpleFields' => $this->modelSimpleSearchFields,
@@ -207,7 +207,7 @@ class ShipmentController extends ContextController
             'city_of_origin_values' => $uniqueCitiesOfOrigin
         ]);
     }
-    
+
     /**
      * @return \Illuminate\Http\Response
      */
@@ -222,8 +222,8 @@ class ShipmentController extends ContextController
             $query = $query->sortable([]);
         }
 
-        $shipments = $query->paginate(self::RESULTS_PER_PAGE);
-    
+        $shipments = $query->withCount('assets')->paginate(self::RESULTS_PER_PAGE);
+
         return view('shipment.shipmentSearchResult', [
             'fields' => $this->modelSearchResultFields,
             'fieldCategories' => $this->fieldCategories,
@@ -232,7 +232,7 @@ class ShipmentController extends ContextController
             'limit' => self::STRING_LIMIT
         ]);
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Builder
      */
@@ -248,16 +248,16 @@ class ShipmentController extends ContextController
         foreach($input as $key => $value) {
             $input[$key] = trim($value);
         }
-    
+
         foreach ($this->modelSearchFields as $field => $label) {
             if (in_array($field, $this->fieldCategories['exact'], true) && array_key_exists($field, $input) && !empty($input[$field])) {
                 $query->where($field, StringHelper::addSlashes($input[$field]));
             }
-        
+
             if (in_array($field, $this->fieldCategories['string_like'], true) && array_key_exists($field, $input) && !empty($input[$field])) {
                 $query->where($field, 'like', '%' . StringHelper::addSlashes($input[$field]) . '%');
             }
-        
+
             if (in_array($field, $this->fieldCategories['string_multi'], true) && array_key_exists($field, $input) && !empty($input[$field . '_select']) && !empty($input[$field])) {
                 switch ($input[$field . '_select']) {
                     case 'equals':
@@ -278,7 +278,7 @@ class ShipmentController extends ContextController
                 }
                 $query->where($field, 'like', $phrase);
             }
-        
+
             if (in_array($field, $this->fieldCategories['date_from_to'], true)) {
                 if (array_key_exists($field . '_from', $input) && !empty($input[$field . '_from'])) {
                     $query->where($field, '>=', Carbon::createFromFormat(Constants::DATE_FORMAT, $input[$field . '_from'])->startOfDay());
@@ -287,7 +287,7 @@ class ShipmentController extends ContextController
                     $query->where($field, '<=', Carbon::createFromFormat(Constants::DATE_FORMAT, $input[$field . '_to'])->endOfDay());
                 }
             }
-        
+
             if ((in_array($field, $this->fieldCategories['int_less_greater'], true) || in_array($field, $this->fieldCategories['float_less_greater'], true))) {
                 if (array_key_exists($field . '_greater_than', $input) && !empty($input[$field . '_greater_than'])) {
                     $query->where($field, '>=', $input[$field . '_greater_than']);
@@ -310,17 +310,17 @@ class ShipmentController extends ContextController
                 }
             }
         }
-        
+
         return $query;
     }
-    
+
     /**
      * @return \Illuminate\Http\Response
      */
     public function getSearchExport()
     {
         $query = $this->prepareQuery();
-        
+
         /* not needed after all
         if (Input::get('page')) {
             $query->paginate(self::RESULTS_PER_PAGE, null, null, Input::get('page'));
@@ -381,12 +381,12 @@ class ShipmentController extends ContextController
         }
 
         $csv->finalize();
-        
+
         $filename = $this->site->code . '_shipments_' . Carbon::now()->format('mdY') . '.csv';
 
         return $csv->download($filename);
     }
-    
+
     /**
      * @return \Illuminate\Http\Response
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
@@ -394,7 +394,7 @@ class ShipmentController extends ContextController
     public function getDetails($context = null, $id)
     {
         $shipment = Shipment::find($id);
-        
+
         if (!$shipment) {
             throw new NotFoundHttpException();
         }
@@ -404,7 +404,7 @@ class ShipmentController extends ContextController
                 throw new NotFoundHttpException();
             }
         }
-    
+
         if ($this->site->hasFeature(Feature::LOT_NUMBER_PREFIX_ACCESS_RESTRICTED) && !Auth::user()->hasRole(Role::SUPERUSER)) {
             if (count($this->lotNumberPrefixes) > 0) {
                 $error = true;
@@ -420,13 +420,13 @@ class ShipmentController extends ContextController
                 }
             }
         }
-    
+
         return view('shipment.shipmentDetails', [
             'fields' => $this->modelSearchResultFields,
             'shipment' => $shipment
         ]);
     }
-    
+
     /**
      * @return \Redirect
      */
