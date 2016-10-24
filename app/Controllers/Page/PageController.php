@@ -55,8 +55,6 @@ class PageController extends ContextController
                         $canAccessPageLotNumberRestricted = false;
 
                         $userLotNumbers = Auth::user()->lotNumbers->pluck('prefix')->toArray();
-                        $userLotNumbersCount  = count($userLotNumbers);
-                        $userHasLotNumberRestrictions = ($userLotNumbersCount > 0) ? true : false;
                         $fileLotNumbers = [];
 
                         foreach ($sitePage->files as $file) {
@@ -67,7 +65,7 @@ class PageController extends ContextController
 
                         $intersection = array_intersect($fileLotNumbers, $userLotNumbers);
 
-                        if (count($intersection) > 0 || !$userHasLotNumberRestrictions) {
+                        if (count($intersection) > 0) {
                             $canAccessPageLotNumberRestricted = true;
                         }
                     }

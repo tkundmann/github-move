@@ -15,11 +15,6 @@
                         <hr />
 
                         @if ($files->count() > 0)
-                            <?php
-                            $userLotNumbers = Auth::user()->lotNumbers->pluck('prefix')->toArray();
-                            $userLotNumbersCount  = count($userLotNumbers);
-                            $userHasLotNumberRestrictions = ($userLotNumbersCount > 0) ? true : false;
-                            ?>
                             <table id="fileTable" class="table table-striped">
                                 <thead>
                                     <tr>
@@ -33,7 +28,7 @@
                                 </thead>
                                 <tbody>
                             @foreach ($files as $file)
-                                @if (!$page->lotNumberRestricted || !$userHasLotNumberRestrictions || ($page->lotNumberRestricted && $fileAccess[$file->id]))
+                                @if (!$page->lotNumberRestricted || ($page->lotNumberRestricted && $fileAccess[$file->id]))
                                 <tr>
                                     <td>
                                         <i class="fa fa-file-o margin-right-sm"></i>
