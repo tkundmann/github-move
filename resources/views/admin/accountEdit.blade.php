@@ -16,6 +16,25 @@
                             {{ Form::open(['route' => ['admin.account.edit', $account->id], 'method' => 'POST', 'class' => 'form-horizontal', 'id' => 'account_edit_form']) }}
                             {{ csrf_field() }}
 
+                            <div class="form-group @if($errors->has('roles')) has-error @endif">
+                                {{ Form::label('roles', trans('admin.accounts.user.role'), ['class' => 'col-sm-3 control-label colon-after']) }}
+                                <div class="col-sm-6">
+                                    {{ Form::select('roles', $roles, Input::get('roles') ? Input::get('roles') : (old('roles') ? old('roles') : $account->roles()->lists('name')->toArray()), ['class' => 'selectpicker form-control']) }}
+                                </div>
+                            </div>
+
+                            <div id="siteGroup" class="form-group @if($errors->has('site')) has-error @endif">
+                                {{ Form::label('site', trans('admin.accounts.user.site'), ['class' => 'col-sm-3 control-label colon-after']) }}
+                                <div class="col-sm-6">
+                                    {{ Form::select('site', $sites, Input::get('site') ? Input::get('site') : (old('site') ? old('site') : $account->site_id), ['class' => 'selectpicker form-control', 'title' => trans('common.select')]) }}
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="alert alert-field alert-info text-center">
+                                        @lang('admin.accounts.create.site_reload_warning')
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="form-group{{----}}@if($errors->has('name')) has-error @endif">
                                 {{ Form::label('name', trans('admin.accounts.user.name'), ['class' => 'col-sm-3 control-label colon-after']) }}
                                 <div class="col-sm-6">
@@ -33,25 +52,6 @@
                                     @if ($errors->has('email'))
                                         {!! $errors->first('email', '<small class="text-danger">:message</small>') !!}
                                     @endif
-                                </div>
-                            </div>
-
-                            <div class="form-group @if($errors->has('roles')) has-error @endif">
-                                {{ Form::label('roles', trans('admin.accounts.user.role'), ['class' => 'col-sm-3 control-label colon-after']) }}
-                                <div class="col-sm-6">
-                                    {{ Form::select('roles', $roles, Input::get('roles') ? Input::get('roles') : (old('roles') ? old('roles') : $account->roles()->lists('name')->toArray()), ['class' => 'selectpicker form-control']) }}
-                                </div>
-                            </div>
-
-                            <div id="siteGroup" class="form-group @if($errors->has('site')) has-error @endif">
-                                {{ Form::label('site', trans('admin.accounts.user.site'), ['class' => 'col-sm-3 control-label colon-after']) }}
-                                <div class="col-sm-6">
-                                    {{ Form::select('site', $sites, Input::get('site') ? Input::get('site') : (old('site') ? old('site') : $account->site_id), ['class' => 'selectpicker form-control', 'title' => trans('common.select')]) }}
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="alert alert-field alert-info text-center">
-                                        @lang('admin.accounts.create.site_reload_warning')
-                                    </div>
                                 </div>
                             </div>
 
