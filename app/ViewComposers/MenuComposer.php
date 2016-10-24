@@ -84,6 +84,9 @@ class MenuComposer
                                     $canAccessPageLotNumberRestricted = false;
 
                                     $userLotNumbers = Auth::user()->lotNumbers->pluck('prefix')->toArray();
+                                    $userLotNumbersCount  = count($userLotNumbers);
+                                    $userHasLotNumberRestrictions = ($userLotNumbersCount > 0) ? true : false;
+
                                     $fileLotNumbers = [];
 
                                     foreach ($page->files as $file) {
@@ -94,7 +97,7 @@ class MenuComposer
 
                                     $intersection = array_intersect($fileLotNumbers, $userLotNumbers);
 
-                                    if (count($intersection) > 0) {
+                                    if (count($intersection) > 0 || !$userHasLotNumberRestrictions) {
                                         $canAccessPageLotNumberRestricted = true;
                                     }
                                 }
