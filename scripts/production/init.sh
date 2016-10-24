@@ -4,6 +4,7 @@ npm install
 
 # Install and Run "gulp less" (will rebuild *.less files from resources/assets and put them into public/css)
 npm install gulp -g
+npm install gulp-notify -g
 
 gulp less
 
