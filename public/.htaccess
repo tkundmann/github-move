@@ -5,6 +5,27 @@
 
     RewriteEngine On
 
+    # Ebay Pickup Request Form Redirects
+    RewriteCond %{REQUEST_URI} ^/ebay/pickuprequest$ [NC]
+    RewriteRule ^.*$  "/ebay/pickup-request"    [R,NE,L]
+
+    # GoDaddy Pickup Request Form Redirects
+    RewriteCond %{REQUEST_URI} ^/godaddy/pickuprequest$ [NC]
+    RewriteRule ^.*$  "/godaddy/pickup-request"    [R,NE,L]
+
+    # Principal Pickup Request Form Redirects
+    RewriteCond %{REQUEST_URI} ^/principal/pickuprequest$ [NC]
+    RewriteRule ^.*$  "/principal/pickup-request"    [R,NE,L]
+
+    # Workday Pickup Request Form Redirects
+    RewriteCond %{REQUEST_URI} ^/workday/pickuprequest$ [NC]
+    RewriteRule ^.*$  "/workday/pickup-request"    [R,NE,L]
+
+    # Yahoo Pickup Request Form Redirects
+    RewriteCond %{REQUEST_URI} ^/yahoo/page/pickuprequest$ [OR,NC]
+    RewriteCond %{REQUEST_URI} ^/yahoo/pickuprequest$ [NC]
+    RewriteRule ^.*$  "/yahoo/pickup-request"    [R,NE,L]
+
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)/$ /$1 [L,R=301]
