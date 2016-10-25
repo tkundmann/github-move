@@ -31,7 +31,7 @@ class PageController extends ContextController
         $this->middleware('context.permissions:' . $this->context);
         $this->middleware('role:'. Role::USER .'|'. Role::SUPERUSER);
     }
-
+    
     public function getPage($context, $page)
     {
         if (($this->site->hasFeature(Feature::HAS_PAGES)) && ($this->site->hasPage($page))) {
@@ -52,21 +52,24 @@ class PageController extends ContextController
                     }
 
                     if ($sitePage->lotNumberRestricted) {
-                        $canAccessPageLotNumberRestricted = false;
-
                         $userLotNumbers = Auth::user()->lotNumbers->pluck('prefix')->toArray();
-                        $fileLotNumbers = [];
 
-                        foreach ($sitePage->files as $file) {
-                            $fileLotNumbers = array_merge($fileLotNumbers, $file->lotNumbers->pluck('prefix')->toArray());
-                        }
+                        if (count($userLotNumbers) > 0) {
+                            $canAccessPageLotNumberRestricted = false;
 
-                        $fileLotNumbers = array_unique($fileLotNumbers);
+                            $fileLotNumbers = [];
 
-                        $intersection = array_intersect($fileLotNumbers, $userLotNumbers);
+                            foreach ($sitePage->files as $file) {
+                                $fileLotNumbers = array_merge($fileLotNumbers, $file->lotNumbers->pluck('prefix')->toArray());
+                            }
 
-                        if (count($intersection) > 0) {
-                            $canAccessPageLotNumberRestricted = true;
+                            $fileLotNumbers = array_unique($fileLotNumbers);
+
+                            $intersection = array_intersect($fileLotNumbers, $userLotNumbers);
+
+                            if (count($intersection) > 0) {
+                                $canAccessPageLotNumberRestricted = true;
+                            }
                         }
                     }
                 }
@@ -90,10 +93,14 @@ class PageController extends ContextController
                 $userLotNumbers = Auth::user()->lotNumbers->pluck('prefix')->toArray();
 
                 foreach ($files->items() as $file) {
-                    $fileLotNumbers = $file->lotNumbers->pluck('prefix')->toArray();
-                    $fileAccessArray[$file->id] = (count(array_intersect($fileLotNumbers, $userLotNumbers)) > 0) || Auth::user()->hasRole([ Role::SUPERUSER ]);
+                    if (count($userLotNumbers) > 0) {
+                        $fileLotNumbers = $file->lotNumbers->pluck('prefix')->toArray();
+                        $fileAccessArray[$file->id] = (count(array_intersect($fileLotNumbers, $userLotNumbers)) > 0) || Auth::user()->hasRole([Role::SUPERUSER]);
+                    }
+                    else {
+                        $fileAccessArray[$file->id] = true;
+                    }
                 }
-
             }
 
             $fileAvailabilityArray = [];

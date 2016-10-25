@@ -4,7 +4,7 @@ namespace App\Data;
 
 class Constants
 {
-    const VERSION = '1.0.0.20160927';
+    const VERSION = '1.0.0.20161025';
 
     const REMEMBER_ME_COOKIE_LONGEVITY = 365; // days
 

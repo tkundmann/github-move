@@ -49,13 +49,13 @@ class MenuComposer
             }
         }
 
-        /**
-         * Bind data to the view.
-         *
-         * @param  View  $view
-         * @return void
-         */
-        public function compose(View $view)
+    /**
+     * Bind data to the view.
+     *
+     * @param  View  $view
+     * @return void
+     */
+    public function compose(View $view)
     {
         $site = null;
 
@@ -81,21 +81,24 @@ class MenuComposer
                                 }
 
                                 if ($page->lotNumberRestricted) {
-                                    $canAccessPageLotNumberRestricted = false;
-
                                     $userLotNumbers = Auth::user()->lotNumbers->pluck('prefix')->toArray();
-                                    $fileLotNumbers = [];
 
-                                    foreach ($page->files as $file) {
-                                        $fileLotNumbers = array_merge($fileLotNumbers, $file->lotNumbers->pluck('prefix')->toArray());
-                                    }
+                                    if (count($userLotNumbers) > 0) {
+                                        $canAccessPageLotNumberRestricted = false;
 
-                                    $fileLotNumbers = array_unique($fileLotNumbers);
+                                        $fileLotNumbers = [];
 
-                                    $intersection = array_intersect($fileLotNumbers, $userLotNumbers);
+                                        foreach ($page->files as $file) {
+                                            $fileLotNumbers = array_merge($fileLotNumbers, $file->lotNumbers->pluck('prefix')->toArray());
+                                        }
 
-                                    if (count($intersection) > 0) {
-                                        $canAccessPageLotNumberRestricted = true;
+                                        $fileLotNumbers = array_unique($fileLotNumbers);
+
+                                        $intersection = array_intersect($fileLotNumbers, $userLotNumbers);
+
+                                        if (count($intersection) > 0) {
+                                            $canAccessPageLotNumberRestricted = true;
+                                        }
                                     }
                                 }
                             }
