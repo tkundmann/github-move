@@ -340,7 +340,7 @@ class ShipmentController extends ContextController
         $query = $this->prepareQuery();
         $query = $query->sortable(['id' => 'asc']);
 
-        $resultCheck = $query->paginate(1000);
+        $resultCheck = $query->paginate(10000);
         $numberOfIterations = $resultCheck->lastPage();
         $currentIteration = 1;
 
@@ -348,7 +348,7 @@ class ShipmentController extends ContextController
             $query = $this->prepareQuery();
             $query = $query->sortable(['id' => 'asc']);
 
-            $paginator = $query->paginate(1000, ['*'], 'page', $i);
+            $paginator = $query->paginate(10000, ['*'], 'page', $i);
 
             $shipments = $paginator->items();
             $shipmentsCsvArray = [];
@@ -357,19 +357,23 @@ class ShipmentController extends ContextController
                 $shipmentElement = $shipment->toArray();
 
                 $row = [];
-                foreach ($shipmentElement as $key => $value) {
-                    if (array_key_exists($key, $this->modelExportFields)) {
-                        if (in_array($key, $this->fieldCategories['exact'], true) ||
-                            in_array($key, $this->fieldCategories['string_like'], true) ||
-                            in_array($key, $this->fieldCategories['string_multi'], true) ||
-                            in_array($key, $this->fieldCategories['int_less_greater'], true) ||
-                            in_array($key, $this->fieldCategories['float_less_greater'], true) ||
-                            in_array($key, $this->fieldCategories['custom'], true)
+                foreach ($this->modelExportFields as $field => $label) {
+                    if (array_key_exists($field, $shipmentElement)) {
+                        if (in_array($field, $this->fieldCategories['exact'], true) ||
+                            in_array($field, $this->fieldCategories['string_like'], true) ||
+                            in_array($field, $this->fieldCategories['string_multi'], true) ||
+                            in_array($field, $this->fieldCategories['int_less_greater'], true) ||
+                            in_array($field, $this->fieldCategories['float_less_greater'], true) ||
+                            in_array($field, $this->fieldCategories['custom'], true)
                         ) {
-                            $row[$key] = $value;
+                            $row[$field] = $shipmentElement[$field];
                         }
-                        else if (in_array($key, $this->fieldCategories['date_from_to'], true)) {
-                            $row[$key] = !$value ? null : Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(Constants::DATE_FORMAT);
+                        else if (in_array($field, $this->fieldCategories['date_from_to'], true)) {
+                            try {
+                                $row[$field] = !$shipmentElement[$field] ? null : Carbon::createFromFormat('Y-m-d H:i:s', $shipmentElement[$field])->format(Constants::DATE_FORMAT);
+                            } catch (\InvalidArgumentException $e) {
+                                $row[$field] = !$shipmentElement[$field] ? null : Carbon::createFromFormat('Y-m-d', $shipmentElement[$field])->format(Constants::DATE_FORMAT);
+                            }
                         }
                     }
                 }

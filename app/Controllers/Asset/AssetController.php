@@ -22,7 +22,7 @@ class AssetController extends ContextController
     const RESULTS_PER_PAGE = 50;
     const USE_SELECT_EXACT_VALUES = false;
     const STRING_LIMIT = 50;
-    
+
     protected $defaultSearchFields = [
         'vendor_client' => 'vendor_client',
         'lot_date' => 'lot_date',
@@ -73,7 +73,7 @@ class AssetController extends ContextController
         'cert_of_data_wipe_num' => 'cert_of_data_wipe_num',
         'cert_of_destruction_num' => 'cert_of_destruction_num'
     ];
-    
+
     protected $defaultSimpleSearchFields = [
         'vendor_client' => 'vendor_client',
         'lot_date' => 'lot_date',
@@ -82,7 +82,7 @@ class AssetController extends ContextController
         'cert_of_data_wipe_num' => 'cert_of_data_wipe_num',
         'cert_of_destruction_num' => 'cert_of_destruction_num'
     ];
-    
+
     protected $defaultSearchResultFields = [
         'lot_date' => 'lot_date',
         'lot_number' => 'lot_number',
@@ -133,7 +133,7 @@ class AssetController extends ContextController
         'cert_of_data_wipe_num' => 'cert_of_data_wipe_num',
         'cert_of_destruction_num' => 'cert_of_destruction_num'
     ];
-    
+
     protected $defaultExportFields = [
         'lot_date' => 'lot_date',
         'lot_number' => 'lot_number',
@@ -184,14 +184,14 @@ class AssetController extends ContextController
         'cert_of_data_wipe_num' => 'cert_of_data_wipe_num',
         'cert_of_destruction_num' => 'cert_of_destruction_num'
     ];
-    
+
     protected $modelSearchFields = [];
     protected $modelSimpleSearchFields = [];
     protected $modelSearchResultFields = [];
     protected $modelExportFields = [];
-    
+
     protected $fieldCategories = [];
-    
+
     protected $vendorClients = [];
     protected $lotNumberPrefixes = [];
 
@@ -203,7 +203,7 @@ class AssetController extends ContextController
     public function __construct(Request $request)
     {
         parent::__construct($request);
-        
+
         $this->fieldCategories = self::USE_SELECT_EXACT_VALUES ?
         [
             'exact' => ['carrier', 'manufacturer', 'product_family', 'condition', 'date_code', 'status'],
@@ -248,11 +248,11 @@ class AssetController extends ContextController
                 'custom' => []
             ]
         ];
-        
+
         $this->middleware('auth');
         $this->middleware('context.permissions:' . $this->context);
         $this->middleware('role:' . Role::USER . '|' . Role::SUPERUSER);
-        
+
         $this->modelSearchFields = $this->site->hasFeature(Feature::ASSET_CUSTOM_SEARCH_FIELDS) ? $this->site->getFeature(Feature::ASSET_CUSTOM_SEARCH_FIELDS)->pivot->data : $this->defaultSearchFields;
         $this->modelSimpleSearchFields = $this->site->hasFeature(Feature::ASSET_CUSTOM_SIMPLE_SEARCH_FIELDS) ? $this->site->getFeature(Feature::ASSET_CUSTOM_SIMPLE_SEARCH_FIELDS)->pivot->data : $this->defaultSimpleSearchFields;
         $this->modelSearchResultFields = $this->site->hasFeature(Feature::ASSET_CUSTOM_SEARCH_RESULT_FIELDS) ? $this->site->getFeature(Feature::ASSET_CUSTOM_SEARCH_RESULT_FIELDS)->pivot->data : $this->defaultSearchResultFields;
@@ -273,7 +273,7 @@ class AssetController extends ContextController
             // $this->lotNumberPrefixes = $this->site->lotNumbers->lists('prefix', 'prefix')->toArray();
         }
     }
-    
+
     /**
      * @return \Illuminate\Http\Response
      */
@@ -345,7 +345,7 @@ class AssetController extends ContextController
                 $uniqueStatuses = array_pluck($uniqueStatusesQuery->get(), 'status');
             }
         }
-    
+
         return view('asset.assetSearch', [
             'fields' => $this->modelSearchFields,
             'simpleFields' => $this->modelSimpleSearchFields,
@@ -363,7 +363,7 @@ class AssetController extends ContextController
             'city_of_origin_values' => $uniqueCitiesOfOrigin
         ]);
     }
-    
+
     /**
      * @return \Illuminate\Http\Response
      */
@@ -379,7 +379,7 @@ class AssetController extends ContextController
         }
 
         $assets = $query->paginate(self::RESULTS_PER_PAGE);
-        
+
         return view('asset.assetSearchResult', [
             'fields' => $this->modelSearchResultFields,
             'fieldCategories' => $this->fieldCategories,
@@ -388,7 +388,7 @@ class AssetController extends ContextController
             'limit' => self::STRING_LIMIT
         ]);
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Builder
      */
@@ -398,23 +398,23 @@ class AssetController extends ContextController
 
         $this->applyVendorClientQueryRestrictions($query, 'asset');
         $this->applyLotNumberPrefixRestrictions($query, 'asset');
-        
+
         $input = Input::all();
 
         foreach($input as $key => $value) {
             $input[$key] = trim($value);
         }
-    
+
         foreach ($this->modelSearchFields as $field => $label) {
             // Asset
             if (in_array($field, $this->fieldCategories['exact'], true) && array_key_exists($field, $input) && !empty($input[$field])) {
                 $query->where('asset.' . $field, StringHelper::addSlashes($input[$field]));
             }
-        
+
             if (in_array($field, $this->fieldCategories['string_like'], true) && array_key_exists($field, $input) && !empty($input[$field])) {
                 $query->where('asset.' . $field, 'like', '%' . StringHelper::addSlashes($input[$field]) . '%');
             }
-        
+
             if (in_array($field, $this->fieldCategories['string_multi'], true) && array_key_exists($field, $input) && !empty($input[$field . '_select']) && !empty($input[$field])) {
                 switch ($input[$field . '_select']) {
                     case 'equals':
@@ -435,7 +435,7 @@ class AssetController extends ContextController
                 }
                 $query->where('asset.' . $field, 'like', $phrase);
             }
-            
+
             if (in_array($field, $this->fieldCategories['date_from_to'], true)) {
                 if (array_key_exists($field . '_from', $input) && !empty($input[$field . '_from'])) {
                     $query->where('asset.' . $field, '>=', Carbon::createFromFormat(Constants::DATE_FORMAT, $input[$field . '_from'])->startOfDay());
@@ -444,7 +444,7 @@ class AssetController extends ContextController
                     $query->where('asset.' . $field, '<=', Carbon::createFromFormat(Constants::DATE_FORMAT, $input[$field . '_to'])->endOfDay());
                 }
             }
-        
+
             if ((in_array($field, $this->fieldCategories['int_less_greater'], true) || in_array($field, $this->fieldCategories['float_less_greater'], true))) {
                 if (array_key_exists($field . '_greater_than', $input) && !empty($input[$field . '_greater_than'])) {
                     $query->where('asset.' . $field, '>=', $input[$field . '_greater_than']);
@@ -453,7 +453,7 @@ class AssetController extends ContextController
                     $query->where('asset.' . $field, '<=', $input[$field . '_less_than']);
                 }
             }
-            
+
             if (in_array($field, $this->fieldCategories['custom'], true) && array_key_exists($field, $input)) {
                 if ($field === 'vendor_client') {
                     if (!empty($input[$field])) {
@@ -466,17 +466,17 @@ class AssetController extends ContextController
                     }
                 }
             }
-        
+
             // Shipment
 
             if (in_array($field, $this->fieldCategories['shipment']['exact'], true) && array_key_exists($field, $input) && !empty($input[$field])) {
                 $query->where('shipment.' . $field, StringHelper::addSlashes($input[$field]));
             }
-        
+
             if (in_array($field, $this->fieldCategories['shipment']['string_like'], true) && array_key_exists($field, $input) && !empty($input[$field])) {
                 $query->where('shipment.' . $field, 'like', '%' . StringHelper::addSlashes($input[$field]) . '%');
             }
-        
+
             if (in_array($field, $this->fieldCategories['shipment']['string_multi'], true) && array_key_exists($field, $input) && !empty($input[$field . '_select']) && !empty($input[$field])) {
                 switch ($input[$field . '_select']) {
                     case 'equals':
@@ -497,7 +497,7 @@ class AssetController extends ContextController
                 }
                 $query->where('shipment.' . $field, 'like', $phrase);
             }
-        
+
             if (in_array($field, $this->fieldCategories['shipment']['date_from_to'], true)) {
                 if ((array_key_exists($field . '_from', $input) && !empty($input[$field . '_from'])) || (array_key_exists($field . '_to', $input) && !empty($input[$field . '_to']))) {
                     if (array_key_exists($field . '_from', $input) && !empty($input[$field . '_from'])) {
@@ -508,7 +508,7 @@ class AssetController extends ContextController
                     }
                 }
             }
-        
+
             if (in_array($field, $this->fieldCategories['shipment']['int_less_greater'], true) || in_array($field, $this->fieldCategories['shipment']['float_less_greater'], true)) {
                 if ((array_key_exists($field . '_greater_than', $input) && !empty($input[$field . '_greater_than'])) || (array_key_exists($field . '_less_than', $input) && !empty($input[$field . '_less_than']))) {
                     if (array_key_exists($field . '_greater_than', $input) && !empty($input[$field . '_greater_than'])) {
@@ -519,7 +519,7 @@ class AssetController extends ContextController
                     }
                 }
             }
-        
+
             if (in_array($field, $this->fieldCategories['shipment']['custom'], true) && array_key_exists($field, $input)) {
                 if ($field === 'vendor_client') {
                     if (!empty($input[$field])) {
@@ -533,10 +533,10 @@ class AssetController extends ContextController
                 }
             }
         }
-    
+
         return $query;
     }
-    
+
     /**
      * @return \Illuminate\Http\Response
      */
@@ -547,6 +547,26 @@ class AssetController extends ContextController
            $query->paginate(self::RESULTS_PER_PAGE, null, null, Input::get('page'));
         }
         */
+
+        $siteHasCustomEmptyStatus = $this->site->hasFeature(Feature::ASSET_CUSTOM_EMPTY_STATUS);
+        $siteCustomEmptyStatus = null;
+        if ($siteHasCustomEmptyStatus) {
+            $siteCustomEmptyStatus = $this->site->getFeature(Feature::ASSET_CUSTOM_EMPTY_STATUS);
+        }
+
+        $siteHasCustomProductFamilyForCertificateOfDataWipeNumber = $this->site->hasFeature(Feature::CUSTOM_PRODUCT_FAMILY_FOR_CERTIFICATE_OF_DATA_WIPE_NUMBER);
+        $siteCustomProductFamilyForCertificateOfDataWipeNumber = null;
+
+        if ($siteHasCustomProductFamilyForCertificateOfDataWipeNumber) {
+            $siteCustomProductFamilyForCertificateOfDataWipeNumber = $this->site->getFeature(Feature::CUSTOM_PRODUCT_FAMILY_FOR_CERTIFICATE_OF_DATA_WIPE_NUMBER);
+        }
+
+        $siteHasCustomStatusForCertificateOfDestructionNumber = $this->site->hasFeature(Feature::CUSTOM_STATUS_FOR_CERTIFICATE_OF_DESTRUCTION_NUMBER);
+        $siteCustomStatusForCertificateOfDestructionNumber = null;
+
+        if ($siteHasCustomStatusForCertificateOfDestructionNumber) {
+            $siteCustomStatusForCertificateOfDestructionNumber = $this->site->getFeature(Feature::CUSTOM_STATUS_FOR_CERTIFICATE_OF_DESTRUCTION_NUMBER);
+        }
 
         $csv = new CsvHelper();
 
@@ -561,7 +581,7 @@ class AssetController extends ContextController
         $query = $this->prepareQuery();
         $query = $query->sortable(['asset.id' => 'asc']);
 
-        $resultCheck = $query->paginate(1000);
+        $resultCheck = $query->paginate(10000);
         $numberOfIterations = $resultCheck->lastPage();
         $currentIteration = 1;
 
@@ -569,7 +589,7 @@ class AssetController extends ContextController
             $query = $this->prepareQuery();
             $query = $query->sortable(['asset.id' => 'asc']);
 
-            $paginator = $query->paginate(1000, ['*'], 'page', $i);
+            $paginator = $query->paginate(10000, ['*'], 'page', $i);
 
             $assets = $paginator->items();
             $assetsCsvArray = [];
@@ -593,15 +613,15 @@ class AssetController extends ContextController
                             in_array($field, $this->fieldCategories['shipment']['float_less_greater'], true) ||
                             in_array($field, $this->fieldCategories['shipment']['custom'], true)
                         ) {
-                            if ($field === 'status' && empty($assetElement[$field]) && $this->site->hasFeature(Feature::ASSET_CUSTOM_EMPTY_STATUS)) {
-                                if (!$customStatus = $this->site->getFeature(Feature::ASSET_CUSTOM_EMPTY_STATUS)->pivot->data) {
-                                    $customStatus = $this->site->getFeature(Feature::ASSET_CUSTOM_EMPTY_STATUS)->data;
+                            if ($field === 'status' && empty($assetElement[$field]) && $siteHasCustomEmptyStatus) {
+                                if (!$customStatus = $siteCustomEmptyStatus->pivot->data) {
+                                    $customStatus = $siteCustomEmptyStatus->data;
                                 }
 
                                 $row[$field] = $customStatus;
-                            } else if ($field === 'cert_of_data_wipe_num' && $this->site->hasFeature(Feature::CUSTOM_PRODUCT_FAMILY_FOR_CERTIFICATE_OF_DATA_WIPE_NUMBER)) {
-                                if (!$productFamilyArray = $this->site->getFeature(Feature::CUSTOM_PRODUCT_FAMILY_FOR_CERTIFICATE_OF_DATA_WIPE_NUMBER)->pivot->data) {
-                                    $productFamilyArray = $this->site->getFeature(Feature::CUSTOM_PRODUCT_FAMILY_FOR_CERTIFICATE_OF_DATA_WIPE_NUMBER)->data;
+                            } else if ($field === 'cert_of_data_wipe_num' && $siteHasCustomProductFamilyForCertificateOfDataWipeNumber) {
+                                if (!$productFamilyArray = $siteCustomProductFamilyForCertificateOfDataWipeNumber->pivot->data) {
+                                    $productFamilyArray = $siteCustomProductFamilyForCertificateOfDataWipeNumber->data;
                                 }
 
                                 if (in_array($assetElement['product_family'], $productFamilyArray)) {
@@ -610,9 +630,9 @@ class AssetController extends ContextController
                                     $row[$field] = '-';
                                 }
 
-                            } else if ($field === 'cert_of_destruction_num' && $this->site->hasFeature(Feature::CUSTOM_STATUS_FOR_CERTIFICATE_OF_DESTRUCTION_NUMBER)) {
-                                if (!$statusArray = $this->site->getFeature(Feature::CUSTOM_STATUS_FOR_CERTIFICATE_OF_DESTRUCTION_NUMBER)->pivot->data) {
-                                    $statusArray = $this->site->getFeature(Feature::CUSTOM_STATUS_FOR_CERTIFICATE_OF_DESTRUCTION_NUMBER)->data;
+                            } else if ($field === 'cert_of_destruction_num' && $siteHasCustomStatusForCertificateOfDestructionNumber) {
+                                if (!$statusArray = $siteCustomStatusForCertificateOfDestructionNumber->pivot->data) {
+                                    $statusArray = $siteCustomStatusForCertificateOfDestructionNumber->data;
                                 }
 
                                 if (in_array($assetElement['status'], $statusArray)) {
@@ -644,16 +664,16 @@ class AssetController extends ContextController
         $csv->finalize();
 
         $filename = $this->site->code . '_assets';
-    
+
         if (!empty(Input::get('lot_number')) && (Input::get('lot_number_select') == 'equals')) {
             $filename = $filename . '_lotnumber_' . Input::get('lot_number');
         }
-    
+
         $filename = $filename . '_' . Carbon::now()->format('mdY') . '.csv';
-    
+
         return $csv->download($filename);
     }
-    
+
     /**
      * @return \Illuminate\Http\Response
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
@@ -661,7 +681,7 @@ class AssetController extends ContextController
     public function getDetails($context = null, $id)
     {
         $asset = Asset::find($id);
-    
+
         if (!$asset) {
             throw new NotFoundHttpException();
         }
@@ -687,13 +707,13 @@ class AssetController extends ContextController
                 }
             }
         }
-    
+
         return view('asset.assetDetails', [
             'asset' => $asset,
             'fields' => $this->modelSearchResultFields,
         ]);
     }
-    
+
     /**
      * @return \Redirect
      */
