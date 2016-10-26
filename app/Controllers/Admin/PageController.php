@@ -41,7 +41,7 @@ class PageController extends ContextController
             'name' => 'required'
         ];
     }
-    
+
     public function getList()
     {
         $pages = null;
@@ -57,7 +57,7 @@ class PageController extends ContextController
 
         $allSitesWithPages = Site::whereHas('features', function ($query) {
             $query->where('name', Feature::HAS_PAGES);
-        })->get();
+        })->orderBy('title', 'asc')->get();
 
         $allSitesWithPagesArray = [];
 
@@ -72,7 +72,7 @@ class PageController extends ContextController
             'limit' => self::STRING_LIMIT
         ]);
     }
-    
+
     public function getCreate()
     {
         $siteId = Input::get('site') ? trim(Input::get('site')) : old('site');
@@ -84,7 +84,7 @@ class PageController extends ContextController
     protected function createView($site = null) {
         $allSitesWithPages = Site::whereHas('features', function ($query) {
             $query->where('name', Feature::HAS_PAGES);
-        })->get();
+        })->orderBy('title', 'asc')->get();
 
         $allSitesWithPagesArray = [];
 
@@ -138,7 +138,7 @@ class PageController extends ContextController
             'types' => $types
         ]);
     }
-    
+
     public function postCreate()
     {
         if (Input::get('site_change')) {
@@ -160,7 +160,7 @@ class PageController extends ContextController
         }
 
         $validator = Validator::make(Input::all(), $rules);
-        
+
         if ($validator->fails()) {
             return redirect()->route('admin.page.create')->withErrors($validator)->withInput();
         }
@@ -221,7 +221,7 @@ class PageController extends ContextController
 
         $allSitesWithPages = Site::whereHas('features', function ($query) {
             $query->where('name', Feature::HAS_PAGES);
-        })->get();
+        })->orderBy('title', 'asc')->get();
 
         $allSitesWithPagesArray = [];
 
@@ -260,7 +260,7 @@ class PageController extends ContextController
             return redirect()->route('admin.page.list', ['site' => $page->site_id])->with('success', trans('admin.page.edit.page_saved'));
         }
     }
-    
+
     public function getRemove($context = null, $id)
     {
         $page = Page::find($id);
@@ -268,9 +268,9 @@ class PageController extends ContextController
         if (!$page) {
             return redirect()->route('admin.page.list')->with('fail', trans('admin.page.remove.not_exist'));
         }
-        
+
         $siteId = $page->siteId;
-    
+
         foreach ($page->files as $file) {
             $file->delete();
         }
@@ -297,7 +297,7 @@ class PageController extends ContextController
         }
 
         $page->delete();
-    
+
         return redirect()->route('admin.page.list', ['site' => $siteId])->with('success', trans('admin.page.remove.page_removed'));
     }
 
@@ -325,7 +325,7 @@ class PageController extends ContextController
             'limit' => self::STRING_LIMIT
         ]);
     }
-    
+
     public function getFileCreate($context = null, $id)
     {
         $page = Page::find($id);
@@ -339,10 +339,10 @@ class PageController extends ContextController
         if ($page->lotNumberRestricted) {
             $siteLotNumbers = $page->site->lotNumbers->pluck('prefix', 'id')->toArray();
         }
-    
+
         return view('admin.pageFileCreate')->with(['page' => $page, 'lotNumbers' => $siteLotNumbers, 'limit' => self::STRING_LIMIT]);
     }
-    
+
     public function postFileCreate($context = null, $id)
     {
         $page = Page::find($id);
@@ -350,7 +350,7 @@ class PageController extends ContextController
         if (!$page) {
             return redirect()->route('admin.page.list')->with('fail', trans('admin.page.edit.not_exist'));
         }
-        
+
         $rules = [
             'name' => 'required',
             'file' => 'required'
@@ -400,7 +400,7 @@ class PageController extends ContextController
 
         $uploadedFile = Input::file('file');
         $fileName = $uploadedFile->getClientOriginalName();
-        
+
         $file = new File();
         $file->pageId = $page->id;
         $file->name = trim(Input::get('name'));
@@ -456,7 +456,7 @@ class PageController extends ContextController
 
         $file->url = $url;
         $file->save();
-    
+
         return redirect()->route('admin.page.file.list', ['id' => $page->id])->with('success', trans('admin.page.file.create.file_created'));
     }
 
@@ -580,7 +580,7 @@ class PageController extends ContextController
             return redirect()->route('admin.page.file.list', ['id' => $file->page_id])->with('success', trans('admin.page.file.edit.file_saved'));
         }
     }
-    
+
     public function getFileRemove($context = null, $pageId, $fileId)
     {
         $file = File::find($fileId);
@@ -588,7 +588,7 @@ class PageController extends ContextController
         if (!$file) {
             return redirect()->route('admin.page.file.list', ['id' => $pageId])->with('fail', trans('admin.page.file.remove.not_exist'));
         }
-        
+
         $pageId = $file->pageId;
 
         if ($file->page->type == 'Standard') {
@@ -617,7 +617,7 @@ class PageController extends ContextController
         }
 
         $file->delete();
-    
+
         return redirect()->route('admin.page.file.list', ['id' => $pageId])->with('success', trans('admin.page.file.remove.file_removed'));
     }
 

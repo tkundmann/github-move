@@ -32,7 +32,7 @@ class FileController extends ContextController
         $this->middleware('context.permissions:' . $this->context);
         $this->middleware('role:' . Role::ADMIN . '|' . Role::SUPERADMIN);
     }
-    
+
     public function getList()
     {
         $files = null;
@@ -71,7 +71,7 @@ class FileController extends ContextController
 
         $allSitesWithPages = Site::whereHas('features', function ($query) {
             $query->whereIn('name', [Feature::HAS_CERTIFICATES, Feature::HAS_SETTLEMENTS]);
-        })->get();
+        })->orderBy('title', 'asc')->get();
 
         $allSitesWithPagesArray = [];
 
@@ -86,7 +86,7 @@ class FileController extends ContextController
             'limit' => self::STRING_LIMIT
         ]);
     }
-    
+
     public function getCreate()
     {
         $siteId = Input::get('site') ? trim(Input::get('site')) : old('site');
@@ -111,7 +111,7 @@ class FileController extends ContextController
 
         $allSitesWithPages = Site::whereHas('features', function ($query) {
             $query->whereIn('name', [Feature::HAS_CERTIFICATES, Feature::HAS_SETTLEMENTS]);
-        })->get();
+        })->orderBy('title', 'asc')->get();
 
         $allSitesWithPagesArray = [];
 
@@ -125,7 +125,7 @@ class FileController extends ContextController
             'limit' => self::STRING_LIMIT
         ]);
     }
-    
+
     public function postCreate()
     {
         $site = null;
@@ -335,7 +335,7 @@ class FileController extends ContextController
             return redirect()->route('admin.file.list', ['site' => $file->page->site->id])->with('success', trans('admin.file.edit.file_saved'));
         }
     }
-    
+
     public function getRemove($context, $id)
     {
         $file = File::find($id);
