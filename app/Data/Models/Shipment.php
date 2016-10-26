@@ -58,10 +58,10 @@ use Sofa\Eloquence\Mappable;
 class Shipment extends Model
 {
     use Eloquence, Mappable, Sortable;
-    
+
     const CREATED_AT = 'import_date_time';
     const UPDATED_AT = 'update_date_time';
-    
+
     protected $table = 'shipment';
 
     protected $dates = [
@@ -140,7 +140,7 @@ class Shipment extends Model
             $shipment->lotDate = DateTime::createFromFormat('m/d/y', $xml->LOT_DATE->__toString())->setTime(0, 0, 0);
         }
         if ((isset($xml->APPROVAL_DATE)) && (strlen($xml->APPROVAL_DATE) > 0)) {
-            $shipment->lotApprovedDate = DateTime::createFromFormat('m/d/y', $xml->LOT_DATE->__toString())->setTime(0, 0, 0);
+            $shipment->lotApprovedDate = DateTime::createFromFormat('m/d/y', $xml->APPROVAL_DATE->__toString())->setTime(0, 0, 0);
         }
         if ((isset($xml->attributes()['LOT_NUMBER'])) && (strlen($xml->attributes()['LOT_NUMBER']) > 0)) {
             $shipment->lotNumber = $xml->attributes()->LOT_NUMBER->__toString();
@@ -253,7 +253,7 @@ class Shipment extends Model
 
         return $shipment;
     }
-    
+
     static function createFromLotControl(SimpleXMLElement $xml) {
         $shipment = new self();
 
@@ -263,7 +263,7 @@ class Shipment extends Model
             $shipment->lotDate = DateTime::createFromFormat('m/d/y', $xml->LOT_DATE->__toString())->setTime(0, 0, 0);
         }
         if ((isset($xml->APPROVAL_DATE)) && (strlen($xml->APPROVAL_DATE) > 0)) {
-            $shipment->lotApprovedDate = DateTime::createFromFormat('m/d/y', $xml->LOT_DATE->__toString())->setTime(0, 0, 0);
+            $shipment->lotApprovedDate = DateTime::createFromFormat('m/d/y', $xml->APPROVAL_DATE->__toString())->setTime(0, 0, 0);
         }
         if ((isset($xml->attributes()['LOT_NUMBER'])) && (strlen($xml->attributes()['LOT_NUMBER']) > 0)) {
             $shipment->lotNumber = $xml->attributes()->LOT_NUMBER->__toString();
