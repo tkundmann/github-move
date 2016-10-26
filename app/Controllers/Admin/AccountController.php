@@ -73,23 +73,23 @@ class AccountController extends ContextController
     public function getList()
     {
         $query = User::query();
-    
+
         if (!Auth::user()->hasRole(Role::SUPERADMIN)) {
             $query->whereDoesntHave('roles', function ($subquery) {
                 $subquery->whereIn('name', [Role::SUPERADMIN, Role::ADMIN]);
             });
         }
-    
+
         if (!empty(Input::get('name_email'))) {
             $query->where(function ($subquery) {
                 $subquery->where('name', 'like', '%' . StringHelper::addSlashes(trim(Input::get('name_email'))) . '%');
                 $subquery->orWhere('email', 'like', '%' . StringHelper::addSlashes(trim(Input::get('name_email'))) . '%');
             });
         }
-    
+
         if (!empty(Input::get('role'))) {
             $role = trim(Input::get('role'));
-        
+
             if ($role == 'all_users') {
                 $query->whereHas('roles', function ($subquery) {
                     $subquery->whereIn('name', [Role::USER, Role::SUPERUSER]);
@@ -104,10 +104,10 @@ class AccountController extends ContextController
                 });
             }
         }
-    
+
         if (!empty(Input::get('site'))) {
             $site = trim(Input::get('site'));
-        
+
             if ($site != 'all') {
                 $query->whereHas('site', function ($subquery) use ($site) {
                     $subquery->where('id', $site);
@@ -117,17 +117,17 @@ class AccountController extends ContextController
 
         if (!empty(Input::get('status')) || Input::get('status') == '0') {
             $status = trim(Input::get('status'));
-        
+
             if ($status == '1') {
                 $query->where('disabled', false);
             } else if ($status == '0') {
                 $query->where('disabled', true);
             }
         }
-    
+
         $query = $query->sortable(['id' => 'asc']);
         $accounts = $query->paginate(self::RESULTS_PER_PAGE);
-    
+
         if (Auth::user()->hasRole(Role::SUPERADMIN)) {
             $rolesArray = Role::orderBy('id', 'asc')->pluck('name', 'name')->toArray();
             $rolesArray = ['all' => Lang::get('common.all'), 'all_users' => Lang::get('admin.accounts.user.all_users'), 'all_admins' => Lang::get('admin.accounts.user.all_admins')] + $rolesArray;
@@ -135,8 +135,8 @@ class AccountController extends ContextController
             $rolesArray = Role::whereIn('name', [Role::USER, Role::SUPERUSER])->orderBy('id', 'asc')->pluck('name', 'name')->toArray();
             $rolesArray = ['all' => Lang::get('common.all'), 'all_users' => Lang::get('admin.accounts.user.all_users')] + $rolesArray;
         }
-    
-        $allSites = Site::all();
+
+        $allSites = Site::orderBy('title', 'asc')->get();
         $allSitesArray = [];
         foreach ($allSites as $site) {
             $allSitesArray[$site->id] = ($site->title ? $site->title : '-') . ' (' . ($site->code ? $site->code : '-') . ')';
@@ -158,13 +158,13 @@ class AccountController extends ContextController
         $lotNumbers = $site ? $this->getLotNumbers($site) : null;
         $vendorClients = $site ? $this->getVendorClients($site) : null;
         $pages = $site ? $this->getPages($site) : null;
-    
+
         return $this->createView($lotNumbers, $vendorClients, $pages);
     }
-    
+
     protected function createView($lotNumbers = [], $vendorClients = [], $pages = [])
     {
-        $allSites = Site::all();
+        $allSites = Site::orderBy('title', 'asc')->get();
         $allSitesArray = [];
         foreach ($allSites as $site) {
             $allSitesArray[$site->id] = ($site->title ? $site->title : '-') . ' (' . ($site->code ? $site->code : '-') . ')';
@@ -262,21 +262,21 @@ class AccountController extends ContextController
                         $account->vendorClients()->attach($vendorClient);
                     }
                 }
-    
+
                 if ($site->hasFeature(Feature::HAS_PAGES) && is_array(Input::get('pages'))) {
                     foreach (Input::get('pages') as $pageId) {
                         if (!$page = Page::find($pageId)) {
                             throw new \Exception('Page does not exist.');
                         }
-            
+
                         if (!$site->pages->contains($page)) {
                             throw new \Exception('Page does not belong to site.');
                         }
-            
+
                         if (!$page->user_restricted) {
                             throw new \Exception('Page not restricted.');
                         }
-            
+
                         $account->pages()->attach($page);
                     }
                 }
@@ -298,35 +298,35 @@ class AccountController extends ContextController
             return redirect()->route('admin.account.list')->with('success', trans('admin.accounts.create.user_created'));
         }
     }
-    
+
     public function getEdit($context = null, $id)
     {
         $account = User::find($id);
         if (!$account) {
             return redirect()->route('admin.account.list')->with('fail', trans('admin.accounts.edit.not_exist'));
         }
-    
+
         if (!$siteId = Input::get('site') ? trim(Input::get('site')) : old('site')) {
             $siteId = $account->site_id;
         }
-    
+
         $site = Site::find($siteId);
-    
+
         $lotNumbers = $site ? $this->getLotNumbers($site) : null;
         $vendorClients = $site ? $this->getVendorClients($site) : null;
         $pages = $site ? $this->getPages($site) : null;
-    
+
         return $this->editView($account, $lotNumbers, $vendorClients, $pages);
     }
-    
+
     protected function editView(User $account, $lotNumbers = [], $vendorClients = [], $pages = [])
     {
-        $allSites = Site::all();
+        $allSites = Site::orderBy('title', 'asc')->get();
         $allSitesArray = [];
         foreach ($allSites as $site) {
             $allSitesArray[$site->id] = ($site->title ? $site->title : '-') . ' (' . ($site->code ? $site->code : '-') . ')';
         }
-        
+
         if (Auth::user()->hasRole(Role::SUPERADMIN)) {
             $rolesArray = Role::orderBy('id', 'asc')->pluck('name', 'name')->toArray();
         }
@@ -336,7 +336,7 @@ class AccountController extends ContextController
         else {
             $rolesArray = Role::whereNotIn('name', [Role::ADMIN, Role::SUPERADMIN])->orderBy('id', 'asc')->orderBy('id', 'asc')->pluck('name', 'name')->toArray();
         }
-        
+
         return view('admin.accountEdit')->with([
             'account' => $account,
             'sites' => $allSitesArray,
@@ -346,7 +346,7 @@ class AccountController extends ContextController
             'pages' => $pages
         ]);
     }
-    
+
     public function postEdit($context, $id)
     {
         $rules = [
@@ -356,27 +356,27 @@ class AccountController extends ContextController
             'confirmed' => 'required',
             'roles' => 'required',
         ];
-    
+
         if (Input::get('roles') && !in_array(Input::get('roles'), [Role::SUPERUSER, Role::ADMIN, Role::SUPERADMIN], true)) {
             $rules['site'] = 'required|exists:site,id';
         }
-    
+
         if (Auth::user()->hasRole(Role::SUPERADMIN)) {
             $rolesArray = Role::all()->pluck('name')->toArray();
         } else {
             $rolesArray = Role::whereNotIn('name', [Role::ADMIN, Role::SUPERADMIN])->pluck('name')->toArray();
         }
-    
+
         $rules['roles'] = 'required|in:' . implode(',', $rolesArray);
-    
+
         $account = User::find($id);
-    
+
         if (!$account) {
             return redirect()->route('admin.account.list')->with('fail', trans('admin.accounts.edit.not_exist'));
         }
-    
+
         $validator = Validator::make(Input::all(), $rules);
-        
+
         if ($validator->fails()) {
             return redirect()->route('admin.account.edit', ['id' => $id])->withErrors($validator)->withInput(Input::except('password'));
         } else {
@@ -387,7 +387,7 @@ class AccountController extends ContextController
                     return $this->editView($account, $this->getLotNumbers($site), $this->getVendorClients($site), $this->getPages($site));
                 }
             }
-            
+
             $account->name = trim(Input::get('name'));
             $account->email = trim(Input::get('email'));
             $account->disabled = trim(Input::get('disabled'));
@@ -402,61 +402,61 @@ class AccountController extends ContextController
                     throw new \Exception('Site does not exist.');
                 }
                 $account->site()->associate($site);
-    
+
                 if (is_array(Input::get('lot_numbers'))) {
                     foreach (Input::get('lot_numbers') as $lotNumberId) {
                         if (!$lotNumber = LotNumber::find($lotNumberId)) {
                             throw new \Exception('Lot Number does not exist.');
                         }
-            
+
                         if (!$site->lotNumbers->contains($lotNumber)) {
                             throw new \Exception('Lot Number does not belong to site.');
                         }
-            
+
                         $account->lotNumbers()->attach($lotNumber);
                     }
                 }
-    
+
                 if (is_array(Input::get('vendor_clients'))) {
                     foreach (Input::get('vendor_clients') as $vendorClientId) {
                         if (!$vendorClient = VendorClient::find($vendorClientId)) {
                             throw new \Exception('Vendor Client does not exist.');
                         }
-            
+
                         if (!$site->vendorClients->contains($vendorClient)) {
                             throw new \Exception('Vendor Client does not belong to site.');
                         }
-            
+
                         $account->vendorClients()->attach($vendorClient);
                     }
                 }
-    
+
                 if ($site->hasFeature(Feature::HAS_PAGES) && is_array(Input::get('pages'))) {
                     foreach (Input::get('pages') as $pageId) {
                         if (!$page = Page::find($pageId)) {
                             throw new \Exception('Page does not exist.');
                         }
-            
+
                         if (!$site->pages->contains($page)) {
                             throw new \Exception('Page does not belong to site.');
                         }
-            
+
                         if (!$page->user_restricted) {
                             throw new \Exception('Page is not user restricted.');
                         }
-            
+
                         $account->pages()->attach($page);
                     }
                 }
             }
-    
+
             $account->detachRoles();
             if (Input::get('roles')) {
                 $account->attachRole(Role::where('name', Input::get('roles'))->first());
             }
-    
+
             $account->save();
-    
+
             return redirect()->route('admin.account.list')->with('success', trans('admin.accounts.edit.user_saved'));
         }
     }
