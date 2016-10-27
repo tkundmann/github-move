@@ -15,36 +15,36 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
         <meta charset="utf-8">
 
-        <link rel="icon" type="image/x-icon" href="{{ asset("/img/favicon.ico") }}" >
-        <link rel="shortcut icon" type="image/x-icon" href="{{ asset("/img/favicon.ico") }}"/>
+        <link rel="icon" type="image/x-icon" href="{{ secure_asset("/img/favicon.ico") }}" >
+        <link rel="shortcut icon" type="image/x-icon" href="{{ secure_asset("/img/favicon.ico") }}"/>
 
         <!-- CSS / Prerequisites -->
 
         <!-- Bootstrap  -->
-        <link href="{{ asset("/lib/bootstrap/css/bootstrap.css") }}" rel="stylesheet">
+        <link href="{{ secure_asset("/lib/bootstrap/css/bootstrap.css") }}" rel="stylesheet">
         <!-- Bootstrap Theme -->
-        <link href="{{ asset("/lib/bootstrap/css/bootstrap-theme.css") }}" rel="stylesheet">
+        <link href="{{ secure_asset("/lib/bootstrap/css/bootstrap-theme.css") }}" rel="stylesheet">
         <!-- Bootstrap Jasny -->
-        <link href="{{ asset("/lib/bootstrap-jasny/css/bootstrap-jasny.css") }}" rel="stylesheet">
+        <link href="{{ secure_asset("/lib/bootstrap-jasny/css/bootstrap-jasny.css") }}" rel="stylesheet">
         <!-- Bootstrap Colorpicker -->
-        <link href="{{ asset("/lib/bootstrap-colorpicker/css/bootstrap-colorpicker.css") }}" rel="stylesheet">
+        <link href="{{ secure_asset("/lib/bootstrap-colorpicker/css/bootstrap-colorpicker.css") }}" rel="stylesheet">
         <!-- Bootstrap Datepicker -->
-        <link href="{{ asset("/lib/bootstrap-datepicker/css/bootstrap-datepicker.css") }}" rel="stylesheet">
+        <link href="{{ secure_asset("/lib/bootstrap-datepicker/css/bootstrap-datepicker.css") }}" rel="stylesheet">
         <!-- Bootstrap Select -->
-        <link href="{{ asset("/lib/bootstrap-select/css/bootstrap-select.css") }}" rel="stylesheet">
+        <link href="{{ secure_asset("/lib/bootstrap-select/css/bootstrap-select.css") }}" rel="stylesheet">
         <!-- Font Awesome -->
-        <link href="{{ asset("/lib/font-awesome/css/font-awesome.css") }}" rel="stylesheet">
+        <link href="{{ secure_asset("/lib/font-awesome/css/font-awesome.css") }}" rel="stylesheet">
         <!-- Lato -->
-        <link href="{{ asset("/lib/lato/css/lato.css") }}" rel="stylesheet">
+        <link href="{{ secure_asset("/lib/lato/css/lato.css") }}" rel="stylesheet">
         <!-- Toastr -->
-        <link href="{{ asset("/lib/toastr/css/toastr.css") }}" rel="stylesheet">
+        <link href="{{ secure_asset("/lib/toastr/css/toastr.css") }}" rel="stylesheet">
 
         <!-- CSS / Application -->
 
-        <link href="{{ asset("/css/util.css") }}" rel="stylesheet">
-        <link href="{{ asset("/css/main.css") }}" rel="stylesheet">
-        <link href="{{ asset("/css/header.css") }}" rel="stylesheet">
-        <link href="{{ asset("/css/menu.css") }}" rel="stylesheet">
+        <link href="{{ secure_asset("/css/util.css") }}" rel="stylesheet">
+        <link href="{{ secure_asset("/css/main.css") }}" rel="stylesheet">
+        <link href="{{ secure_asset("/css/header.css") }}" rel="stylesheet">
+        <link href="{{ secure_asset("/css/menu.css") }}" rel="stylesheet">
 
     </head>
 
@@ -68,16 +68,16 @@
 
         <!-- JS / Prerequisites -->
 
-        <script src="{{ asset("/lib/jquery/js/jquery.js") }}"></script>
-        <script src="{{ asset("/lib/jquery-browser/js/jquery-browser.js") }}"></script>
-        <script src="{{ asset("/lib/jquery-stickyTableHeaders/js/jquery-stickyTableHeaders.js") }}"></script>
-        <script src="{{ asset("/lib/bootstrap/js/bootstrap.js") }}"></script>
-        <script src="{{ asset("/lib/bootstrap-jasny/js/bootstrap-jasny.js") }}"></script>
-        <script src="{{ asset("/lib/bootstrap-colorpicker/js/bootstrap-colorpicker.js") }}"></script>
-        <script src="{{ asset("/lib/bootstrap-datepicker/js/bootstrap-datepicker.js") }}"></script>
-        <script src="{{ asset("/lib/bootstrap-select/js/bootstrap-select-custom.js") }}"></script>
-        <script src="{{ asset("/lib/toastr/js/toastr.js") }}"></script>
-        <script src="{{ asset("/lib/bootbox/bootbox.js") }}"></script>
+        <script src="{{ secure_asset("/lib/jquery/js/jquery.js") }}"></script>
+        <script src="{{ secure_asset("/lib/jquery-browser/js/jquery-browser.js") }}"></script>
+        <script src="{{ secure_asset("/lib/jquery-stickyTableHeaders/js/jquery-stickyTableHeaders.js") }}"></script>
+        <script src="{{ secure_asset("/lib/bootstrap/js/bootstrap.js") }}"></script>
+        <script src="{{ secure_asset("/lib/bootstrap-jasny/js/bootstrap-jasny.js") }}"></script>
+        <script src="{{ secure_asset("/lib/bootstrap-colorpicker/js/bootstrap-colorpicker.js") }}"></script>
+        <script src="{{ secure_asset("/lib/bootstrap-datepicker/js/bootstrap-datepicker.js") }}"></script>
+        <script src="{{ secure_asset("/lib/bootstrap-select/js/bootstrap-select-custom.js") }}"></script>
+        <script src="{{ secure_asset("/lib/toastr/js/toastr.js") }}"></script>
+        <script src="{{ secure_asset("/lib/bootbox/bootbox.js") }}"></script>
 
         <!-- JS / Application -->
         @if (session('toast')){{--
