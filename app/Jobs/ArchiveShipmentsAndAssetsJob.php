@@ -39,7 +39,7 @@ class ArchiveShipmentsAndAssetsJob extends Job implements ShouldQueue
 
         $shipmentsToArchive = Shipment::where('updateDateTime', '<', $archiveDateCutPoint)->get();
         if (count($shipmentsToArchive) > 0) {
-            Log::info('Shipments to archive: ' . $shipmentsToArchive->toJson());
+            //Log::info('Shipments to archive: ' . $shipmentsToArchive->toJson());
 
             $shipmentsToArchiveArray = $shipmentsToArchive->toArray();
             DB::table('shipment_archive')->insert($shipmentsToArchiveArray);
@@ -56,7 +56,7 @@ class ArchiveShipmentsAndAssetsJob extends Job implements ShouldQueue
 
         $assetsToArchive = Asset::where('updateDateTime', '<', $archiveDateCutPoint)->get();
         if (count($assetsToArchive) > 0) {
-            Log::info('Assets to archive: ' . $assetsToArchive->toJson());
+            //Log::info('Assets to archive: ' . $assetsToArchive->toJson());
 
             $assetsToArchiveArray = $assetsToArchive->toArray();
             DB::table('asset_archive')->insert($assetsToArchiveArray);
