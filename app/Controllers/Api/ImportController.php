@@ -57,7 +57,6 @@ class ImportController extends Controller
                 case 'Lot_Summary':
                     try {
                         $this->processLotSummary($xml);
-                        $this->archiveShipmentsAndAssets();
                         return $this->returnSuccess();
                     } catch (Exception $e) {
                         return $this->returnError(ApiResponse::DESCRIPTION_IMPORT_UNSUCCESSFUL);
@@ -67,7 +66,6 @@ class ImportController extends Controller
                     try {
                         $this->processLotControl($xml);
                         $this->pruneAssets();
-                        $this->archiveShipmentsAndAssets();
                         return $this->returnSuccess();
                     }
                     catch (Exception $e) {
@@ -78,7 +76,6 @@ class ImportController extends Controller
                     try {
                         $this->processAssetsDetail($xml);
                         $this->pruneAssets();
-                        $this->archiveShipmentsAndAssets();
                         return $this->returnSuccess();
                     }
                     catch (Exception $e) {
