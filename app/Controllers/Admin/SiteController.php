@@ -36,11 +36,11 @@ class SiteController extends ContextController
     public function getList()
     {
         $query = Site::query();
-    
+
         if (!empty(Input::get('title'))) {
             $query->where('title', 'like', '%' . StringHelper::addSlashes(trim(Input::get('title'))) . '%');
         }
-    
+
         if (!empty(Input::get('type'))) {
             $type = trim(Input::get('type'));
 
@@ -48,7 +48,7 @@ class SiteController extends ContextController
                 $query->where('type', $type);
             }
         }
-    
+
         $query = $query->sortable(['title' => 'asc']);
         $sites = $query->paginate(self::RESULTS_PER_PAGE);
 
@@ -95,8 +95,8 @@ class SiteController extends ContextController
                         $imageWidth = $imageSize[0];
                         $imageHeight = $imageSize[1];
 
-                        if (($imageWidth < 0) || ($imageWidth > 400) || ($imageHeight < 0) || ($imageHeight > 70)) {
-                            $validator->errors()->add('file', 'Custom Logo maximum dimension is 400 x 70.');
+                        if (($imageWidth < 0) || ($imageWidth > 400) || ($imageHeight < 0) || ($imageHeight > 90)) {
+                            $validator->errors()->add('file', 'Custom Logo maximum dimension is 400 x 90.');
                         }
                     }
                 }
@@ -161,7 +161,7 @@ class SiteController extends ContextController
             return redirect()->route('admin.site.list')->with('success', trans('admin.site.create.site_created'));
         }
     }
-    
+
     public function getEdit($context = null, $id)
     {
         $site = Site::find($id);
@@ -174,7 +174,7 @@ class SiteController extends ContextController
             'currentSite' => $site
         ]);
     }
-    
+
     public function postEdit($context, $id)
     {
         $site = Site::find($id);
@@ -200,7 +200,7 @@ class SiteController extends ContextController
         $messages = array(
             'file.required' => trans('admin.site.create.custom_logo_required')
         );
-    
+
         $validator = Validator::make(Input::all(), $rules, $messages);
         $validator->after(function($validator) {
             if (Input::get('logo_change') && Input::get('logo')) {
@@ -216,14 +216,14 @@ class SiteController extends ContextController
                         $imageWidth = $imageSize[0];
                         $imageHeight = $imageSize[1];
 
-                        if (($imageWidth < 0) || ($imageWidth > 400) || ($imageHeight < 0) || ($imageHeight > 70)) {
-                            $validator->errors()->add('file', 'Custom Logo maximum dimension is 400 x 70.');
+                        if (($imageWidth < 0) || ($imageWidth > 400) || ($imageHeight < 0) || ($imageHeight > 90)) {
+                            $validator->errors()->add('file', 'Custom Logo maximum dimension is 400 x 90.');
                         }
                     }
                 }
             }
         });
-        
+
         if ($validator->fails()) {
             return redirect()->route('admin.site.edit', ['id' => $id])->withInput(Input::all())->withErrors($validator);
         }
@@ -295,7 +295,7 @@ class SiteController extends ContextController
             }
 
             $site->save();
-    
+
             return redirect()->route('admin.site.list')->with('success', trans('admin.site.edit.site_saved'));
         }
     }

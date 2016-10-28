@@ -5,6 +5,14 @@
 
     RewriteEngine On
 
+    #######################################################################
+    # ALWAYS SSL (Handles Situation where the SSL terminates at the load balancer)
+    #######################################################################
+
+    RewriteCond %{HTTPS} !=on
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1  [R=301,L]
+
     # Ebay Pickup Request Form Redirects
     RewriteCond %{REQUEST_URI} ^/ebay/pickuprequest$ [NC]
     RewriteRule ^.*$  "/ebay/pickup-request"    [R,NE,L]
