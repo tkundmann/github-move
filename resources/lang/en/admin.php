@@ -1,7 +1,7 @@
 <?php
 
 return [
-    
+
     /*
     |--------------------------------------------------------------------------
     | Admin
@@ -9,7 +9,7 @@ return [
     |
     |
     */
-    
+
     'remove' => [
         'remove_assets' => [
             'remove_assets' => 'Remove Asset(s)',
@@ -228,7 +228,8 @@ return [
             'site' => 'Site',
             'confirm_remove' => 'Are you sure you want to remove this File?',
             'file' => '{0}files|{1}file|[2,Inf]files',
-            'choose_site' => 'Choose a Site.'
+            'choose_site' => 'Choose a Site.',
+            'filename_name' => 'Filename/Name'
         ],
         'create' => [
             'upload_file' => 'Upload file',

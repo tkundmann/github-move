@@ -27,6 +27,12 @@
                                         <label for="type" class="control-label colon-after margin-right-md">@lang('admin.file.edit.type')</label>
                                         {{ Form::select('type', ['all' => Lang::get('common.all'), 'Certificates of Data Wipe' => 'Certificates of Data Wipe', 'Certificates of Recycling' => 'Certificates of Recycling', 'Settlements' => 'Settlements' ], Input::get('type'), ['class' => 'selectpicker form-control' ,'data-width' => 'auto']) }}
                                     </div>
+                                    <div class="form-group margin-right-md">
+                                        <label for="filename_name"
+                                               class="control-label colon-after margin-right-md">@lang('admin.file.list.filename_name')</label>
+                                        <input id="filename_name" type="text" class="form-control" name="filename_name"
+                                               value="{{ Input::get('filename_name') }}">
+                                    </div>
                                     <button type="submit" class="btn btn-primary"><i class="fa fa-btn fa-search"></i>@lang('common.search')</button>
                                 </form>
                             </div>
