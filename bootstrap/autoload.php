@@ -1,10 +1,5 @@
 <?php
 
-function route($name, $parameters = [], $absolute = false)
-{
-    return app('url')->route($name, $parameters, $absolute);
-}
-
 define('LARAVEL_START', microtime(true));
 
 /*
