@@ -43,6 +43,14 @@ class FileController extends ContextController
             $site = Site::find(Input::get('site'));
 
             if ($site) {
+
+                if (!empty(Input::get('filename_name'))) {
+                    $query->where(function ($subquery) {
+                        $subquery->where('filename', 'like', '%' . StringHelper::addSlashes(trim(Input::get('filename_name'))) . '%');
+                        $subquery->orWhere('name', 'like', '%' . StringHelper::addSlashes(trim(Input::get('filename_name'))) . '%');
+                    });
+                }
+
                 $query->whereHas('page', function ($subquery) use ($site) {
                     $types = [];
 

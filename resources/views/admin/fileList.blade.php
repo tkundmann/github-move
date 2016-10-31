@@ -11,14 +11,14 @@
                             - {{ $files ? $files->total() : 0 }} {{ trans_choice('admin.file.list.file', $files ? $files->total() : 0) }} @lang('common.found') @endif
                     </div>
                     <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-2">
-                                <a href="{{ Input::get('site') ? route('admin.file.create', ['site' => Input::get('site')]) : route('admin.file.create') }}" class="btn btn-success">
-                                    <i class="fa fa-btn fa-plus"></i>@lang('common.upload')
-                                </a>
-                            </div>
-                            <div class="col-md-8 text-center">
-                                <form method="GET" action="{{ route('admin.file.list') }}" class="form-inline">
+                        <form method="GET" action="{{ route('admin.file.list') }}" class="form-inline">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <a href="{{ Input::get('site') ? route('admin.file.create', ['site' => Input::get('site')]) : route('admin.file.create') }}" class="btn btn-success">
+                                        <i class="fa fa-btn fa-plus"></i>@lang('common.upload')
+                                    </a>
+                                </div>
+                                <div class="col-md-8 text-center">
                                     <div class="form-group margin-right-md">
                                         <label for="site" class="control-label colon-after margin-right-md">@lang('admin.file.list.site')</label>
                                         {{ Form::select('site', $sites, Input::get('site'), ['class' => 'selectpicker form-control', 'title' => trans('common.select'), 'data-width' => 'auto']) }}
@@ -27,6 +27,11 @@
                                         <label for="type" class="control-label colon-after margin-right-md">@lang('admin.file.edit.type')</label>
                                         {{ Form::select('type', ['all' => Lang::get('common.all'), 'Certificates of Data Wipe' => 'Certificates of Data Wipe', 'Certificates of Recycling' => 'Certificates of Recycling', 'Settlements' => 'Settlements' ], Input::get('type'), ['class' => 'selectpicker form-control' ,'data-width' => 'auto']) }}
                                     </div>
+                                </div>
+                                <div class="col-md-2"></div>
+                            </div>
+                            <div class="row margin-top-lg">
+                                <div class="col-md-12 text-center">
                                     <div class="form-group margin-right-md">
                                         <label for="filename_name"
                                                class="control-label colon-after margin-right-md">@lang('admin.file.list.filename_name')</label>
@@ -34,10 +39,9 @@
                                                value="{{ Input::get('filename_name') }}">
                                     </div>
                                     <button type="submit" class="btn btn-primary"><i class="fa fa-btn fa-search"></i>@lang('common.search')</button>
-                                </form>
+                                </div>
                             </div>
-                            <div class="col-md-2"></div>
-                        </div>
+                        </form>
 
                         <hr />
 
