@@ -10,6 +10,7 @@ use App\Data\Models\Page;
 use App\Data\Models\Role;
 use App\Data\Models\Shipment;
 use App\Data\Models\Site;
+use App\Helpers\StringHelper;
 use Illuminate\Http\Request;
 use Input;
 use Storage;
