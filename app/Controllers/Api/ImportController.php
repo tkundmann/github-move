@@ -40,7 +40,7 @@ class ImportController extends Controller
 
         Log::info('Content-Type: ' . $contentType);
 
-        if (($contentType != 'text/xml; charset=utf-8') && ($contentType != 'application/xml') && ($contentType != 'text/plain')) {
+        if (strpos($contentType,'text/plain') === false && strpos($contentType,'text/xml') === false && strpos($contentType,'application/xml') === false) {
             return $this->returnError(ApiResponse::DESCRIPTION_FORMAT_INCORRECT);
         }
         if (strlen($content) == 0) {
