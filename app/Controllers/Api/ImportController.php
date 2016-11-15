@@ -38,6 +38,7 @@ class ImportController extends Controller
         $contentType = $request->headers->get('CONTENT_TYPE');
 
         if (($contentType != 'application/x-www-form-urlencoded') && ($contentType != 'application/xml') && ($contentType != 'text/plain')) {
+            $this->info('Content-Type: ' . $contentType);
             return $this->returnError($contentType . ' ' . ApiResponse::DESCRIPTION_FORMAT_INCORRECT);
         }
         if (strlen($content) == 0) {
