@@ -9,11 +9,6 @@ use App\Data\ApiResponse;
 use App\Data\Models\Asset;
 use App\Data\Models\Shipment;
 
-use App\Data\Constants;
-use Carbon\Carbon;
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
-
 use DateTime;
 use Exception;
 use SimpleXMLElement;
@@ -43,7 +38,6 @@ class ImportController extends Controller
         $contentType = $request->headers->get('CONTENT_TYPE');
 
         if (($contentType != 'application/x-www-form-urlencoded') && ($contentType != 'application/xml') && ($contentType != 'text/plain')) {
-            $this->info('Content-Type: ' . $contentType);
             return $this->returnError($contentType . ' ' . ApiResponse::DESCRIPTION_FORMAT_INCORRECT);
         }
         if (strlen($content) == 0) {
