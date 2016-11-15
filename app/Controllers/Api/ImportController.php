@@ -38,7 +38,7 @@ class ImportController extends Controller
         $contentType = $request->headers->get('CONTENT_TYPE');
 
         if (($contentType != 'application/xml') && ($contentType != 'text/plain')) {
-            return $this->returnError(ApiResponse::DESCRIPTION_FORMAT_INCORRECT);
+            return $this->returnError($contentType . ' ' . ApiResponse::DESCRIPTION_FORMAT_INCORRECT);
         }
         if (strlen($content) == 0) {
             return $this->returnError(ApiResponse::DESCRIPTION_FORMAT_INCORRECT);
