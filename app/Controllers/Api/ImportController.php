@@ -9,6 +9,11 @@ use App\Data\ApiResponse;
 use App\Data\Models\Asset;
 use App\Data\Models\Shipment;
 
+use App\Data\Constants;
+use Carbon\Carbon;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
+
 use DateTime;
 use Exception;
 use SimpleXMLElement;
