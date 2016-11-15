@@ -14,6 +14,7 @@ use Exception;
 use SimpleXMLElement;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ImportController extends Controller
 {
@@ -35,10 +36,12 @@ class ImportController extends Controller
 
         // #2 method - plain content from request (application/xml or text/plain)
         $content = $request->getContent();
-        $contentType = $request->headers->get('CONTENT_TYPE');
+        $contentType = strtolower($request->headers->get('CONTENT_TYPE'));
+
+        Log::info('Content-Type: ' . $contentType);
 
         if (($contentType != 'text/xml; charset=utf-8') && ($contentType != 'application/xml') && ($contentType != 'text/plain')) {
-            return $this->returnError($contentType . ' ' . ApiResponse::DESCRIPTION_FORMAT_INCORRECT);
+            return $this->returnError(ApiResponse::DESCRIPTION_FORMAT_INCORRECT);
         }
         if (strlen($content) == 0) {
             return $this->returnError(ApiResponse::DESCRIPTION_FORMAT_INCORRECT);
