@@ -366,7 +366,12 @@ class ShipmentController extends ContextController
                             in_array($field, $this->fieldCategories['float_less_greater'], true) ||
                             in_array($field, $this->fieldCategories['custom'], true)
                         ) {
-                            $row[$field] = $shipmentElement[$field];
+                            if ($field === 'freight_charge') {
+                                $row[$field] = Constants::CURRENCY_SYMBOL . $shipmentElement[$field];
+                            }
+                            else {
+                                $row[$field] = $shipmentElement[$field];
+                            }
                         }
                         else if (in_array($field, $this->fieldCategories['date_from_to'], true)) {
                             try {
@@ -375,6 +380,12 @@ class ShipmentController extends ContextController
                                 $row[$field] = !$shipmentElement[$field] ? null : Carbon::createFromFormat('Y-m-d', $shipmentElement[$field])->format(Constants::DATE_FORMAT);
                             }
                         }
+                        else {
+                            $row[$field] = '-';
+                        }
+                    }
+                    else {
+                        $row[$field] = '-';
                     }
                 }
 

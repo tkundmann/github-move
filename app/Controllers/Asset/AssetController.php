@@ -394,7 +394,7 @@ class AssetController extends ContextController
      */
     private function prepareQuery()
     {
-        $query = Asset::query()->select('asset.*')->leftjoin('shipment', 'asset.lot_number', '=', 'shipment.lot_number');
+        $query = Asset::query()->select('asset.*')->leftjoin('shipment', 'asset.lot_number', '=', 'shipment.lot_number')->with('shipment');
 
         $this->applyVendorClientQueryRestrictions($query, 'asset');
         $this->applyLotNumberPrefixRestrictions($query, 'asset');
@@ -605,13 +605,7 @@ class AssetController extends ContextController
                             in_array($field, $this->fieldCategories['string_multi'], true) ||
                             in_array($field, $this->fieldCategories['int_less_greater'], true) ||
                             in_array($field, $this->fieldCategories['float_less_greater'], true) ||
-                            in_array($field, $this->fieldCategories['custom'], true) ||
-                            in_array($field, $this->fieldCategories['shipment']['exact'], true) ||
-                            in_array($field, $this->fieldCategories['shipment']['string_like'], true) ||
-                            in_array($field, $this->fieldCategories['shipment']['string_multi'], true) ||
-                            in_array($field, $this->fieldCategories['shipment']['int_less_greater'], true) ||
-                            in_array($field, $this->fieldCategories['shipment']['float_less_greater'], true) ||
-                            in_array($field, $this->fieldCategories['shipment']['custom'], true)
+                            in_array($field, $this->fieldCategories['custom'], true)
                         ) {
                             if ($field === 'status' && empty($assetElement[$field]) && $siteHasCustomEmptyStatus) {
                                 if (!$customStatus = $siteCustomEmptyStatus->pivot->data) {
@@ -619,7 +613,11 @@ class AssetController extends ContextController
                                 }
 
                                 $row[$field] = $customStatus;
-                            } else if ($field === 'cert_of_data_wipe_num' && $siteHasCustomProductFamilyForCertificateOfDataWipeNumber) {
+                            }
+                            else if (($field === 'net_settlement') || ($field === 'settlement_amount')) {
+                                $row[$field] = Constants::CURRENCY_SYMBOL . $assetElement[$field];
+                            }
+                            else if ($field === 'cert_of_data_wipe_num' && $siteHasCustomProductFamilyForCertificateOfDataWipeNumber) {
                                 if (!$productFamilyArray = $siteCustomProductFamilyForCertificateOfDataWipeNumber->pivot->data) {
                                     $productFamilyArray = $siteCustomProductFamilyForCertificateOfDataWipeNumber->data;
                                 }
@@ -630,7 +628,8 @@ class AssetController extends ContextController
                                     $row[$field] = '-';
                                 }
 
-                            } else if ($field === 'cert_of_destruction_num' && $siteHasCustomStatusForCertificateOfDestructionNumber) {
+                            }
+                            else if ($field === 'cert_of_destruction_num' && $siteHasCustomStatusForCertificateOfDestructionNumber) {
                                 if (!$statusArray = $siteCustomStatusForCertificateOfDestructionNumber->pivot->data) {
                                     $statusArray = $siteCustomStatusForCertificateOfDestructionNumber->data;
                                 }
@@ -641,17 +640,61 @@ class AssetController extends ContextController
                                     $row[$field] = '-';
                                 }
 
-                            } else {
+                            }
+                            else {
                                 $row[$field] = $assetElement[$field];
                             }
                         }
-                        else if (in_array($field, $this->fieldCategories['date_from_to'], true) || in_array($field, $this->fieldCategories['shipment']['date_from_to'], true)) {
+                        else if (in_array($field, $this->fieldCategories['date_from_to'], true)) {
                             try {
                                 $row[$field] = !$assetElement[$field] ? null : Carbon::createFromFormat('Y-m-d H:i:s', $assetElement[$field])->format(Constants::DATE_FORMAT);
                             } catch (\InvalidArgumentException $e) {
                                 $row[$field] = !$assetElement[$field] ? null : Carbon::createFromFormat('Y-m-d', $assetElement[$field])->format(Constants::DATE_FORMAT);
                             }
                         }
+                        else {
+                            $row[$field] = '-';
+                        }
+                    }
+                    else if ($assetElement['shipment'] && array_key_exists($field, $assetElement['shipment'])) {
+                        if (in_array($field, $this->fieldCategories['shipment']['exact'], true) ||
+                            in_array($field, $this->fieldCategories['shipment']['string_like'], true) ||
+                            in_array($field, $this->fieldCategories['shipment']['string_multi'], true) ||
+                            in_array($field, $this->fieldCategories['shipment']['int_less_greater'], true) ||
+                            in_array($field, $this->fieldCategories['shipment']['float_less_greater'], true) ||
+                            in_array($field, $this->fieldCategories['shipment']['custom'], true)
+                        ) {
+                            if ($assetElement['shipment']) {
+                                if ($field === 'freight_charge') {
+                                    $row[$field] = Constants::CURRENCY_SYMBOL . $assetElement['shipment'][$field];
+                                }
+                                else {
+                                    $row[$field] = $assetElement['shipment'][$field];
+                                }
+                            }
+                            else {
+                                $row[$field] = '-';
+                            }
+                        }
+                        else if (in_array($field, $this->fieldCategories['shipment']['date_from_to'], true)) {
+                            if ($assetElement['shipment']) {
+                                try {
+                                    $row[$field] = !$assetElement['shipment'][$field] ? null : Carbon::createFromFormat('Y-m-d H:i:s', $assetElement['shipment'][$field])->format(Constants::DATE_FORMAT);
+                                }
+                                catch (\InvalidArgumentException $e) {
+                                    $row[$field] = !$assetElement['shipment'][$field] ? null : Carbon::createFromFormat('Y-m-d', $assetElement['shipment'][$field])->format(Constants::DATE_FORMAT);
+                                }
+                            }
+                            else {
+                                $row[$field] = '-';
+                            }
+                        }
+                        else {
+                            $row[$field] = '-';
+                        }
+                    }
+                    else {
+                        $row[$field] = '-';
                     }
                 }
 
