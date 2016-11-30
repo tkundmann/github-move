@@ -1,7 +1,7 @@
 <?php
 
 return [
-    
+
     /*
     |--------------------------------------------------------------------------
     | Assets
@@ -9,7 +9,7 @@ return [
     |
     |
     */
-    
+
     'lot_date' => 'Lot Date',
     'lot_number' => 'Lot Number',
     'bill_of_lading' => 'Bill of Lading',
@@ -66,9 +66,9 @@ return [
      // shipment labels
     'city_of_origin' => 'City of Origin',
     'audit_completed' => 'Audit Completed',
-    'vendor_shipment_number' => 'Vendor Shipment Number',
-    'freight_carrier' => 'Freight Carrier',
-    
+    'vendor_shipment_number' => 'Vendor Order Number',
+    'freight_carrier' => 'Carrier',
+
     'search' => [
         'assets_search_form' => 'Assets Search Form',
         'use_1' => 'Use the form below to search for Assets that match specific search criteria.',
@@ -78,7 +78,7 @@ return [
         'export_assets' => 'Export to CSV',
         'advanced_search' => 'Advanced Search'
     ],
-    
+
     'search_result' => [
         'listed_below' => 'Listed below is the Asset report that matches your search criteria.',
         'data_can_be_stored_1' => 'Data can be sorted by the columns listed by clicking on the corresponding column name.',
@@ -88,7 +88,7 @@ return [
         'modify_search' => 'Modify Search',
         'export_assets' => 'Export to CSV',
     ],
-    
+
     'details' => [
         'asset_details' => 'Asset Details'
     ]

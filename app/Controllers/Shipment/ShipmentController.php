@@ -338,7 +338,7 @@ class ShipmentController extends ContextController
         $csv->initialize($header);
 
         $query = $this->prepareQuery();
-        $query = $query->sortable(['id' => 'asc']);
+        $query = $query->sortable(['lot_date' => 'desc']);
 
         $resultCheck = $query->paginate(10000);
         $numberOfIterations = $resultCheck->lastPage();
@@ -346,7 +346,7 @@ class ShipmentController extends ContextController
 
         for ($i = $currentIteration; $i <= $numberOfIterations; $i++) {
             $query = $this->prepareQuery();
-            $query = $query->sortable(['id' => 'asc']);
+            $query = $query->sortable(['lot_date' => 'desc']);
 
             $paginator = $query->paginate(10000, ['*'], 'page', $i);
 
