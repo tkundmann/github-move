@@ -96,7 +96,7 @@
                                                     @if (isset($asset->certOfDataWipeNum))
                                                         @if ($site->hasFeature(Feature::HAS_CERTIFICATES))
                                                             <?php $certOfDataWipePage = $site->pages->where('type', 'Certificates of Data Wipe')->first(); ?>
-                                                            <?php $certOfDataWipe = $certOfDataWipePage ? $asset->shipment->files->where('page_id', $certOfDataWipePage->id)->first() : null; ?>
+                                                            <?php $certOfDataWipe = ($certOfDataWipePage && isset($asset->shipment)) ? $asset->shipment->files->where('page_id', $certOfDataWipePage->id)->first() : null; ?>
                                                             @if ($certOfDataWipe)
                                                                 @if ($site->hasFeature(Feature::CERTIFICATE_OF_DATA_WIPE_NUMBER_AS_FILE))
                                                                     <a href="{{ $certOfDataWipe->url }}" target="_blank">{{ str_limit($asset->certOfDataWipeNum, $limit) }} ({{ str_limit($certOfDataWipe->filename, $limit) }})</a>
@@ -117,7 +117,7 @@
                                                 @if (isset($asset->certOfDataWipeNum))
                                                     @if ($site->hasFeature(Feature::HAS_CERTIFICATES))
                                                         <?php $certOfDataWipePage = $site->pages->where('type', 'Certificates of Data Wipe')->first(); ?>
-                                                        <?php $certOfDataWipe = $certOfDataWipePage ? $asset->shipment->files->where('page_id', $certOfDataWipePage->id)->first() : null; ?>
+                                                        <?php $certOfDataWipe = ($certOfDataWipePage && isset($asset->shipment)) ? $asset->shipment->files->where('page_id', $certOfDataWipePage->id)->first() : null; ?>
                                                         @if ($certOfDataWipe)
                                                             @if ($site->hasFeature(Feature::CERTIFICATE_OF_DATA_WIPE_NUMBER_AS_FILE))
                                                                 <a href="{{ $certOfDataWipe->url }}" target="_blank">{{ str_limit($asset->certOfDataWipeNum, $limit) }} ({{ str_limit($certOfDataWipe->filename, $limit) }})</a>
@@ -141,7 +141,7 @@
                                                     @if (isset($asset->certOfDestructionNum))
                                                         @if ($site->hasFeature(Feature::HAS_CERTIFICATES))
                                                             <?php $certOfDataDestructionPage = $site->pages->where('type', 'Certificates of Recycling')->first(); ?>
-                                                            <?php $certOfDataDestruction = $certOfDataDestructionPage ? $asset->shipment->files->where('page_id', $certOfDataDestructionPage->id)->first() : null; ?>
+                                                            <?php $certOfDataDestruction = ($certOfDataDestructionPage && isset($asset->shipment)) ? $asset->shipment->files->where('page_id', $certOfDataDestructionPage->id)->first() : null; ?>
                                                             @if ($certOfDataDestruction)
                                                                 @if ($site->hasFeature(Feature::CERTIFICATE_OF_DESTRUCTION_NUMBER_AS_FILE))
                                                                     <a href="{{ $certOfDataDestruction->url }}" target="_blank">{{ str_limit($asset->certOfDestructionNum, $limit) }} ({{ str_limit($certOfDataDestruction->filename, $limit) }})</a>
@@ -162,7 +162,7 @@
                                                 @if (isset($asset->certOfDestructionNum))
                                                     @if ($site->hasFeature(Feature::HAS_CERTIFICATES))
                                                         <?php $certOfDataDestructionPage = $site->pages->where('type', 'Certificates of Recycling')->first(); ?>
-                                                        <?php $certOfDataDestruction = $certOfDataDestructionPage ? $asset->shipment->files->where('page_id', $certOfDataDestructionPage->id)->first() : null; ?>
+                                                        <?php $certOfDataDestruction = ($certOfDataDestructionPage && isset($asset->shipment)) ? $asset->shipment->files->where('page_id', $certOfDataDestructionPage->id)->first() : null; ?>
                                                         @if ($certOfDataDestruction)
                                                             @if ($site->hasFeature(Feature::CERTIFICATE_OF_DESTRUCTION_NUMBER_AS_FILE))
                                                                 <a href="{{ $certOfDataDestruction->url }}" target="_blank">{{ str_limit($asset->certOfDestructionNum, $limit) }} ({{ str_limit($certOfDataDestruction->filename, $limit) }})</a>
@@ -200,8 +200,8 @@
                                 <td class="pointer" title="{{ $asset->$field }}" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">{{ isset($asset->$field) ? $asset->$field->format(Constants::DATE_FORMAT) : '-' }}</td>
                             @endif
                             @if(in_array($field, array_merge($fieldCategories['shipment']['exact'], $fieldCategories['shipment']['string_like'], $fieldCategories['shipment']['string_multi'], $fieldCategories['shipment']['custom'], $fieldCategories['shipment']['int_less_greater'], $fieldCategories['shipment']['float_less_greater']), true))
-                                <td class="pointer" title="{{ $asset->shipment->$field }}" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">
-                                    @if($asset->shipment)
+                                <td class="pointer" title="{{ isset($asset->shipment->$field) ? $asset->shipment->$field : '' }}" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">
+                                    @if(isset($asset->shipment))
                                         @if (in_array($field, ['freight_charge'], true))
                                             <span @if($asset->shipment->$field < 0)class="text-danger"@endif>{{ $asset->shipment->$field ? Constants::CURRENCY_SYMBOL . $asset->shipment->$field : '-' }}</span>
                                         @else
@@ -211,10 +211,9 @@
                                         -
                                     @endif
                                 </td>
-                            @endif
-                            @if(in_array($field, $fieldCategories['shipment']['date_from_to'], true))
-                                <td class="pointer" title="{{ $asset->shipment->$field }}" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">
-                                    @if($asset->shipment)
+                            @elseif(in_array($field, $fieldCategories['shipment']['date_from_to'], true))
+                                <td class="pointer" title="{{ isset($asset->shipment->$field) ? $asset->shipment->$field : '' }}" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">
+                                    @if(isset($asset->shipment))
                                         {{ isset($asset->shipment->$field) ? $asset->shipment->$field->format(Constants::DATE_FORMAT) : '-' }}
                                     @else
                                         -
@@ -226,7 +225,7 @@
                                     -
                                 </td>
                             @endif
-                            @endforeach
+                    @endforeach
                 </tr>
             @endforeach
             </tbody>
