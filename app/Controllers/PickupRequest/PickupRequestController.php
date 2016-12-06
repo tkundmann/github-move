@@ -290,7 +290,7 @@ class PickupRequestController extends ContextController
             }
 
             if ($preferredPickupDateAMPM) {
-                $date = Carbon::createFromFormat('m/d/Y h:i A', $date->month . '/' . $date->day . '/' . $date->year . ' ' . str_pad($date->hour, 2, '0',STR_PAD_LEFT) . ':' . str_pad($date->minute, 2, '0',STR_PAD_LEFT) . ' ' . $preferredPickupDateAMPM);
+                $date = Carbon::createFromFormat('m/d/Y h:i A', $date->month . '/' . $date->day . '/' . $date->year . ' ' . str_pad($date->hour, 2, '0', STR_PAD_LEFT) . ':' . str_pad($date->minute, 2, '0', STR_PAD_LEFT) . ' ' . $preferredPickupDateAMPM);
             }
 
             $pickupRequest->preferred_pickup_date = $date;
