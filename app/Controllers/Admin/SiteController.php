@@ -395,7 +395,7 @@ class SiteController extends ContextController
             return redirect()->route('admin.site.vendorClient.create', ['siteId' => $site->id])->withInput(Input::all())->withErrors($validator);
         }
         else {
-            $input = htmlspecialchars(Input::get('vendor_client'));
+            $input = Input::get('vendor_client');
             $input = str_replace([',', ';', "\r\n", "\r", "\n"], ',', $input);
             $vendorClients = explode(',', $input);
 
