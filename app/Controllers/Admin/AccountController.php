@@ -198,7 +198,8 @@ class AccountController extends ContextController
         $rules = array(
             'name' => 'required',
             'email' => 'required|email|unique_email_context:site_id,' . trim(Input::get('site')),
-            'password' => 'required|min:8|symbols|confirmed',
+            //'password' => 'required|min:8|symbols|confirmed',
+            'password' => 'required|confirmed|min:4',
             'password_confirmation' => 'required',
             'disabled' => 'required',
         );

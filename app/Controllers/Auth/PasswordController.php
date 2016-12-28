@@ -41,7 +41,7 @@ class PasswordController extends ContextController
 
         $this->subject = trans('email.reset_password.email_title');
     }
-    
+
     /**
      * Display the password reset view for the given token.
      *
@@ -64,7 +64,7 @@ class PasswordController extends ContextController
             'token' => $token
         ];
         $credentials = array_merge($credentials, ['site_id' => $this->getSiteId()]);
-    
+
         if (!empty($credentials['email']) || !empty($credentials['token'])) {
             $broker = $this->getBroker();
             $prevalidateResult = Password::broker($broker)->prevalidateReset($credentials);
@@ -80,7 +80,7 @@ class PasswordController extends ContextController
 
         return view('auth.reset')->with(compact('token', 'email', 'prevalidateResult'));
     }
-    
+
     /**
      * Send a reset link to the given user.
      *
@@ -114,7 +114,7 @@ class PasswordController extends ContextController
                 return $this->getSendResetLinkEmailFailureResponse($response);
         }
     }
-    
+
     /**
      * Validate the request of sending reset link.
      *
@@ -158,7 +158,7 @@ class PasswordController extends ContextController
                 return $this->getResetFailureResponse($request, $response);
         }
     }
-    
+
     /**
      * Get the password reset validation rules.
      *
@@ -169,7 +169,8 @@ class PasswordController extends ContextController
         return [
             'token' => 'required',
             'email' => 'required|email|exists:user,email,site_id,' . $this->getSiteId(true),
-            'password' => 'required|confirmed|min:8|symbols',
+            //'password' => 'required|confirmed|min:8|symbols',
+            'password' => 'required|confirmed|min:4',
         ];
     }
 
