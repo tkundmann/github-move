@@ -169,8 +169,7 @@ class PasswordController extends ContextController
         return [
             'token' => 'required',
             'email' => 'required|email|exists:user,email,site_id,' . $this->getSiteId(true),
-            //'password' => 'required|confirmed|min:8|symbols',
-            'password' => 'required|confirmed|min:4',
+            'password' => 'required|confirmed|min:8|symbols',
         ];
     }
 

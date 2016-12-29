@@ -36,8 +36,11 @@ class ChangePasswordController extends ContextController
     {
         $rules = [
             'old_password' => 'required',
-            //'new_password' => 'required|min:8|symbols|confirmed',
-            'new_password' => 'required|min:4|confirmed'
+            'new_password' => '
+                required|
+                min:8|
+                symbols|
+                confirmed',
         ];
 
         $validator = Validator::make(Input::all(), $rules);
