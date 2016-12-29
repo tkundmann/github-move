@@ -33,6 +33,20 @@
     RewriteCond %{REQUEST_URI} ^/yahoo/page/pickuprequest$ [OR,NC]
     RewriteCond %{REQUEST_URI} ^/yahoo/pickuprequest$ [NC]
     RewriteRule ^.*$  "/yahoo/pickup-request"    [R,NE,L]
+    
+    # Redirects from the old site
+    RewriteCond %{HTTP_HOST} ^www.belmont-technology.com$
+    RewriteCond %{REQUEST_URI} ^/$ [OR]
+    RewriteCond %{REQUEST_URI} ^/main.taf?
+    RewriteRule ^(.*)$          http://www.sipiar.com?  [NC,R=301,L]
+
+    RewriteCond %{HTTP_HOST} ^www.belmont-technology.com$
+    RewriteCond %{REQUEST_URI} ^/(.*)/main.taf?
+    RewriteRule ^(.*)/main.taf?$          https://portal.sipiar.com/$1/  [NC,R=301,L]
+
+    RewriteCond %{HTTP_HOST} ^www.belmont-technology.com$
+    RewriteCond %{REQUEST_URI} !^/(.*)/main.taf?
+    RewriteRule ^(.*)$          https://portal.sipiar.com/$1/  [NC,R=301,L]
 
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
