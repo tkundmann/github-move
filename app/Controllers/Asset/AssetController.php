@@ -615,7 +615,7 @@ class AssetController extends ContextController
                                 $row[$field] = $customStatus;
                             }
                             else if (($field === 'net_settlement') || ($field === 'settlement_amount')) {
-                                $row[$field] = Constants::CURRENCY_SYMBOL . $assetElement[$field];
+                                $row[$field] = '-';
                             }
                             else if ($field === 'cert_of_data_wipe_num' && $siteHasCustomProductFamilyForCertificateOfDataWipeNumber) {
                                 if (!$productFamilyArray = $siteCustomProductFamilyForCertificateOfDataWipeNumber->pivot->data) {
