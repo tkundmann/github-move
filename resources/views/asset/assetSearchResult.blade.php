@@ -86,7 +86,7 @@
                                     @endif
                                     @if ($asset->$field)
                                         @if (in_array($field, ['net_settlement', 'settlement_amount'], true))
-                                            <span @if($asset->$field < 0)class="text-danger"@endif>{{ $asset->$field ? Constants::CURRENCY_SYMBOL . $asset->$field : '-' }}</span>
+                                            <span>-</span>
                                         @elseif($field === 'cert_of_data_wipe_num')
                                             @if ($site->hasFeature(Feature::CUSTOM_PRODUCT_FAMILY_FOR_CERTIFICATE_OF_DATA_WIPE_NUMBER))
                                                 @if (!$productFamilyArray = $site->getFeature(Feature::CUSTOM_PRODUCT_FAMILY_FOR_CERTIFICATE_OF_DATA_WIPE_NUMBER)->pivot->data)
