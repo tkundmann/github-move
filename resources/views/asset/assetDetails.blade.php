@@ -151,19 +151,6 @@
                                                 @endif
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-6 control-label colon-after">{{ array_key_exists('settlement_amount', $fields) ? (Lang::has('asset.'. $fields['settlement_amount']) ? Lang::trans('asset.' .  $fields['settlement_amount']) :  $fields['settlement_amount']) : Lang::trans('asset.settlement_amount') }}</label>
-                                            <div class="col-sm-6">
-                                                <p class="form-control-static @if($asset->settlementAmount && $asset->settlementAmount < 0) text-danger @endif">{{ isset($asset->settlementAmount) ? Constants::CURRENCY_SYMBOL . $asset->settlementAmount : '-' }}</p>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-6 control-label colon-after">{{ array_key_exists('net_settlement', $fields) ? (Lang::has('asset.'. $fields['net_settlement']) ? Lang::trans('asset.' .  $fields['net_settlement']) :  $fields['net_settlement']) : Lang::trans('asset.net_settlement') }}</label>
-                                            <div class="col-sm-6">
-                                                <p class="form-control-static @if($asset->netSettlement && $asset->netSettlement < 0) text-danger @endif">{{ isset($asset->netSettlement) ? Constants::CURRENCY_SYMBOL . $asset->netSettlement : '-' }}</p>
-                                            </div>
-                                        </div>
-
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
