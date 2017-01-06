@@ -13,7 +13,7 @@ class AddHdsnToAssetArchive extends Migration
     public function up()
     {
         Schema::table('asset_archive', function (Blueprint $table) {
-            $table->string('hdsn_configuration', 50)->nullable()->default(null);
+            $table->string('hdsn_configuration', 255)->nullable()->default(null);
         });
     }
 
