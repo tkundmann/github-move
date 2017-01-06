@@ -50,6 +50,7 @@ use Sofa\Eloquence\Mappable;
  * @property \Carbon\Carbon $auditCompleted
  * @property string $certOfDataWipeNum
  * @property string $certOfDestructionNum
+ * @property string $representative
  * @property \Carbon\Carbon $importDateTime
  * @property \Carbon\Carbon $updateDateTime
  * @property-read \App\Data\Models\Asset[] $assets
@@ -118,6 +119,7 @@ class Shipment extends Model
         'certOfDestructionNum' => 'cert_of_destruction_num',
         'importDateTime' => 'import_date_time',
         'updateDateTime' => 'update_date_time'
+        //'representative' => 'representative'
     ];
 
     public function assets()
@@ -250,6 +252,9 @@ class Shipment extends Model
         if ((isset($xml->CERTIFICATE_OF_DESTRUCTION_NUMBER)) && (strlen($xml->CERTIFICATE_OF_DESTRUCTION_NUMBER) > 0)) {
             $shipment->certOfDestructionNum = $xml->CERTIFICATE_OF_DESTRUCTION_NUMBER->__toString();
         }
+        if ((isset($xml->REPRESENTATIVE)) && (strlen($xml->REPRESENTATIVE) > 0)) {
+            $shipment->representative = $xml->REPRESENTATIVE->__toString();
+        }
 
         return $shipment;
     }
@@ -357,6 +362,9 @@ class Shipment extends Model
         }
         if ((isset($xml->CERTIFICATE_OF_DESTRUCTION_NUMBER)) && (strlen($xml->CERTIFICATE_OF_DESTRUCTION_NUMBER) > 0)) {
             $shipment->certOfDestructionNum = $xml->CERTIFICATE_OF_DESTRUCTION_NUMBER->__toString();
+        }
+        if ((isset($xml->REPRESENTATIVE)) && (strlen($xml->REPRESENTATIVE) > 0)) {
+            $shipment->representative = $xml->REPRESENTATIVE->__toString();
         }
 
         return $shipment;

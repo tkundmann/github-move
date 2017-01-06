@@ -61,6 +61,7 @@ use Sofa\Eloquence\Mappable;
  * @property string $hardDriveSerialNum
  * @property string $assetTag
  * @property string $status
+ * @property string $hdsnConfiguration
  * @property float $settlementAmount
  * @property float $netSettlement
  * @property string $certOfDataWipeNum
@@ -140,7 +141,8 @@ class Asset extends Model
         'certOfDataWipeNum' => 'cert_of_data_wipe_num',
         'certOfDestructionNum' => 'cert_of_destruction_num',
         'importDateTime' => 'import_date_time',
-        'updateDateTime' => 'update_date_time'
+        'updateDateTime' => 'update_date_time',
+        'hdsnConfiguration' => 'hdsn_configuration'
     ];
 
     public function shipment()
@@ -311,6 +313,9 @@ class Asset extends Model
         if ((isset($lotControl->CERTIFICATE_OF_DESTRUCTION_NUMBER)) && (strlen($lotControl->CERTIFICATE_OF_DESTRUCTION_NUMBER) > 0)) {
             $asset->certOfDestructionNum = $lotControl->CERTIFICATE_OF_DESTRUCTION_NUMBER->__toString();
         }
+        if ((isset($xml->HDSN_CONFIG)) && (strlen($xml->HDSN_CONFIG) > 0)) {
+            $asset->hdsnConfiguration = $xml->HDSN_CONFIG->__toString();
+        }
 
         return $asset;
     }
@@ -475,6 +480,9 @@ class Asset extends Model
         }
         if ((isset($xml->CERTIFICATE_OF_DESTRUCTION_NUMBER)) && (strlen($xml->CERTIFICATE_OF_DESTRUCTION_NUMBER) > 0)) {
             $asset->certOfDestructionNum = $xml->CERTIFICATE_OF_DESTRUCTION_NUMBER->__toString();
+        }
+        if ((isset($xml->HDSN_CONFIG)) && (strlen($xml->HDSN_CONFIG) > 0)) {
+            $asset->hdsnConfiguration = $xml->HDSN_CONFIG->__toString();
         }
 
         return $asset;
