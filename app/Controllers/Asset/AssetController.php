@@ -218,7 +218,7 @@ class AssetController extends ContextController
             'custom' => ['vendor_client'],
             'shipment' => [
                 'exact' => ['city_of_origin', 'freight_carrier'],
-                'string_like' => ['bill_of_lading', 'cost_center', 'pickup_address', 'pickup_address_2', 'pickup_city', 'pickup_state', 'pickup_zip_code', 'po_number', 'vendor_shipment_number'],
+                'string_like' => ['bill_of_lading', 'cost_center', 'pickup_address', 'pickup_address_2', 'pickup_city', 'pickup_state', 'pickup_zip_code', 'po_number', 'vendor_shipment_number','representative'],
                 'string_multi' => [],
                 'date_from_to' => ['date_received', 'pre_audit_approved', 'audit_completed'],
                 'int_less_greater' => [],
@@ -240,7 +240,7 @@ class AssetController extends ContextController
             'custom' => ['vendor_client'],
             'shipment' => [
                 'exact' => [],
-                'string_like' => ['city_of_origin', 'freight_carrier', 'bill_of_lading', 'cost_center', 'pickup_address', 'pickup_address_2', 'pickup_city', 'pickup_state', 'pickup_zip_code', 'po_number', 'vendor_shipment_number'],
+                'string_like' => ['city_of_origin', 'freight_carrier', 'bill_of_lading', 'cost_center', 'pickup_address', 'pickup_address_2', 'pickup_city', 'pickup_state', 'pickup_zip_code', 'po_number', 'vendor_shipment_number','representative'],
                 'string_multi' => [],
                 'date_from_to' => ['date_received', 'pre_audit_approved', 'audit_completed'],
                 'int_less_greater' => [],
