@@ -207,10 +207,9 @@ class AssetController extends ContextController
         $this->fieldCategories = self::USE_SELECT_EXACT_VALUES ?
         [
             'exact' => ['carrier', 'manufacturer', 'product_family', 'condition', 'date_code', 'status'],
-            'string_like' => ['vendor_order_number', 'vendor', 'barcode_number', 'manufacturer_model_num', 'manufacturer_part_num',
+            'string_like' => ['bill_of_lading', 'vendor_order_number', 'vendor', 'barcode_number', 'manufacturer_model_num', 'manufacturer_part_num',
                 'parent_serial_num', 'item_number', 'form_factor', 'speed', 'memory', 'storage_capacity', 'dual', 'quad', 'optical_1', 'optical_2', 'nic', 'video', 'color',
-                'adapter', 'screen_size', 'battery', 'wifi', 'docking_station', 'stylus', 'firewire', 'keyboard', 'mouse', 'cartridge', 'coa', 'osx_description',
-                'comments', 'additional_comments', 'hard_drive_serial_num', 'asset_tag', 'cert_of_data_wipe_num', 'cert_of_destruction_num'],
+                'adapter', 'screen_size', 'battery', 'wifi', 'docking_station', 'stylus', 'firewire', 'keyboard', 'mouse', 'cartridge', 'coa', 'osx_description', 'po_number', 'comments', 'additional_comments', 'hard_drive_serial_num', 'asset_tag', 'cert_of_data_wipe_num', 'cert_of_destruction_num'],
             'string_multi' => ['lot_number', 'manufacturer_serial_num'],
             'date_from_to' => ['lot_date', 'date_arrived', 'shipment_date'],
             'int_less_greater' => [],
@@ -218,7 +217,7 @@ class AssetController extends ContextController
             'custom' => ['vendor_client'],
             'shipment' => [
                 'exact' => ['city_of_origin', 'freight_carrier'],
-                'string_like' => ['bill_of_lading', 'cost_center', 'pickup_address', 'pickup_address_2', 'pickup_city', 'pickup_state', 'pickup_zip_code', 'po_number', 'vendor_shipment_number','representative'],
+                'string_like' => ['cost_center', 'pickup_address', 'pickup_address_2', 'pickup_city', 'pickup_state', 'pickup_zip_code', 'vendor_shipment_number','representative'],
                 'string_multi' => [],
                 'date_from_to' => ['date_received', 'pre_audit_approved', 'audit_completed'],
                 'int_less_greater' => [],
@@ -229,10 +228,9 @@ class AssetController extends ContextController
         :
         [
             'exact' => [],
-            'string_like' => ['carrier', 'manufacturer', 'product_family', 'condition', 'date_code', 'status', 'vendor_order_number', 'vendor', 'barcode_number', 'manufacturer_model_num', 'manufacturer_part_num',
+            'string_like' => ['bill_of_lading', 'carrier', 'manufacturer', 'product_family', 'condition', 'date_code', 'status', 'vendor_order_number', 'vendor', 'barcode_number', 'manufacturer_model_num', 'manufacturer_part_num',
                 'parent_serial_num', 'item_number', 'form_factor', 'speed', 'memory', 'storage_capacity', 'dual', 'quad', 'optical_1', 'optical_2', 'nic', 'video', 'color',
-                'adapter', 'screen_size', 'battery', 'wifi', 'docking_station', 'stylus', 'firewire', 'keyboard', 'mouse', 'cartridge', 'coa', 'osx_description',
-                'comments', 'additional_comments', 'hard_drive_serial_num', 'asset_tag', 'cert_of_data_wipe_num', 'cert_of_destruction_num'],
+                'adapter', 'screen_size', 'battery', 'wifi', 'docking_station', 'stylus', 'firewire', 'keyboard', 'mouse', 'cartridge', 'coa', 'osx_description', 'po_number', 'comments', 'additional_comments', 'hard_drive_serial_num', 'asset_tag', 'cert_of_data_wipe_num', 'cert_of_destruction_num'],
             'string_multi' => ['lot_number', 'manufacturer_serial_num'],
             'date_from_to' => ['lot_date', 'date_arrived', 'shipment_date'],
             'int_less_greater' => [],
@@ -240,7 +238,7 @@ class AssetController extends ContextController
             'custom' => ['vendor_client'],
             'shipment' => [
                 'exact' => [],
-                'string_like' => ['city_of_origin', 'freight_carrier', 'bill_of_lading', 'cost_center', 'pickup_address', 'pickup_address_2', 'pickup_city', 'pickup_state', 'pickup_zip_code', 'po_number', 'vendor_shipment_number','representative'],
+                'string_like' => ['city_of_origin', 'freight_carrier', 'cost_center', 'pickup_address', 'pickup_address_2', 'pickup_city', 'pickup_state', 'pickup_zip_code', 'vendor_shipment_number','representative'],
                 'string_multi' => [],
                 'date_from_to' => ['date_received', 'pre_audit_approved', 'audit_completed'],
                 'int_less_greater' => [],
