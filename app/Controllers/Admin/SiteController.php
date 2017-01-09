@@ -409,19 +409,19 @@ class SiteController extends ContextController
                     if ($existingRecordCount > 0) {
                         $existingVendorClient =  VendorClient::where('name', $vendorClient)->first();
 
-                        $site->vendorClients()->attach($existingVendorClient->id);
+                        try {
+                          $site->vendorClients()->attach($existingVendorClient->id);
+                        }
+                        catch (\Exception $e) {
+                            throw new \Exception('Vendor Client already assign to that site.');
+                        }
                     }
                     else {
                         $newVendorClient = new VendorClient();
                         $newVendorClient->name = $vendorClient;
                         $newVendorClient->save();
 
-                        try {
-                          $site->vendorClients()->attach($newVendorClient->id);
-                        }
-                        catch (\Exception $e) {
-                            throw new \Exception('Vendor Client already assign to that site.');
-                        }
+                        $site->vendorClients()->attach($newVendorClient->id);
                     }
                 }
             }
@@ -520,19 +520,20 @@ class SiteController extends ContextController
                     if ($existingRecordCount > 0) {
                         $existingLotNumber = LotNumber::where('prefix', $lotNumber)->first();
 
-                        $site->lotNumbers()->attach($existingLotNumber->id);
+                        try {
+                          $site->lotNumbers()->attach($existingLotNumber->id);
+                        }
+                        catch (\Exception $e) {
+                            throw new \Exception('Lot Number Prefix already assign to that site.');
+                        }
+
                     }
                     else {
                         $newLotNumber= new LotNumber();
                         $newLotNumber->prefix = $lotNumber;
                         $newLotNumber->save();
 
-                        try {
-                          $site->lotNumbers()->attach($newLotNumber->id);
-                        }
-                        catch (\Exception $e) {
-                            throw new \Exception('Lot Number Prefix already assign to that site.');
-                        }
+                        $site->lotNumbers()->attach($newLotNumber->id);
                     }
                 }
             }
