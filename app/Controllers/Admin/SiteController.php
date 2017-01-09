@@ -401,7 +401,7 @@ class SiteController extends ContextController
 
             foreach ($vendorClients as $vendorClient) {
 
-                $vendorClient = trim($vendorClient);
+                $vendorClient = strtoupper(trim($vendorClient));
 
                 if ($vendorClient != '') {
                     $existingRecordCount = VendorClient::where('name', $vendorClient)->count();
@@ -409,11 +409,8 @@ class SiteController extends ContextController
                     if ($existingRecordCount > 0) {
                         $existingVendorClient =  VendorClient::where('name', $vendorClient)->first();
 
-                        try {
-                          $site->vendorClients()->attach($existingVendorClient->id);
-                        }
-                        catch (\Exception $e) {
-                            throw new \Exception('Vendor Client already assign to that site.');
+                        if (!$site->vendorClients->contains($existingVendorClient->id)) {
+                            $site->vendorClients()->attach($existingVendorClient->id);
                         }
                     }
                     else {
@@ -513,18 +510,15 @@ class SiteController extends ContextController
 
             foreach ($lotNumbers as $lotNumber) {
 
-                $lotNumber = trim($lotNumber);
+                $lotNumber = strtoupper(trim($lotNumber));
                 if ($lotNumber != '') {
                     $existingRecordCount = LotNumber::where('prefix', $lotNumber)->count();
 
                     if ($existingRecordCount > 0) {
                         $existingLotNumber = LotNumber::where('prefix', $lotNumber)->first();
 
-                        try {
-                          $site->lotNumbers()->attach($existingLotNumber->id);
-                        }
-                        catch (\Exception $e) {
-                            throw new \Exception('Lot Number Prefix already assign to that site.');
+                        if (!$site->lotNumbers->contains($existingLotNumber->id)) {
+                            $site->lotNumbers()->attach($existingLotNumber->id);
                         }
 
                     }
