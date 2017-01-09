@@ -400,19 +400,29 @@ class SiteController extends ContextController
             $vendorClients = explode(',', $input);
 
             foreach ($vendorClients as $vendorClient) {
-                $existingRecordCount = VendorClient::where('name', $vendorClient)->count();
 
-                if ($existingRecordCount > 0) {
-                    $existingVendorClient =  VendorClient::where('name', $vendorClient)->first();
+                $vendorClient = trim($vendorClient);
 
-                    $site->vendorClients()->attach($existingVendorClient->id);
-                }
-                else {
-                    $newVendorClient = new VendorClient();
-                    $newVendorClient->name = $vendorClient;
-                    $newVendorClient->save();
+                if ($vendorClient != '') {
+                    $existingRecordCount = VendorClient::where('name', $vendorClient)->count();
 
-                    $site->vendorClients()->attach($newVendorClient->id);
+                    if ($existingRecordCount > 0) {
+                        $existingVendorClient =  VendorClient::where('name', $vendorClient)->first();
+
+                        $site->vendorClients()->attach($existingVendorClient->id);
+                    }
+                    else {
+                        $newVendorClient = new VendorClient();
+                        $newVendorClient->name = $vendorClient;
+                        $newVendorClient->save();
+
+                        try {
+                          $site->vendorClients()->attach($newVendorClient->id);
+                        }
+                        catch (\Exception $e) {
+                            throw new \Exception('Vendor Client already assign to that site.');
+                        }
+                    }
                 }
             }
 
@@ -502,19 +512,28 @@ class SiteController extends ContextController
             $lotNumbers = explode(',', $input);
 
             foreach ($lotNumbers as $lotNumber) {
-                $existingRecordCount = LotNumber::where('prefix', $lotNumber)->count();
 
-                if ($existingRecordCount > 0) {
-                    $existingLotNumber = LotNumber::where('prefix', $lotNumber)->first();
+                $lotNumber = trim($lotNumber);
+                if ($lotNumber != '') {
+                    $existingRecordCount = LotNumber::where('prefix', $lotNumber)->count();
 
-                    $site->lotNumbers()->attach($existingLotNumber->id);
-                }
-                else {
-                    $newLotNumber= new LotNumber();
-                    $newLotNumber->prefix = $lotNumber;
-                    $newLotNumber->save();
+                    if ($existingRecordCount > 0) {
+                        $existingLotNumber = LotNumber::where('prefix', $lotNumber)->first();
 
-                    $site->lotNumbers()->attach($newLotNumber->id);
+                        $site->lotNumbers()->attach($existingLotNumber->id);
+                    }
+                    else {
+                        $newLotNumber= new LotNumber();
+                        $newLotNumber->prefix = $lotNumber;
+                        $newLotNumber->save();
+
+                        try {
+                          $site->lotNumbers()->attach($newLotNumber->id);
+                        }
+                        catch (\Exception $e) {
+                            throw new \Exception('Lot Number Prefix already assign to that site.');
+                        }
+                    }
                 }
             }
 
