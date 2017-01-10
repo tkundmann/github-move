@@ -43,6 +43,9 @@
         <table id="assetSearchTable" class="table table-striped table-bordered withHover">
             <thead>
             <tr>
+                @if ($site->hasFeature(Feature::IS_WINTHROP))
+                    <th>Sipi</th>
+                @endif
                 @foreach($fields as $field => $label)
                     @if(in_array($field, array_merge($fieldCategories['int_less_greater'], $fieldCategories['float_less_greater']), true))
                         <th>@sortablelink('asset.' . $field, Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label, 'fa fa-sort-amount', $order)</th>
@@ -71,7 +74,7 @@
             <tbody>
             @foreach ($assets as $asset)
                 <tr>
-                    @foreach($fields as $field => $label
+                    @foreach($fields as $field => $label)
                         @if (starts_with($field, 'hardcoded-'))
                             <td class="pointer" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">
                                 {{ str_replace('_', ' ', str_replace('hardcoded-', '', $field)) }}
