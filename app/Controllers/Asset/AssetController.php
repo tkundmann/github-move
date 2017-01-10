@@ -597,7 +597,10 @@ class AssetController extends ContextController
 
                 $row = [];
                 foreach ($this->modelExportFields as $field => $label) {
-                    if (array_key_exists($field, $assetElement)) {
+                    if (str_contains($field, 'hardcoded-')) {
+                        $row[$field] = str_replace('_', ' ', str_replace('hardcoded-', '', $field));
+                    }
+                    else if (array_key_exists($field, $assetElement)) {
                         if (in_array($field, $this->fieldCategories['exact'], true) ||
                             in_array($field, $this->fieldCategories['string_like'], true) ||
                             in_array($field, $this->fieldCategories['string_multi'], true) ||
@@ -613,7 +616,7 @@ class AssetController extends ContextController
                                 $row[$field] = $customStatus;
                             }
                             else if (($field === 'net_settlement') || ($field === 'settlement_amount')) {
-                                $row[$field] = '-';
+                                $row[$field] = '';
                             }
                             else if ($field === 'cert_of_data_wipe_num' && $siteHasCustomProductFamilyForCertificateOfDataWipeNumber) {
                                 if (!$productFamilyArray = $siteCustomProductFamilyForCertificateOfDataWipeNumber->pivot->data) {
@@ -623,7 +626,7 @@ class AssetController extends ContextController
                                 if (in_array($assetElement['product_family'], $productFamilyArray)) {
                                     $row[$field] = $assetElement[$field];
                                 } else {
-                                    $row[$field] = '-';
+                                    $row[$field] = '';
                                 }
 
                             }
@@ -635,7 +638,7 @@ class AssetController extends ContextController
                                 if (in_array($assetElement['status'], $statusArray)) {
                                     $row[$field] = $assetElement[$field];
                                 } else {
-                                    $row[$field] = '-';
+                                    $row[$field] = '';
                                 }
 
                             }
@@ -651,7 +654,7 @@ class AssetController extends ContextController
                             }
                         }
                         else {
-                            $row[$field] = '-';
+                            $row[$field] = '';
                         }
                     }
                     else if ($assetElement['shipment'] && array_key_exists($field, $assetElement['shipment'])) {
@@ -671,7 +674,7 @@ class AssetController extends ContextController
                                 }
                             }
                             else {
-                                $row[$field] = '-';
+                                $row[$field] = '';
                             }
                         }
                         else if (in_array($field, $this->fieldCategories['shipment']['date_from_to'], true)) {
@@ -684,15 +687,15 @@ class AssetController extends ContextController
                                 }
                             }
                             else {
-                                $row[$field] = '-';
+                                $row[$field] = '';
                             }
                         }
                         else {
-                            $row[$field] = '-';
+                            $row[$field] = '';
                         }
                     }
                     else {
-                        $row[$field] = '-';
+                        $row[$field] = '';
                     }
                 }
 

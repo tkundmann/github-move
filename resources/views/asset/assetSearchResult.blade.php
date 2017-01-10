@@ -43,9 +43,6 @@
         <table id="assetSearchTable" class="table table-striped table-bordered withHover">
             <thead>
             <tr>
-                @if ($site->hasFeature(Feature::IS_WINTHROP))
-                    <th>Sipi</th>
-                @endif
                 @foreach($fields as $field => $label)
                     @if(in_array($field, array_merge($fieldCategories['int_less_greater'], $fieldCategories['float_less_greater']), true))
                         <th>@sortablelink('asset.' . $field, Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label, 'fa fa-sort-amount', $order)</th>
@@ -65,7 +62,7 @@
                     @if(in_array($field, $fieldCategories['shipment']['date_from_to'], true))
                         <th>@sortablelink('shipment.' . $field, Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label, 'fa fa-sort-numeric', $order)</th>
                     @endif
-                    @if (starts_with($field, '!'))
+                    @if (starts_with($field, '!') || starts_with($field, 'hardcoded-'))
                         <th>{{ $label }}</th>
                     @endif
                 @endforeach
@@ -74,12 +71,13 @@
             <tbody>
             @foreach ($assets as $asset)
                 <tr>
-                    @if($site->hasFeature(Feature::IS_WINTHROP))
-                        <td>Refurb Center</td>
-                    @endif
                     @foreach($fields as $field => $label)
                         @if(in_array($field, array_merge($fieldCategories['exact'], $fieldCategories['string_like'], $fieldCategories['string_multi'], $fieldCategories['custom'], $fieldCategories['int_less_greater'], $fieldCategories['float_less_greater']), true))
-                            @if(($field === 'cert_of_data_wipe_num') || ($field === 'cert_of_destruction_num'))
+                            @if (starts_with($field, 'hardcoded-'))
+                                <td class="pointer" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">
+                                    str_replace('_', ' ', str_replace('hardcoded-', '', $field))
+                                </td>
+                            @elseif(($field === 'cert_of_data_wipe_num') || ($field === 'cert_of_destruction_num'))
                                 <td title="{{ $asset->$field }}">
                             @else
                                 <td class="pointer" title="{{ $asset->$field }}" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">

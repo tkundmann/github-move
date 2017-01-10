@@ -358,7 +358,10 @@ class ShipmentController extends ContextController
 
                 $row = [];
                 foreach ($this->modelExportFields as $field => $label) {
-                    if (array_key_exists($field, $shipmentElement)) {
+                    if (str_contains($field, 'hardcoded-')) {
+                        $row[$field] = str_replace('_', ' ', str_replace('hardcoded-', '', $field));
+                    }
+                    else if (array_key_exists($field, $shipmentElement)) {
                         if (in_array($field, $this->fieldCategories['exact'], true) ||
                             in_array($field, $this->fieldCategories['string_like'], true) ||
                             in_array($field, $this->fieldCategories['string_multi'], true) ||
@@ -381,11 +384,11 @@ class ShipmentController extends ContextController
                             }
                         }
                         else {
-                            $row[$field] = '-';
+                            $row[$field] = '';
                         }
                     }
                     else {
-                        $row[$field] = '-';
+                        $row[$field] = '';
                     }
                 }
 
