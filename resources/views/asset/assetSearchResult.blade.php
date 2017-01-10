@@ -43,9 +43,6 @@
         <table id="assetSearchTable" class="table table-striped table-bordered withHover">
             <thead>
             <tr>
-                @if ($site->hasFeature(Feature::IS_WINTHROP))
-                    <th>Sipi</th>
-                @endif
                 @foreach($fields as $field => $label)
                     @if(in_array($field, array_merge($fieldCategories['int_less_greater'], $fieldCategories['float_less_greater']), true))
                         <th>@sortablelink('asset.' . $field, Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label, 'fa fa-sort-amount', $order)</th>
