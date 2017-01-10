@@ -249,17 +249,17 @@ class FileController extends ContextController
         $url = null;
 
         if ($type == 'Certificates of Data Wipe') {
-            $fileName = $shipment->cert_of_data_wipe_num . '.' . $uploadedFileExt;
+            $fileName = strtoupper($shipment->cert_of_data_wipe_num) . '.' . $uploadedFileExt;
             Storage::cloud()->put(Constants::UPLOAD_DIRECTORY . $site->code . '/certificate_of_data_wipe/' . $fileName, file_get_contents($uploadedFile));
             $url = Storage::cloud()->url(Constants::UPLOAD_DIRECTORY . $site->code . '/certificate_of_data_wipe/' . $fileName);
         }
         else if ($type == 'Certificates of Recycling') {
-            $fileName = $shipment->cert_of_destruction_num . '.' . $uploadedFileExt;
+            $fileName = strtoupper($shipment->cert_of_destruction_num) . '.' . $uploadedFileExt;
             Storage::cloud()->put(Constants::UPLOAD_DIRECTORY . $site->code . '/certificate_of_destruction/' . $fileName, file_get_contents($uploadedFile));
             $url = Storage::cloud()->url(Constants::UPLOAD_DIRECTORY . $site->code . '/certificate_of_destruction/' . $fileName);
         }
         else if ($type == 'Settlements') {
-            $fileName = 'settlement' . strtolower($shipment->lot_number) . '.' . $uploadedFileExt;
+            $fileName = 'settlement' . strtoupper($shipment->lot_number) . '.' . $uploadedFileExt;
             Storage::cloud()->put(Constants::UPLOAD_DIRECTORY . $site->code . '/settlement/' . $fileName, file_get_contents($uploadedFile));
             $url = Storage::cloud()->url(Constants::UPLOAD_DIRECTORY . $site->code . '/settlement/' . $fileName);
         }
