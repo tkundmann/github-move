@@ -188,7 +188,6 @@ class FileController extends ContextController
         $rules = [
             'site' => 'required|exists:site,id',
             'type' => 'required',
-            'name' => 'required',
             'file' => 'required',
             'shipment' => 'required|exists:shipment,lot_number'
         ];
@@ -234,9 +233,7 @@ class FileController extends ContextController
 
         $file = new File();
         $file->pageId = $page->id;
-        //$file->name = trim(Input::get('name'));
         $file->size = $uploadedFile->getSize();
-        //$file->filename = $fileName;
         $file->save();
 
         if (Input::get('shipment')) {

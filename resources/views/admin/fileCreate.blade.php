@@ -61,16 +61,6 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{----}}@if($errors->has('name')) has-error @endif">
-                            {{ Form::label('name', trans('admin.file.create.file_name'), ['class' => 'col-sm-3 control-label colon-after']) }}
-                            <div class="col-sm-6">
-                                {{ Form::text('name', Input::get('name') ? Input::get('name') : old('name'), ['class' => 'form-control']) }}
-                                @if ($errors->has('name'))
-                                    {!! $errors->first('name', '<small class="text-danger">:message</small>') !!}
-                                @endif
-                            </div>
-                        </div>
-
                         <div class="form-group{{----}}@if($errors->has('shipment')) has-error @endif">
                             {{ Form::label('shipment', trans('admin.file.create.shipment'), ['class' => 'col-sm-3 control-label colon-after']) }}
                             <div class="col-sm-6">
@@ -114,9 +104,6 @@
                     $('.fileinput-filename').text(value);
                 }
             }
-        });
-        $('.fileinput').on("change.bs.fileinput clear.bs.fileinput reset.bs.fileinput", function() {
-            $('input[name="name"]').val(($('input[name="file"]').val()));
         });
     });
 </script>
