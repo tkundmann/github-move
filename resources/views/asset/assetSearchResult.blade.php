@@ -71,13 +71,13 @@
             <tbody>
             @foreach ($assets as $asset)
                 <tr>
-                    @foreach($fields as $field => $label)
-                        @if(in_array($field, array_merge($fieldCategories['exact'], $fieldCategories['string_like'], $fieldCategories['string_multi'], $fieldCategories['custom'], $fieldCategories['int_less_greater'], $fieldCategories['float_less_greater']), true))
-                            @if (starts_with($field, 'hardcoded-'))
-                                <td class="pointer" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">
-                                    str_replace('_', ' ', str_replace('hardcoded-', '', $field))
-                                </td>
-                            @elseif(($field === 'cert_of_data_wipe_num') || ($field === 'cert_of_destruction_num'))
+                    @foreach($fields as $field => $label
+                        @if (starts_with($field, 'hardcoded-'))
+                            <td class="pointer" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">
+                                {{ str_replace('_', ' ', str_replace('hardcoded-', '', $field)) }}
+                            </td>
+                        @elseif(in_array($field, array_merge($fieldCategories['exact'], $fieldCategories['string_like'], $fieldCategories['string_multi'], $fieldCategories['custom'], $fieldCategories['int_less_greater'], $fieldCategories['float_less_greater']), true))
+                            @if(($field === 'cert_of_data_wipe_num') || ($field === 'cert_of_destruction_num'))
                                 <td title="{{ $asset->$field }}">
                             @else
                                 <td class="pointer" title="{{ $asset->$field }}" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">
