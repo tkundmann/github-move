@@ -154,7 +154,12 @@ class PickupRequestController extends ContextController
         if ($this->site->hasFeature(Feature::PICKUP_REQUEST_EQUIPMENT_LIST)) {
             $uploadedFile = Input::file('upload_equipment_list');
             if ($uploadedFile) {
-                $fileName = $uploadedFile->getClientOriginalName();
+                //$fileName = $uploadedFile->getClientOriginalName();
+
+                // Do not rely on the original file name. File name should be based on the site code and the pick up request id.
+                // Retain the file extension of the upload file, however
+                $uploadedFileExt = $uploadedFile->getClientOriginalExtension();
+                $fileName = $this->site->code . '_EquipmentList_' . $pickupRequest->id . '.' . $uploadedFileExt;
 
                 $file = new File();
                 $file->pickup_request_id = $pickupRequest->id;

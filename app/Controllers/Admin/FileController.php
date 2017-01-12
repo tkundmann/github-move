@@ -246,12 +246,12 @@ class FileController extends ContextController
         $url = null;
 
         if ($type == 'Certificates of Data Wipe') {
-            $fileName = strtoupper($shipment->cert_of_data_wipe_num) . '.' . $uploadedFileExt;
+            $fileName = 'DATA' . strtoupper($shipment->lot_number) . '.' . $uploadedFileExt;
             Storage::cloud()->put(Constants::UPLOAD_DIRECTORY . $site->code . '/certificate_of_data_wipe/' . $fileName, file_get_contents($uploadedFile));
             $url = Storage::cloud()->url(Constants::UPLOAD_DIRECTORY . $site->code . '/certificate_of_data_wipe/' . $fileName);
         }
         else if ($type == 'Certificates of Recycling') {
-            $fileName = strtoupper($shipment->cert_of_destruction_num) . '.' . $uploadedFileExt;
+            $fileName = 'DEST' . strtoupper($shipment->lot_number) . '.' . $uploadedFileExt;
             Storage::cloud()->put(Constants::UPLOAD_DIRECTORY . $site->code . '/certificate_of_destruction/' . $fileName, file_get_contents($uploadedFile));
             $url = Storage::cloud()->url(Constants::UPLOAD_DIRECTORY . $site->code . '/certificate_of_destruction/' . $fileName);
         }
