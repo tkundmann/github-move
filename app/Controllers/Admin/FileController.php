@@ -12,6 +12,7 @@ use App\Data\Models\Shipment;
 use App\Data\Models\Site;
 use App\Helpers\StringHelper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Input;
 use Storage;
 use Validator;
@@ -138,89 +139,72 @@ class FileController extends ContextController
     public function postCreate()
     {
         $site = null;
-
+        $site = Site::find(trim(Input::get('site')))
         if (Input::get('site_change')) {
-            if (!$site = Site::find(trim(Input::get('site')))) {
+            if (!$site) {
                 throw new \Exception('Site does not exist.');
             } else {
                 return $this->createView($site);
-            }
-        }
-        else {
-            $site = Site::find(trim(Input::get('site')));
-        }
-
-        $type = trim(Input::get('type'));
-
-        $page = null;
-
-        if ($type) {
-            $page = $site->pages->where('type', $type)->first();
-        }
-
-        if (!$page && $type) {
-            $page = new Page();
-            $page->type = $type;
-            $page->name = $type;
-            $page->site_id = $site->id;
-            $page->save();
-
-            if (!Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $page->site->code)) {
-                Storage::cloud()->makeDirectory(Constants::UPLOAD_DIRECTORY . $page->site->code);
-            }
-            if ($page->type == 'Certificates of Data Wipe') {
-                if (!Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $page->site->code . '/certificate_of_data_wipe')) {
-                    Storage::cloud()->makeDirectory(Constants::UPLOAD_DIRECTORY . $page->site->code . '/certificate_of_data_wipe');
-                }
-            }
-            else if ($page->type == 'Certificates of Recycling') {
-                if (!Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $page->site->code . '/certificate_of_destruction')) {
-                    Storage::cloud()->makeDirectory(Constants::UPLOAD_DIRECTORY . $page->site->code . '/certificate_of_destruction');
-                }
-            }
-            else if ($page->type == 'Settlements') {
-                if (!Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $page->site->code . '/settlement')) {
-                    Storage::cloud()->makeDirectory(Constants::UPLOAD_DIRECTORY . $page->site->code . '/settlement');
-                }
             }
         }
 
         $rules = [
             'site' => 'required|exists:site,id',
             'type' => 'required',
-            'file' => 'required',
-            'shipment' => 'required|exists:shipment,lot_number'
+            'file' => 'required'
         ];
-
         $validator = Validator::make(Input::all(), $rules);
-        $validator->after(function($validator) use ($site, $type, $page) {
-            // check if prefix is valid (within this site and only if site actually has restrictions)
-            if ($site && $site->hasFeature(Feature::LOT_NUMBER_PREFIX_ACCESS_RESTRICTED)) {
+        if ($validator->fails()) {
+            return redirect()->route('admin.file.create')->withErrors($validator)->withInput();
+        }
 
-                $prefixes = $site->lotNumbers->pluck('prefix')->toArray();
-                $shipment = trim(Input::get('shipment'));
+        // If a page for the selected file type does exist create it and any necessary s3 directories
+        $type = Input::get('type');
+        $page = $site->pages->where('type', $type)->first();
 
-                $isPrefixValid = false;
-                foreach ($prefixes as $prefix) {
-                    if (starts_with($shipment, $prefix)) {
-                        $isPrefixValid = true;
-                    }
-                }
+        if (!$page) {
+            $page = new Page();
+            $page->type = $type;
+            $page->name = $type;
+            $page->site_id = $site->id;
+            $page->save();
 
-                if (!$isPrefixValid) {
-                    $validator->errors()->add('shipment', 'This Shipment Lot Number doesn\'t belong to this Site.');
-                }
+            $siteDirectory = Constants::UPLOAD_DIRECTORY . $page->site->code;
+
+            if (!Storage::cloud()->exists($siteDirectory)) {
+                Storage::cloud()->makeDirectory($siteDirectory);
             }
 
-            // check if no other file for that lot number was uploaded for this site/file type
-
-            $shipment = Shipment::where('lot_number', trim(Input::get('shipment')))->first();
-            if ($shipment && $page) {
-                $existingFile = $page->files->where('shipment_id', $shipment->id)->first();
-
-                if ($existingFile) {
-                    $validator->errors()->add('shipment', 'This site already has a file of type ' . $type . ' uploaded for this Shipment Lot Number.');
+            $pageTypeDir = $this->getFilePageTypeDir($page->type)
+            if ($pageTypeDir != '') {
+                if (!Storage::cloud()->exists($siteDirectory . $pageTypeDir)) {
+                    Storage::cloud()->makeDirectory($siteDirectory . $pageTypeDir);
                 }
+            }
+        }
+
+        // Parse the file name of the uploaded file to retrieve th Shipment Lot Number and then check to see if a shipment
+        // record exists for the selected site per the parsed Lot Number.  This works because all 3 file types follow
+        // agreed upon file naming conventions.
+        $uploadedFile = Input::file('file');
+        $uploadedFileName = $uploadedFile->getClientOriginalName();
+
+        Log::info('uploadedFileName: ' . $uploadedFileName);
+
+        $fileNamePrefix = $this->getFilePrefixPerType($type);
+        $withoutExtension = substr($uploadedFileName, 0, strrpos($uploadedFileName, '.'));
+        $shipmentLotNumber = strtoupper(str_replace($fileNamePrefix, null, $withoutExtension));
+
+        Log::info('shipmentLotNumber: ' . $shipmentLotNumber);
+
+        //$shipment = Shipment::where('lot_number', $shipmentLotNumber)->first();
+        $shipment = Shipment::forLotNumberAndSiteId($shipmentLotNumber, $site->id);
+
+       Log::info('shipment: ' . serialize($shipment));
+
+        $validator->after(function($validator) use ($shipment) {
+            if (!$shipment) {
+                 $validator->errors()->add('file', 'A Shipment record was not found for the selected site per the Lot Number specified in the uploaded filename.');
             }
         });
 
@@ -228,43 +212,38 @@ class FileController extends ContextController
             return redirect()->route('admin.file.create')->withErrors($validator)->withInput();
         }
 
-        $uploadedFile = Input::file('file');
-        $uploadedFileExt = $uploadedFile->getClientOriginalExtension();
+        return;
+
+        // Check if another file for the lot number was previously uploaded for this site/file type
+        // If so, delete file record from DB and remove from S3.  File overwriting is allowed.
+         $existingFile = $page->files->where('shipment_id', $shipment->id)->first();
+        if ($existingFile) {
+            $this->removeFile($existingFile);
+        }
 
         $file = new File();
         $file->pageId = $page->id;
         $file->size = $uploadedFile->getSize();
+        $file->shipmentId = $shipment->id;
         $file->save();
-
-        if (Input::get('shipment')) {
-            $shipment = Shipment::where('lot_number', trim(Input::get('shipment')))->first();
-            if ($shipment) {
-                $file->shipmentId = $shipment->id;
-            }
-        }
 
         $url = null;
+        $siteDirectory = Constants::UPLOAD_DIRECTORY . $site->code;
+        $pageTypeDir = $this->getFilePageTypeDir($type);
 
-        if ($type == 'Certificates of Data Wipe') {
-            $fileName = 'DATA' . strtoupper($shipment->lot_number) . '.' . $uploadedFileExt;
-            Storage::cloud()->put(Constants::UPLOAD_DIRECTORY . $site->code . '/certificate_of_data_wipe/' . $fileName, file_get_contents($uploadedFile));
-            $url = Storage::cloud()->url(Constants::UPLOAD_DIRECTORY . $site->code . '/certificate_of_data_wipe/' . $fileName);
-        }
-        else if ($type == 'Certificates of Recycling') {
-            $fileName = 'DEST' . strtoupper($shipment->lot_number) . '.' . $uploadedFileExt;
-            Storage::cloud()->put(Constants::UPLOAD_DIRECTORY . $site->code . '/certificate_of_destruction/' . $fileName, file_get_contents($uploadedFile));
-            $url = Storage::cloud()->url(Constants::UPLOAD_DIRECTORY . $site->code . '/certificate_of_destruction/' . $fileName);
-        }
-        else if ($type == 'Settlements') {
-            $fileName = 'settlement' . strtoupper($shipment->lot_number) . '.' . $uploadedFileExt;
-            Storage::cloud()->put(Constants::UPLOAD_DIRECTORY . $site->code . '/settlement/' . $fileName, file_get_contents($uploadedFile));
-            $url = Storage::cloud()->url(Constants::UPLOAD_DIRECTORY . $site->code . '/settlement/' . $fileName);
-        }
+        if ($pageTypeDir != '') {
 
-        $file->filename = $file->name = $fileName;
-        $file->url = $url;
-        $file->save();
+            $uploadedFileExt = $uploadedFile->getClientOriginalExtension();
+            $fileNamePrefix = $this->getFilePrefixPerType($type);
+            $fileName = $fileNamePrefix . strtoupper($shipment->lot_number) . '.' . $uploadedFileExt;
+            Storage::cloud()->put($siteDirectory . $pageTypeDir . $fileName, file_get_contents($uploadedFile));
+            $url = Storage::cloud()->url($siteDirectory . $pageTypeDir . $fileName);
 
+            $file->filename = $file->name = $fileName;
+            $file->url = $url;
+            $file->save();
+
+        }
         return redirect()->route('admin.file.list', ['site' => $site->id])->with('success', trans('admin.page.file.create.file_created'));
     }
 
@@ -354,24 +333,51 @@ class FileController extends ContextController
             return redirect()->route('admin.file.list')->with('fail', trans('admin.file.remove.not_exist'));
         }
 
+        $this->removeFile($file);
+        return redirect()->route('admin.file.list',  ['site' => $file->page->site_id])->with('success', trans('admin.file.remove.file_removed'));
+    }
+
+    public function getFilePageTypeDir($type)
+    {
+
+        $pageTypeDir = '';
         if ($file->page->type == 'Certificates of Data Wipe') {
-            if (Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $file->page->site->code . '/certificate_of_data_wipe/' . $file->filename)) {
-                Storage::cloud()->delete(Constants::UPLOAD_DIRECTORY . $file->page->site->code . '/certificate_of_data_wipe/' . $file->filename);
-            }
+            $pageTypeDir = '/certificate_of_data_wipe';
         }
         else if ($file->page->type == 'Certificates of Recycling') {
-            if (Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $file->page->site->code . '/certificate_of_destruction/' . $file->filename)) {
-                Storage::cloud()->delete(Constants::UPLOAD_DIRECTORY . $file->page->site->code . '/certificate_of_destruction/' . $file->filename);
-            }
+            $pageTypeDir = '/certificate_of_destruction';
         }
         else if ($file->page->type == 'Settlements') {
-            if (Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $file->page->site->code . '/settlement/' . $file->filename)) {
-                Storage::cloud()->delete(Constants::UPLOAD_DIRECTORY . $file->page->site->code . '/settlement/' . $file->filename);
+            $pageTypeDir = '/settlement';
+        }
+        return $pageTypeDir;
+    }
+
+    public function getFilePrefixPerType($type)
+    {
+
+        $fileNamePrefix = '';
+        if ($type == 'Certificates of Data Wipe') {
+            $fileNamePrefix = 'DATA';
+        }
+        else if ($type == 'Certificates of Recycling') {
+            $fileNamePrefix = 'DEST';
+        }
+        else if ($type == 'Settlements') {
+            $fileNamePrefix = 'settlement';
+        }
+        return $fileNamePrefix;
+    }
+
+    public function removeFile($file)
+    {
+
+        $pageTypeDir = $this->getFilePageTypeDir($file->page->type);
+        if ($pageTypeDir != '') {
+            if (!Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $file->page->site->code . $pageTypeDir . $file->filename)) {
+                Storage::cloud()->delete(Constants::UPLOAD_DIRECTORY . $file->page->site->code . $pageTypeDir . $file->filename);
             }
         }
-
         $file->delete();
-
-        return redirect()->route('admin.file.list',  ['site' => $file->page->site_id])->with('success', trans('admin.file.remove.file_removed'));
     }
 }
