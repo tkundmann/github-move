@@ -135,10 +135,13 @@ class Shipment extends Model
     // --
 
     public static function forLotNumberAndSiteId($lotNumber, $siteId) {
+
+        $columns = array('shipment.*');
+
         return self::join('vendor_client', 'vendor_client.name', '=', 'shipment.vendor_client')
             ->join('site_vendor_client', 'vendor_client.id', '=', 'site_vendor_client.vendor_client_id')
             ->join('site', 'site_vendor_client.site_id', '=', 'site.id')
-            ->where([['shipment.lot_number', '=', $lotNumber],['site.id', '=', $siteId]])->first();
+            ->where([['shipment.lot_number', '=', $lotNumber],['site.id', '=', $siteId]])->get($columns)->first();
     }
 
     static function createFromLotSummary(SimpleXMLElement $xml) {

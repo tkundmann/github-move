@@ -61,16 +61,6 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{----}}@if($errors->has('shipment')) has-error @endif">
-                            {{ Form::label('shipment', trans('admin.file.create.shipment'), ['class' => 'col-sm-3 control-label colon-after']) }}
-                            <div class="col-sm-6">
-                                {{ Form::text('shipment', Input::get('shipment') ? Input::get('shipment') : old('shipment'), ['class' => 'form-control']) }}
-                                @if ($errors->has('shipment'))
-                                    {!! $errors->first('shipment', '<small class="text-danger">:message</small>') !!}
-                                @endif
-                            </div>
-                        </div>
-
                         <hr/>
 
                         <div class="text-center">

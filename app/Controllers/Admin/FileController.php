@@ -202,7 +202,7 @@ class FileController extends ContextController
 
         $validator->after(function($validator) use ($shipment) {
             if (!$shipment) {
-                 $validator->errors()->add('file', 'A Shipment record was not found for the selected site per the Lot Number specified in the uploaded filename.');
+                 $validator->errors()->add('file', 'A Shipment record was not found per the Lot Number specified in the uploaded filename for the selected site. Files can only be uploaded to sites to which the Lot Number is associated.');
             }
         });
 
