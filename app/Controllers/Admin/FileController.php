@@ -139,7 +139,7 @@ class FileController extends ContextController
     public function postCreate()
     {
         $site = null;
-        $site = Site::find(trim(Input::get('site')))
+        $site = Site::find(trim(Input::get('site')));
         if (Input::get('site_change')) {
             if (!$site) {
                 throw new \Exception('Site does not exist.');
@@ -175,7 +175,7 @@ class FileController extends ContextController
                 Storage::cloud()->makeDirectory($siteDirectory);
             }
 
-            $pageTypeDir = $this->getFilePageTypeDir($page->type)
+            $pageTypeDir = $this->getFilePageTypeDir($page->type);
             if ($pageTypeDir != '') {
                 if (!Storage::cloud()->exists($siteDirectory . $pageTypeDir)) {
                     Storage::cloud()->makeDirectory($siteDirectory . $pageTypeDir);
@@ -200,8 +200,6 @@ class FileController extends ContextController
         //$shipment = Shipment::where('lot_number', $shipmentLotNumber)->first();
         $shipment = Shipment::forLotNumberAndSiteId($shipmentLotNumber, $site->id);
 
-       Log::info('shipment: ' . serialize($shipment));
-
         $validator->after(function($validator) use ($shipment) {
             if (!$shipment) {
                  $validator->errors()->add('file', 'A Shipment record was not found for the selected site per the Lot Number specified in the uploaded filename.');
@@ -212,13 +210,11 @@ class FileController extends ContextController
             return redirect()->route('admin.file.create')->withErrors($validator)->withInput();
         }
 
-        return;
-
         // Check if another file for the lot number was previously uploaded for this site/file type
         // If so, delete file record from DB and remove from S3.  File overwriting is allowed.
          $existingFile = $page->files->where('shipment_id', $shipment->id)->first();
         if ($existingFile) {
-            $this->removeFile($existingFile);
+             $this->removeFile($existingFile);
         }
 
         $file = new File();
@@ -236,8 +232,8 @@ class FileController extends ContextController
             $uploadedFileExt = $uploadedFile->getClientOriginalExtension();
             $fileNamePrefix = $this->getFilePrefixPerType($type);
             $fileName = $fileNamePrefix . strtoupper($shipment->lot_number) . '.' . $uploadedFileExt;
-            Storage::cloud()->put($siteDirectory . $pageTypeDir . $fileName, file_get_contents($uploadedFile));
-            $url = Storage::cloud()->url($siteDirectory . $pageTypeDir . $fileName);
+            Storage::cloud()->put($siteDirectory . $pageTypeDir . '/' . $fileName, file_get_contents($uploadedFile));
+            $url = Storage::cloud()->url($siteDirectory . $pageTypeDir . '/' . $fileName);
 
             $file->filename = $file->name = $fileName;
             $file->url = $url;
@@ -341,13 +337,13 @@ class FileController extends ContextController
     {
 
         $pageTypeDir = '';
-        if ($file->page->type == 'Certificates of Data Wipe') {
+        if ($type == 'Certificates of Data Wipe') {
             $pageTypeDir = '/certificate_of_data_wipe';
         }
-        else if ($file->page->type == 'Certificates of Recycling') {
+        else if ($type == 'Certificates of Recycling') {
             $pageTypeDir = '/certificate_of_destruction';
         }
-        else if ($file->page->type == 'Settlements') {
+        else if ($type == 'Settlements') {
             $pageTypeDir = '/settlement';
         }
         return $pageTypeDir;
@@ -374,8 +370,8 @@ class FileController extends ContextController
 
         $pageTypeDir = $this->getFilePageTypeDir($file->page->type);
         if ($pageTypeDir != '') {
-            if (!Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $file->page->site->code . $pageTypeDir . $file->filename)) {
-                Storage::cloud()->delete(Constants::UPLOAD_DIRECTORY . $file->page->site->code . $pageTypeDir . $file->filename);
+            if (!Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $file->page->site->code . $pageTypeDir . '/' . $file->filename)) {
+                Storage::cloud()->delete(Constants::UPLOAD_DIRECTORY . $file->page->site->code . $pageTypeDir . '/' . $file->filename);
             }
         }
         $file->delete();

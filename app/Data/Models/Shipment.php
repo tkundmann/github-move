@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use SimpleXMLElement;
 use Sofa\Eloquence\Eloquence;
 use Sofa\Eloquence\Mappable;
+use Illuminate\Support\Facades\Log;
 
 /**
  * App\Data\Models\Shipment
@@ -137,7 +138,7 @@ class Shipment extends Model
         return self::join('vendor_client', 'vendor_client.name', '=', 'shipment.vendor_client')
             ->join('site_vendor_client', 'vendor_client.id', '=', 'site_vendor_client.vendor_client_id')
             ->join('site', 'site_vendor_client.site_id', '=', 'site.id')
-            ->where([['shipment.lot_number', '=', $lotNumber],['site.id', '=', $siteId]]);
+            ->where([['shipment.lot_number', '=', $lotNumber],['site.id', '=', $siteId]])->first();
     }
 
     static function createFromLotSummary(SimpleXMLElement $xml) {
