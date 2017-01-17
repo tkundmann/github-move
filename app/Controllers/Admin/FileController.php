@@ -370,7 +370,7 @@ class FileController extends ContextController
 
         $pageTypeDir = $this->getFilePageTypeDir($file->page->type);
         if ($pageTypeDir != '') {
-            if (!Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $file->page->site->code . $pageTypeDir . '/' . $file->filename)) {
+            if (Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $file->page->site->code . $pageTypeDir . '/' . $file->filename)) {
                 Storage::cloud()->delete(Constants::UPLOAD_DIRECTORY . $file->page->site->code . $pageTypeDir . '/' . $file->filename);
             }
         }
