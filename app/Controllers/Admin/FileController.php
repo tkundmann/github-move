@@ -189,20 +189,15 @@ class FileController extends ContextController
         $uploadedFile = Input::file('file');
         $uploadedFileName = $uploadedFile->getClientOriginalName();
 
-        Log::info('uploadedFileName: ' . $uploadedFileName);
-
         $fileNamePrefix = $this->getFilePrefixPerType($type);
         $withoutExtension = substr($uploadedFileName, 0, strrpos($uploadedFileName, '.'));
         $shipmentLotNumber = strtoupper(str_replace($fileNamePrefix, null, $withoutExtension));
 
-        Log::info('shipmentLotNumber: ' . $shipmentLotNumber);
-
-        //$shipment = Shipment::where('lot_number', $shipmentLotNumber)->first();
         $shipment = Shipment::forLotNumberAndSiteId($shipmentLotNumber, $site->id);
 
         $validator->after(function($validator) use ($shipment) {
             if (!$shipment) {
-                 $validator->errors()->add('file', 'A Shipment record was not found per the Lot Number specified in the uploaded filename for the selected site. Files can only be uploaded to sites to which the Lot Number is associated.');
+                 $validator->errors()->add('file', 'A Shipment record was not found per the Lot Number specified in the uploaded filename for the selected site. Files can only be uploaded to sites to which the Lot Number is associated. Please be sure that the File type selected matches up with name of the file being uploaded.');
             }
         });
 
