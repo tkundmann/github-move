@@ -12,6 +12,7 @@ use App\Data\Models\Shipment;
 use DateTime;
 use Exception;
 use SimpleXMLElement;
+use Storage;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -54,39 +55,57 @@ class ImportController extends Controller
             return $this->returnError(ApiResponse::DESCRIPTION_FORMAT_INCORRECT);
         }
         else {
+            $importSuccessful = false;
             $rootElementName = $xml->getName();
 
             switch ($rootElementName) {
                 case 'Lot_Summary':
                     try {
                         $this->processLotSummary($xml);
-                        return $this->returnSuccess();
+                        $importSuccessful = true;
                     } catch (Exception $e) {
-                        return $this->returnError(ApiResponse::DESCRIPTION_IMPORT_UNSUCCESSFUL);
+                        $importSuccessful = false;
                     }
                     break;
                 case 'Lot_Control':
                     try {
                         $this->processLotControl($xml);
                         $this->pruneAssets();
-                        return $this->returnSuccess();
+                        $importSuccessful = true;
                     }
                     catch (Exception $e) {
-                        return $this->returnError(ApiResponse::DESCRIPTION_IMPORT_UNSUCCESSFUL);
+                        $importSuccessful = false;
                     }
                     break;
                 case 'Assets_Detail':
                     try {
                         $this->processAssetsDetail($xml);
                         $this->pruneAssets();
-                        return $this->returnSuccess();
+                        $importSuccessful = true;
                     }
                     catch (Exception $e) {
-                        return $this->returnError(ApiResponse::DESCRIPTION_IMPORT_UNSUCCESSFUL);
+                        $importSuccessful = false;
                     }
                     break;
                 default:
                     return $this->returnError(ApiResponse::DESCRIPTION_FORMAT_INCORRECT);
+            }
+
+            // Store raw XML content in _importing_archive S3 directory
+            $t = microtime(true);
+            $micro = sprintf("%06d",($t - floor($t)) * 1000000);
+            $d = new DateTime( date('Y-m-d H:i:s.'.$micro, $t) );
+            $archiveFileName = $rootElementName . '_' . $d->format("YmdHis_u") . '.xml';
+
+            Log::info('archiveFileName: ' . '/_importing_archive/' . $rootElementName . '/' . $archiveFileName);
+
+            Storage::cloud()->put('/_importing_archive/' . $rootElementName . '/' . $archiveFileName, $content);
+
+            if ($importSuccessful) {
+                return $this->returnSuccess();
+            }
+            else {
+                return $this->returnError(ApiResponse::DESCRIPTION_IMPORT_UNSUCCESSFUL);
             }
         }
     }
