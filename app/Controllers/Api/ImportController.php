@@ -97,8 +97,6 @@ class ImportController extends Controller
             $d = new DateTime( date('Y-m-d H:i:s.'.$micro, $t) );
             $archiveFileName = $rootElementName . '_' . $d->format("YmdHis_u") . '.xml';
 
-            Log::info('archiveFileName: ' . '/_importing_archive/' . $rootElementName . '/' . $archiveFileName);
-
             Storage::cloud()->put('/_importing_archive/' . $rootElementName . '/' . $archiveFileName, $content);
 
             if ($importSuccessful) {
