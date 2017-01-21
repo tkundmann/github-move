@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeds\Development;
+namespace Database\Seeds\Production;
 
 use App\Data\Models\Site;
 use Carbon\Carbon;
@@ -8,7 +8,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
-class PickupRequestAddressSeeder extends Seeder
+class TrinityHealthPickupRequestAddressSeeder extends Seeder
 {
     /**
      * Run the database seeds.
