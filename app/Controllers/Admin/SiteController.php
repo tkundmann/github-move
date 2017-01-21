@@ -110,7 +110,7 @@ class SiteController extends ContextController
             $site = new Site();
             $site->type = trim(Input::get('type'));
             $site->title = trim(Input::get('title'));
-            $site->code = trim(Input::get('code'));
+            $site->code = strtolower(trim(Input::get('code')));
 
             if (!Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $site->code)) {
                 Storage::cloud()->makeDirectory(Constants::UPLOAD_DIRECTORY . $site->code);
@@ -232,7 +232,7 @@ class SiteController extends ContextController
             $site->title = trim(Input::get('title'));
 
             $oldCode = $site->code;
-            $newCode = trim(Input::get('code'));
+            $newCode = strtolower(trim(Input::get('code')));
 
             if ($oldCode != $newCode) {
                 if (!Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $newCode)) {
