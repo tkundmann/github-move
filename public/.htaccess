@@ -5,7 +5,7 @@
 
     RewriteEngine On
 
-    
+
     # Redirects from the old site
     RewriteCond %{HTTP_HOST} ^www.belmont-technology.com$
     RewriteCond %{REQUEST_URI} ^/$ [OR]
@@ -19,7 +19,7 @@
     RewriteCond %{HTTP_HOST} ^www.belmont-technology.com$
     RewriteCond %{REQUEST_URI} !^/(.*)/main.taf?
     RewriteRule ^(.*)$          https://portal.sipiar.com/$1/  [NC,R=301,L]
-    
+
 #######################################################################
     # ALWAYS SSL (Handles Situation where the SSL terminates at the load balancer)
     #######################################################################
@@ -40,6 +40,10 @@
     RewriteCond %{REQUEST_URI} ^/principal/pickuprequest$ [NC]
     RewriteRule ^.*$  "/principal/pickup-request"    [R,NE,L]
 
+    # Trinity Health Pickup Request Form Redirects
+    RewriteCond %{REQUEST_URI} ^/trinity/pickuprequest$ [NC]
+    RewriteRule ^.*$  "/trinity/pickup-request"    [R,NE,L]
+
     # Workday Pickup Request Form Redirects
     RewriteCond %{REQUEST_URI} ^/workday/pickuprequest$ [NC]
     RewriteRule ^.*$  "/workday/pickup-request"    [R,NE,L]
@@ -48,7 +52,7 @@
     RewriteCond %{REQUEST_URI} ^/yahoo/page/pickuprequest$ [OR,NC]
     RewriteCond %{REQUEST_URI} ^/yahoo/pickuprequest$ [NC]
     RewriteRule ^.*$  "/yahoo/pickup-request"    [R,NE,L]
-    
+
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)/$ /$1 [L,R=301]
