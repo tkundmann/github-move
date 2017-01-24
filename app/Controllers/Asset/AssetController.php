@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class AssetController extends ContextController
 {
     const RESULTS_PER_PAGE = 50;
-    const USE_SELECT_EXACT_VALUES = false;
+    const USE_SELECT_EXACT_VALUES = true;
     const STRING_LIMIT = 50;
 
     protected $defaultSearchFields = [
@@ -204,31 +204,32 @@ class AssetController extends ContextController
     {
         parent::__construct($request);
 
-        $this->fieldCategories = self::USE_SELECT_EXACT_VALUES ?
+        $this->fieldCategories =
+        // self::USE_SELECT_EXACT_VALUES ?
+        // [
+        //     'exact' => ['carrier', 'manufacturer', 'product_family', 'condition', 'date_code', 'status'],
+        //     'string_like' => ['bill_of_lading', 'vendor_order_number', 'vendor', 'barcode_number', 'manufacturer_model_num', 'manufacturer_part_num',
+        //         'parent_serial_num', 'item_number', 'form_factor', 'speed', 'memory', 'storage_capacity', 'dual', 'quad', 'optical_1', 'optical_2', 'nic', 'video', 'color',
+        //         'adapter', 'screen_size', 'battery', 'wifi', 'docking_station', 'stylus', 'firewire', 'keyboard', 'mouse', 'cartridge', 'coa', 'osx_description', 'po_number', 'comments', 'additional_comments', 'hard_drive_serial_num', 'asset_tag', 'cert_of_data_wipe_num', 'cert_of_destruction_num'],
+        //     'string_multi' => ['lot_number', 'manufacturer_serial_num'],
+        //     'date_from_to' => ['lot_date', 'date_arrived', 'shipment_date'],
+        //     'int_less_greater' => [],
+        //     'float_less_greater' => ['settlement_amount', 'net_settlement'],
+        //     'custom' => ['vendor_client'],
+        //     'shipment' => [
+        //         'exact' => ['city_of_origin', 'freight_carrier'],
+        //         'string_like' => ['cost_center', 'pickup_address', 'pickup_address_2', 'pickup_city', 'pickup_state', 'pickup_zip_code', 'vendor_shipment_number','representative'],
+        //         'string_multi' => [],
+        //         'date_from_to' => ['date_received', 'pre_audit_approved', 'audit_completed'],
+        //         'int_less_greater' => [],
+        //         'float_less_greater' => [],
+        //         'custom' => []
+        //     ]
+        // ]
+        // :
         [
-            'exact' => ['carrier', 'manufacturer', 'product_family', 'condition', 'date_code', 'status'],
-            'string_like' => ['bill_of_lading', 'vendor_order_number', 'vendor', 'barcode_number', 'manufacturer_model_num', 'manufacturer_part_num',
-                'parent_serial_num', 'item_number', 'form_factor', 'speed', 'memory', 'storage_capacity', 'dual', 'quad', 'optical_1', 'optical_2', 'nic', 'video', 'color',
-                'adapter', 'screen_size', 'battery', 'wifi', 'docking_station', 'stylus', 'firewire', 'keyboard', 'mouse', 'cartridge', 'coa', 'osx_description', 'po_number', 'comments', 'additional_comments', 'hard_drive_serial_num', 'asset_tag', 'cert_of_data_wipe_num', 'cert_of_destruction_num'],
-            'string_multi' => ['lot_number', 'manufacturer_serial_num'],
-            'date_from_to' => ['lot_date', 'date_arrived', 'shipment_date'],
-            'int_less_greater' => [],
-            'float_less_greater' => ['settlement_amount', 'net_settlement'],
-            'custom' => ['vendor_client'],
-            'shipment' => [
-                'exact' => ['city_of_origin', 'freight_carrier'],
-                'string_like' => ['cost_center', 'pickup_address', 'pickup_address_2', 'pickup_city', 'pickup_state', 'pickup_zip_code', 'vendor_shipment_number','representative'],
-                'string_multi' => [],
-                'date_from_to' => ['date_received', 'pre_audit_approved', 'audit_completed'],
-                'int_less_greater' => [],
-                'float_less_greater' => [],
-                'custom' => []
-            ]
-        ]
-        :
-        [
-            'exact' => [],
-            'string_like' => ['bill_of_lading', 'carrier', 'manufacturer', 'product_family', 'condition', 'date_code', 'status', 'vendor_order_number', 'vendor', 'barcode_number', 'manufacturer_model_num', 'manufacturer_part_num',
+            'exact' => ['product_family'],
+            'string_like' => [ 'carrier', 'manufacturer', 'condition', 'date_code', 'status', 'bill_of_lading', 'vendor_order_number', 'vendor', 'barcode_number', 'manufacturer_model_num', 'manufacturer_part_num',
                 'parent_serial_num', 'item_number', 'form_factor', 'speed', 'memory', 'storage_capacity', 'dual', 'quad', 'optical_1', 'optical_2', 'nic', 'video', 'color',
                 'adapter', 'screen_size', 'battery', 'wifi', 'docking_station', 'stylus', 'firewire', 'keyboard', 'mouse', 'cartridge', 'coa', 'osx_description', 'po_number', 'comments', 'additional_comments', 'hard_drive_serial_num', 'asset_tag', 'cert_of_data_wipe_num', 'cert_of_destruction_num'],
             'string_multi' => ['lot_number', 'manufacturer_serial_num'],
@@ -277,9 +278,8 @@ class AssetController extends ContextController
      */
     public function getSearch()
     {
-        $uniqueFreightCarriers = [];
+
         $uniqueSiteCoordinators = [];
-        $uniqueCitiesOfOrigin = [];
         $uniqueCarriers = [];
         $uniqueManufacturers = [];
         $uniqueProductFamilies = [];
@@ -287,60 +287,65 @@ class AssetController extends ContextController
         $uniqueDateCodes = [];
         $uniqueStatuses = [];
 
+        $uniqueCitiesOfOrigin = [];
+        $uniqueFreightCarriers = [];
+
         if (self::USE_SELECT_EXACT_VALUES) {
-            if (array_key_exists('freight_carrier', $this->modelSearchFields)) {
-                $uniqueFreightCarriersQuery = DB::table('shipment')->distinct()->select('freight_carrier')->whereNotNull('freight_carrier');
-                $this->applyVendorClientQueryRestrictions($uniqueFreightCarriersQuery);
-                $this->applyLotNumberPrefixRestrictions($uniqueFreightCarriersQuery);
-                $uniqueFreightCarriers = array_pluck($uniqueFreightCarriersQuery->get(), 'freight_carrier');
-            }
-            if (array_key_exists('site_coordinator', $this->modelSearchFields)) {
-                $uniqueSiteCoordinatorsQuery = DB::table('shipment')->distinct()->select('site_coordinator')->whereNotNull('site_coordinator');
+
+            if (array_key_exists('site_coordinator', $this->modelSearchFields) && in_array('site_coordinator', $this->fieldCategories['exact'])) {
+                $uniqueSiteCoordinatorsQuery = DB::table('shipment')->distinct()->select('site_coordinator')->whereNotNull('site_coordinator')->orderBy('site_coordinator','asc');
                 $this->applyVendorClientQueryRestrictions($uniqueSiteCoordinatorsQuery);
                 $this->applyLotNumberPrefixRestrictions($uniqueSiteCoordinatorsQuery);
                 $uniqueSiteCoordinators = array_pluck($uniqueSiteCoordinatorsQuery->get(), 'site_coordinator');
             }
-            if (array_key_exists('city_of_origin', $this->modelSearchFields)) {
-                $uniqueCitiesOfOriginQuery = DB::table('shipment')->distinct()->select('city_of_origin')->whereNotNull('city_of_origin');
-                $this->applyVendorClientQueryRestrictions($uniqueCitiesOfOriginQuery);
-                $this->applyLotNumberPrefixRestrictions($uniqueCitiesOfOriginQuery);
-                $uniqueCitiesOfOrigin = array_pluck($uniqueCitiesOfOriginQuery->get(), 'city_of_origin');
-            }
-            if (array_key_exists('carrier', $this->modelSearchFields)) {
-                $uniqueCarriersQuery = DB::table('asset')->distinct()->select('carrier')->whereNotNull('carrier');
+            if (array_key_exists('carrier', $this->modelSearchFields) && in_array('carrier', $this->fieldCategories['exact'])) {
+                $uniqueCarriersQuery = DB::table('asset')->distinct()->select('carrier')->whereNotNull('carrier')->orderBy('carrier','asc');
                 $this->applyVendorClientQueryRestrictions($uniqueCarriersQuery);
                 $this->applyLotNumberPrefixRestrictions($uniqueCarriersQuery);
                 $uniqueCarriers = array_pluck($uniqueCarriersQuery->get(), 'carrier');
             }
-            if (array_key_exists('manufacturer', $this->modelSearchFields)) {
-                $uniqueManufacturersQuery = DB::table('asset')->distinct()->select('manufacturer')->whereNotNull('manufacturer');
+            if (array_key_exists('manufacturer', $this->modelSearchFields) && in_array('manufacturer', $this->fieldCategories['exact'])) {
+                $uniqueManufacturersQuery = DB::table('asset')->distinct()->select('manufacturer')->whereNotNull('manufacturer')->orderBy('manufacturer','asc');
                 $this->applyVendorClientQueryRestrictions($uniqueManufacturersQuery);
                 $this->applyLotNumberPrefixRestrictions($uniqueManufacturersQuery);
                 $uniqueManufacturers = array_pluck($uniqueManufacturersQuery->get(), 'manufacturer');
             }
-            if (array_key_exists('product_family', $this->modelSearchFields)) {
-                $uniqueProductFamiliesQuery = DB::table('asset')->distinct()->select('product_family')->whereNotNull('product_family');
+            if (array_key_exists('product_family', $this->modelSearchFields) && in_array('product_family', $this->fieldCategories['exact'])) {
+                $uniqueProductFamiliesQuery = DB::table('asset')->distinct()->select('product_family')->whereNotNull('product_family')->orderBy('product_family','asc');
                 $this->applyVendorClientQueryRestrictions($uniqueProductFamiliesQuery);
                 $this->applyLotNumberPrefixRestrictions($uniqueProductFamiliesQuery);
                 $uniqueProductFamilies = array_pluck($uniqueProductFamiliesQuery->get(), 'product_family');
             }
-            if (array_key_exists('condition', $this->modelSearchFields)) {
-                $uniqueConditionsQuery = DB::table('asset')->distinct()->select('condition')->whereNotNull('condition');
+            if (array_key_exists('condition', $this->modelSearchFields) && in_array('condition', $this->fieldCategories['exact'])) {
+                $uniqueConditionsQuery = DB::table('asset')->distinct()->select('condition')->whereNotNull('condition')->orderBy('condition','asc');
                 $this->applyVendorClientQueryRestrictions($uniqueConditionsQuery);
                 $this->applyLotNumberPrefixRestrictions($uniqueConditionsQuery);
                 $uniqueConditions = array_pluck($uniqueConditionsQuery->get(), 'condition');
             }
-            if (array_key_exists('date_code', $this->modelSearchFields)) {
-                $uniqueDateCodesQuery = DB::table('asset')->distinct()->select('date_code')->whereNotNull('date_code');
+            if (array_key_exists('date_code', $this->modelSearchFields) && in_array('date_code', $this->fieldCategories['exact'])) {
+                $uniqueDateCodesQuery = DB::table('asset')->distinct()->select('date_code')->whereNotNull('date_code')->orderBy('date_code','asc');
                 $this->applyVendorClientQueryRestrictions($uniqueDateCodesQuery);
                 $this->applyLotNumberPrefixRestrictions($uniqueDateCodesQuery);
                 $uniqueDateCodes = array_pluck($uniqueDateCodesQuery->get(), 'date_code');
             }
-            if (array_key_exists('status', $this->modelSearchFields)) {
-                $uniqueStatusesQuery = DB::table('asset')->distinct()->select('status')->whereNotNull('status');
+            if (array_key_exists('status', $this->modelSearchFields) && in_array('status', $this->fieldCategories['exact'])) {
+                $uniqueStatusesQuery = DB::table('asset')->distinct()->select('status')->whereNotNull('status')->orderBy('status','asc');
                 $this->applyVendorClientQueryRestrictions($uniqueStatusesQuery);
                 $this->applyLotNumberPrefixRestrictions($uniqueStatusesQuery);
                 $uniqueStatuses = array_pluck($uniqueStatusesQuery->get(), 'status');
+            }
+
+            if (array_key_exists('city_of_origin', $this->modelSearchFields) && in_array('city_of_origin', $this->fieldCategories['shipment']['exact'])) {
+                $uniqueCitiesOfOriginQuery = DB::table('shipment')->distinct()->select('city_of_origin')->whereNotNull('city_of_origin')->orderBy('city_of_origin','asc');
+                $this->applyVendorClientQueryRestrictions($uniqueCitiesOfOriginQuery);
+                $this->applyLotNumberPrefixRestrictions($uniqueCitiesOfOriginQuery);
+                $uniqueCitiesOfOrigin = array_pluck($uniqueCitiesOfOriginQuery->get(), 'city_of_origin');
+            }
+            if (array_key_exists('freight_carrier', $this->modelSearchFields) && in_array('freight_carrier', $this->fieldCategories['shipment']['exact'])) {
+                $uniqueFreightCarriersQuery = DB::table('shipment')->distinct()->select('freight_carrier')->whereNotNull('freight_carrier')->orderBy('freight_carrier','asc');
+                $this->applyVendorClientQueryRestrictions($uniqueFreightCarriersQuery);
+                $this->applyLotNumberPrefixRestrictions($uniqueFreightCarriersQuery);
+                $uniqueFreightCarriers = array_pluck($uniqueFreightCarriersQuery->get(), 'freight_carrier');
             }
         }
 

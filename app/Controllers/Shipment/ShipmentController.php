@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class ShipmentController extends ContextController
 {
     const RESULTS_PER_PAGE = 50;
-    const USE_SELECT_EXACT_VALUES = false;
+    const USE_SELECT_EXACT_VALUES = true;
     const STRING_LIMIT = 50;
 
     protected $defaultSearchFields = [
@@ -114,20 +114,21 @@ class ShipmentController extends ContextController
     {
         parent::__construct($request);
 
-        $this->fieldCategories = self::USE_SELECT_EXACT_VALUES ?
-        [
-            'exact' => ['freight_carrier', 'site_coordinator', 'city_of_origin'],
-            'string_like' => ['po_number', 'vendor_shipment_number', 'cost_center', 'vendor', 'bill_of_lading', 'freight_invoice_number',
-                'pickup_address', 'pickup_address_2', 'pickup_city', 'pickup_state', 'pickup_zip_code', 'nota_fiscal_transfer', 'nota_fiscal_transfer_2',
-                'nota_fiscal_transfer_3', 'nota_fiscal_transfer_4', 'nota_fiscal_transfer_5', 'equipment_summary', 'cert_of_data_wipe_num', 'cert_of_destruction_num'],
-            'string_multi' => ['lot_number'],
-            'date_from_to' => ['lot_date', 'lot_approved_date', 'schedule_pickup_date', 'pickup_request_date', 'actual_pickup_date', 'date_received', 'nf_received_date',
-                'pre_audit_approved', 'audit_completed'],
-            'int_less_greater' => ['number_of_skids', 'number_of_pieces'],
-            'float_less_greater' => ['freight_charge', 'total_weight_received'],
-            'custom' => ['vendor_client']
-        ]
-        :
+        $this->fieldCategories =
+        // self::USE_SELECT_EXACT_VALUES ?
+        // [
+        //     'exact' => ['freight_carrier', 'site_coordinator', 'city_of_origin'],
+        //     'string_like' => ['po_number', 'vendor_shipment_number', 'cost_center', 'vendor', 'bill_of_lading', 'freight_invoice_number',
+        //         'pickup_address', 'pickup_address_2', 'pickup_city', 'pickup_state', 'pickup_zip_code', 'nota_fiscal_transfer', 'nota_fiscal_transfer_2',
+        //         'nota_fiscal_transfer_3', 'nota_fiscal_transfer_4', 'nota_fiscal_transfer_5', 'equipment_summary', 'cert_of_data_wipe_num', 'cert_of_destruction_num'],
+        //     'string_multi' => ['lot_number'],
+        //     'date_from_to' => ['lot_date', 'lot_approved_date', 'schedule_pickup_date', 'pickup_request_date', 'actual_pickup_date', 'date_received', 'nf_received_date',
+        //         'pre_audit_approved', 'audit_completed'],
+        //     'int_less_greater' => ['number_of_skids', 'number_of_pieces'],
+        //     'float_less_greater' => ['freight_charge', 'total_weight_received'],
+        //     'custom' => ['vendor_client']
+        // ]
+        // :
         [
             'exact' => [],
             'string_like' => ['freight_carrier', 'site_coordinator', 'city_of_origin', 'po_number', 'vendor_shipment_number', 'cost_center', 'vendor', 'bill_of_lading', 'freight_invoice_number',
@@ -176,20 +177,20 @@ class ShipmentController extends ContextController
         $uniqueCitiesOfOrigin = [];
 
         if (self::USE_SELECT_EXACT_VALUES) {
-            if (array_key_exists('freight_carrier', $this->modelSearchFields)) {
-                $uniqueFreightCarriersQuery = DB::table('shipment')->distinct()->select('freight_carrier')->whereNotNull('freight_carrier');
+            if (array_key_exists('freight_carrier', $this->modelSearchFields) && in_array('freight_carrier', $this->fieldCategories['exact'])) {
+                $uniqueFreightCarriersQuery = DB::table('shipment')->distinct()->select('freight_carrier')->whereNotNull('freight_carrier')->orderBy('freight_carrier','asc');
                 $this->applyVendorClientQueryRestrictions($uniqueFreightCarriersQuery);
                 $this->applyLotNumberPrefixRestrictions($uniqueFreightCarriersQuery);
                 $uniqueFreightCarriers = array_pluck($uniqueFreightCarriersQuery->get(), 'freight_carrier');
             }
-            if (array_key_exists('site_coordinator', $this->modelSearchFields)) {
-                $uniqueSiteCoordinatorsQuery = DB::table('shipment')->distinct()->select('site_coordinator')->whereNotNull('site_coordinator');
+            if (array_key_exists('site_coordinator', $this->modelSearchFields) && in_array('site_coordinator', $this->fieldCategories['exact'])) {
+                $uniqueSiteCoordinatorsQuery = DB::table('shipment')->distinct()->select('site_coordinator')->whereNotNull('site_coordinator')->orderBy('site_coordinator','asc');
                 $this->applyVendorClientQueryRestrictions($uniqueSiteCoordinatorsQuery);
                 $this->applyLotNumberPrefixRestrictions($uniqueSiteCoordinatorsQuery);
                 $uniqueSiteCoordinators = array_pluck($uniqueSiteCoordinatorsQuery->get(), 'site_coordinator');
             }
-            if (array_key_exists('city_of_origin', $this->modelSearchFields)) {
-                $uniqueCitiesOfOriginQuery = DB::table('shipment')->distinct()->select('city_of_origin')->whereNotNull('city_of_origin');
+            if (array_key_exists('city_of_origin', $this->modelSearchFields) && in_array('city_of_origin', $this->fieldCategories['exact'])) {
+                $uniqueCitiesOfOriginQuery = DB::table('shipment')->distinct()->select('city_of_origin')->whereNotNull('city_of_origin')->orderBy('city_of_origin','asc');
                 $this->applyVendorClientQueryRestrictions($uniqueCitiesOfOriginQuery);
                 $this->applyLotNumberPrefixRestrictions($uniqueCitiesOfOriginQuery);
                 $uniqueCitiesOfOrigin = array_pluck($uniqueCitiesOfOriginQuery->get(), 'city_of_origin');
