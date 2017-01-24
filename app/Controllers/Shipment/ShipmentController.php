@@ -114,22 +114,7 @@ class ShipmentController extends ContextController
     {
         parent::__construct($request);
 
-        $this->fieldCategories =
-        // self::USE_SELECT_EXACT_VALUES ?
-        // [
-        //     'exact' => ['freight_carrier', 'site_coordinator', 'city_of_origin'],
-        //     'string_like' => ['po_number', 'vendor_shipment_number', 'cost_center', 'vendor', 'bill_of_lading', 'freight_invoice_number',
-        //         'pickup_address', 'pickup_address_2', 'pickup_city', 'pickup_state', 'pickup_zip_code', 'nota_fiscal_transfer', 'nota_fiscal_transfer_2',
-        //         'nota_fiscal_transfer_3', 'nota_fiscal_transfer_4', 'nota_fiscal_transfer_5', 'equipment_summary', 'cert_of_data_wipe_num', 'cert_of_destruction_num'],
-        //     'string_multi' => ['lot_number'],
-        //     'date_from_to' => ['lot_date', 'lot_approved_date', 'schedule_pickup_date', 'pickup_request_date', 'actual_pickup_date', 'date_received', 'nf_received_date',
-        //         'pre_audit_approved', 'audit_completed'],
-        //     'int_less_greater' => ['number_of_skids', 'number_of_pieces'],
-        //     'float_less_greater' => ['freight_charge', 'total_weight_received'],
-        //     'custom' => ['vendor_client']
-        // ]
-        // :
-        [
+        $this->fieldCategories = [
             'exact' => [],
             'string_like' => ['freight_carrier', 'site_coordinator', 'city_of_origin', 'po_number', 'vendor_shipment_number', 'cost_center', 'vendor', 'bill_of_lading', 'freight_invoice_number',
                 'pickup_address', 'pickup_address_2', 'pickup_city', 'pickup_state', 'pickup_zip_code', 'nota_fiscal_transfer', 'nota_fiscal_transfer_2',
@@ -141,6 +126,18 @@ class ShipmentController extends ContextController
             'float_less_greater' => ['freight_charge', 'total_weight_received'],
             'custom' => ['vendor_client']
         ];
+
+        // Turn on USE SELECT EXACT VALUES on a per field basis.
+        // if (self::USE_SELECT_EXACT_VALUES) {
+
+        //     // Applicable Shipment fields: freight_carrier, site_coordinator, city_of_origin
+
+        //     // Turn on for the Freight Carrier
+        //     $this->fieldCategories['exact'][] = 'freight_carrier';
+        //     if (($index = array_search('freight_carrier', $this->fieldCategories['string_like'])) !== false) {
+        //         unset($this->fieldCategories['string_like'][$index]);
+        //     }
+        // }
 
         $this->middleware('auth');
         $this->middleware('context.permissions:' . $this->context);
