@@ -189,9 +189,11 @@ class FileController extends ContextController
         $uploadedFile = Input::file('file');
         $uploadedFileName = $uploadedFile->getClientOriginalName();
 
-        $fileNamePrefix = $this->getFilePrefixPerType($type);
+        $fileNamePrefixPattern = '/' . $this->getFilePrefixPerType($type) . '/';
         $withoutExtension = substr($uploadedFileName, 0, strrpos($uploadedFileName, '.'));
-        $shipmentLotNumber = strtoupper(str_replace($fileNamePrefix, null, $withoutExtension));
+        $replacementLimit = 1;
+
+        $shipmentLotNumber = strtoupper(preg_replace($fileNamePrefixPattern, null, $withoutExtension, $replacementLimit));
 
         $shipment = Shipment::forLotNumberAndSiteId($shipmentLotNumber, $site->id);
 
