@@ -73,7 +73,7 @@
                                     <td class="pointer" onclick="window.document.location='{{ route('shipment.details', ['id' => $shipment->id ]) }}';" title="{{ $shipment->$field }}">
                                         @endif
                                         @if (in_array($field, ['freight_charge'], true))
-                                            <span @if($shipment->$field < 0)class="text-danger"@endif>{{ $shipment->$field ? Constants::CURRENCY_SYMBOL . $shipment->$field : '-' }}</span>
+                                            <span @if($shipment->$field < 0)class="text-danger"@endif>{{ $shipment->$field ? Constants::CURRENCY_SYMBOL . $shipment->$field : ' ' }}</span>
                                         @elseif ($field === 'cert_of_data_wipe_num')
                                             @if (isset($shipment->certOfDataWipeNum))
                                                 @if ($site->hasFeature(Feature::HAS_CERTIFICATES))
@@ -90,7 +90,7 @@
                                                     @endif
                                                 @endif
                                             @else
-                                                -
+                                                {{ ' ' }}
                                             @endif
                                         @elseif ($field === 'cert_of_destruction_num')
                                             @if (isset($shipment->certOfDestructionNum))
@@ -108,20 +108,20 @@
                                                     @endif
                                                 @endif
                                             @else
-                                                -
+                                                {{ ' ' }}
                                             @endif
                                         @else
-                                            {{ $shipment->$field ? str_limit($shipment->$field, $limit) : '-' }}
+                                            {{ $shipment->$field ? str_limit($shipment->$field, $limit) : ' ' }}
                                         @endif
                                     </td>
                                 @endif
                                 @if(in_array($field, $fieldCategories['date_from_to'], true))
                                     <td class="pointer" title="{{ $shipment->$field }}"
-                                        onclick="window.document.location='{{ route('shipment.details', ['id' => $shipment->id ]) }}';">{{ isset($shipment->$field) ? $shipment->$field->format(Constants::DATE_FORMAT) : '-' }}</td>
+                                        onclick="window.document.location='{{ route('shipment.details', ['id' => $shipment->id ]) }}';">{{ isset($shipment->$field) ? $shipment->$field->format(Constants::DATE_FORMAT) : ' ' }}</td>
                                 @endif
                                 @if (starts_with($field, '!'))
                                     <td class="pointer" title="{{ $shipment->$field }}" onclick="window.document.location='{{ route('shipment.details', ['id' => $shipment->id ]) }}';">
-                                        -
+                                        {{ ' ' }}
                                     </td>
                                 @endif
                                 @endforeach
@@ -137,7 +137,7 @@
                                             @endif
                                         </td>
                                     @else
-                                        <td>-</td>
+                                        <td>{{ ' ' }}</td>
                                     @endif
                                 @endif
                                 <td class="text-center text-nowrap">

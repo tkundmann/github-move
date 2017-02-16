@@ -69,10 +69,22 @@
             </tr>
             </thead>
             <tbody>
+            @if ($site->hasFeature(Feature::IS_WINTHROP))
+               <?php $winthropNoSerialSequenceCounter = 1; ?>
+            @endif
+
             @foreach ($assets as $asset)
                 <tr>
                     @foreach($fields as $field => $label)
-                        @if (starts_with($field, 'hardcoded-'))
+                        @if ($site->hasFeature(Feature::IS_WINTHROP) && $field === 'manufacturer_serial_num' && strpos(strtoupper($asset->$field),'N/A') !== false)
+                            <td class="pointer" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">
+                                {{ 'NoSerial' . $winthropNoSerialSequenceCounter++ }}
+                            </td>
+                        @elseif ($site->hasFeature(Feature::IS_WINTHROP) && strtoupper($asset->$field) === 'N/A')
+                            <td class="pointer" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">
+                                {{ ' ' }}
+                            </td>
+                        @elseif (starts_with($field, 'hardcoded-'))
                             <td class="pointer" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">
                                 {{ str_replace('_', ' ', str_replace('hardcoded-', '', $field)) }}
                             </td>
@@ -84,7 +96,7 @@
                                     @endif
                                     @if ($asset->$field)
                                         @if (in_array($field, ['net_settlement', 'settlement_amount'], true))
-                                            <span>-</span>
+                                            <span>{{ ' ' }}</span>
                                         @elseif($field === 'cert_of_data_wipe_num')
                                             @if ($site->hasFeature(Feature::CUSTOM_PRODUCT_FAMILY_FOR_CERTIFICATE_OF_DATA_WIPE_NUMBER))
                                                 @if (!$productFamilyArray = $site->getFeature(Feature::CUSTOM_PRODUCT_FAMILY_FOR_CERTIFICATE_OF_DATA_WIPE_NUMBER)->pivot->data)
@@ -106,10 +118,10 @@
                                                             @endif
                                                         @endif
                                                     @else
-                                                        -
+                                                        {{ ' ' }}
                                                     @endif
                                                 @else
-                                                    -
+                                                    {{ ' ' }}
                                                 @endif
                                             @else
                                                 @if (isset($asset->certOfDataWipeNum))
@@ -127,7 +139,7 @@
                                                         @endif
                                                     @endif
                                                 @else
-                                                    -
+                                                    {{ ' ' }}
                                                 @endif
                                             @endif
                                         @elseif($field === 'cert_of_destruction_num')
@@ -151,10 +163,10 @@
                                                             @endif
                                                         @endif
                                                     @else
-                                                        -
+                                                        {{ ' ' }}
                                                     @endif
                                                 @else
-                                                    -
+                                                    {{ ' ' }}
                                                 @endif
                                             @else
                                                 @if (isset($asset->certOfDestructionNum))
@@ -172,7 +184,7 @@
                                                         @endif
                                                     @endif
                                                 @else
-                                                    -
+                                                    {{ ' ' }}
                                                 @endif
                                             @endif
                                         @else
@@ -186,41 +198,41 @@
                                                 @endif
                                                 {{ str_limit($customStatus, $limit) }}
                                             @else
-                                                -
+                                                {{ ' ' }}
                                             @endif
                                         @else
-                                            -
+                                            {{ ' ' }}
                                         @endif
                                     @endif
                                 </td>
                             @endif
                             @if(in_array($field, $fieldCategories['date_from_to'], true))
-                                <td class="pointer" title="{{ $asset->$field }}" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">{{ isset($asset->$field) ? $asset->$field->format(Constants::DATE_FORMAT) : '-' }}</td>
+                                <td class="pointer" title="{{ $asset->$field }}" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">{{ isset($asset->$field) ? $asset->$field->format(Constants::DATE_FORMAT) : ' ' }}</td>
                             @endif
                             @if(in_array($field, array_merge($fieldCategories['shipment']['exact'], $fieldCategories['shipment']['string_like'], $fieldCategories['shipment']['string_multi'], $fieldCategories['shipment']['custom'], $fieldCategories['shipment']['int_less_greater'], $fieldCategories['shipment']['float_less_greater']), true))
                                 <td class="pointer" title="{{ isset($asset->shipment->$field) ? $asset->shipment->$field : '' }}" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">
                                     @if(isset($asset->shipment))
                                         @if (in_array($field, ['freight_charge'], true))
-                                            <span @if($asset->shipment->$field < 0)class="text-danger"@endif>{{ $asset->shipment->$field ? Constants::CURRENCY_SYMBOL . $asset->shipment->$field : '-' }}</span>
+                                            <span @if($asset->shipment->$field < 0)class="text-danger"@endif>{{ $asset->shipment->$field ? Constants::CURRENCY_SYMBOL . $asset->shipment->$field : ' ' }}</span>
                                         @else
-                                            {{ $asset->shipment->$field ? str_limit($asset->shipment->$field, $limit) : '-' }}
+                                            {{ $asset->shipment->$field ? str_limit($asset->shipment->$field, $limit) : ' ' }}
                                         @endif
                                     @else
-                                        -
+                                        {{ ' ' }}
                                     @endif
                                 </td>
                             @elseif(in_array($field, $fieldCategories['shipment']['date_from_to'], true))
                                 <td class="pointer" title="{{ isset($asset->shipment->$field) ? $asset->shipment->$field : '' }}" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">
                                     @if(isset($asset->shipment))
-                                        {{ isset($asset->shipment->$field) ? $asset->shipment->$field->format(Constants::DATE_FORMAT) : '-' }}
+                                        {{ isset($asset->shipment->$field) ? $asset->shipment->$field->format(Constants::DATE_FORMAT) : ' ' }}
                                     @else
-                                        -
+                                        {{ ' ' }}
                                     @endif
                                 </td>
                             @endif
                             @if (starts_with($field, '!'))
                                 <td class="pointer" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">
-                                    -
+                                    {{ ' ' }}
                                 </td>
                             @endif
                     @endforeach
