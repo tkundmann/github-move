@@ -69,18 +69,10 @@
             </tr>
             </thead>
             <tbody>
-            @if ($site->hasFeature(Feature::IS_WINTHROP))
-               <?php $winthropNoSerialSequenceCounter = 1; ?>
-            @endif
-
             @foreach ($assets as $asset)
                 <tr>
                     @foreach($fields as $field => $label)
-                        @if ($site->hasFeature(Feature::IS_WINTHROP) && $field === 'manufacturer_serial_num' && strpos(strtoupper($asset->$field),'N/A') !== false)
-                            <td class="pointer" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">
-                                {{ 'NoSerial' . $winthropNoSerialSequenceCounter++ }}
-                            </td>
-                        @elseif ($site->hasFeature(Feature::IS_WINTHROP) && strtoupper($asset->$field) === 'N/A')
+                        @if ($site->hasFeature(Feature::IS_WINTHROP) && strtoupper($asset->$field) === 'N/A')
                             <td class="pointer" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">
                                 {{ ' ' }}
                             </td>

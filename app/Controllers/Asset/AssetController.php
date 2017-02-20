@@ -588,10 +588,6 @@ class AssetController extends ContextController
             $assets = $paginator->items();
             $assetsCsvArray = [];
 
-            if ($this->site->hasFeature(Feature::IS_WINTHROP)) {
-                $winthropNoSerialSequenceCounter = 1;
-            }
-
             foreach ($assets as $asset) {
                 $assetElement = $asset->toArray();
 
@@ -644,14 +640,7 @@ class AssetController extends ContextController
                             else {
                                 if ($this->site->hasFeature(Feature::IS_WINTHROP)) {
 
-                                    if ($field === 'manufacturer_serial_num' && strpos(strtoupper($assetElement[$field]),'N/A') !== false) {
-                                        // Per Winthrop Request, any Manufacturer Serial Numbers that contain 'N/A' are not considered valid
-                                        // Serial Numbers.  In those cases, Winthrop would like it replaced with NoSerial[sequence-counter] (e.g.
-                                        // NoSerial1, NoSerial2, NoSerial3, etc.).  Sequence counter variable initialized just outside assets
-                                        // foreach loop above.
-                                        $row[$field] = 'NoSerial' . $winthropNoSerialSequenceCounter++;
-                                    }
-                                    else if (strtoupper($assetElement[$field]) === 'N/A') {
+                                    if (strtoupper($assetElement[$field]) === 'N/A') {
                                         // Per Winthrop Request, any field set to N/A must be set to empty in the Asset Export
                                         $row[$field] = '';
                                     }
