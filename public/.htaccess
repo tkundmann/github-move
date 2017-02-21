@@ -28,6 +28,10 @@
     RewriteCond %{HTTP:X-Forwarded-Proto} !https
     RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1  [R=301,L]
 
+    # Airgas Pickup Request Form Redirects
+    RewriteCond %{REQUEST_URI} ^/airgas/pickuprequest$ [NC]
+    RewriteRule ^.*$  "/airgas/pickup-request"    [R,NE,L]
+
     # Ebay Pickup Request Form Redirects
     RewriteCond %{REQUEST_URI} ^/ebay/pickuprequest$ [NC]
     RewriteRule ^.*$  "/ebay/pickup-request"    [R,NE,L]
