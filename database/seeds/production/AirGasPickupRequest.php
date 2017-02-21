@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeds\Production;
+
 use App\Data\Models\Feature;
 use App\Data\Models\Site;
 use Carbon\Carbon;
