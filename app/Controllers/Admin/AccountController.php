@@ -41,6 +41,7 @@ class AccountController extends ContextController
         $lotNumbers = [];
         if ($site->hasFeature(Feature::LOT_NUMBER_PREFIX_ACCESS_RESTRICTED) && $site->lotNumbers()->count() > 0) {
             $lotNumbers = $site->lotNumbers()->pluck('prefix', 'id');
+            $lotNumbers = $lotNumbers->sort();
         }
 
         return $lotNumbers;
@@ -51,6 +52,7 @@ class AccountController extends ContextController
         $vendorClients = [];
         if ($site->hasFeature(Feature::VENDOR_CLIENT_CODE_ACCESS_RESTRICTED) && $site->vendorClients()->count() > 0) {
             $vendorClients = $site->vendorClients()->pluck('name', 'id');
+            $vendorClients = $vendorClients->sort();
         }
 
         return $vendorClients;

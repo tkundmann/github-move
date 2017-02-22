@@ -155,8 +155,12 @@ class ShipmentController extends ContextController
             $this->vendorClients = $this->site->vendorClients->lists('name', 'name')->toArray();
         }
 
+        // Sort Vendor Client Array
+        asort($this->vendorClients);
+
         if (Auth::user() && $this->site->hasFeature(Feature::LOT_NUMBER_PREFIX_ACCESS_RESTRICTED) && !Auth::user()->hasRole(Role::SUPERUSER)) {
             $this->lotNumberPrefixes = Auth::user()->lotNumbers()->lists('prefix')->toArray();
+            asort($this->lotNumberPrefixes);
         }
         else {
             // probably not
