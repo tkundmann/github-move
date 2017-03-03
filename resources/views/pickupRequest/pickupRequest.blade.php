@@ -32,6 +32,7 @@
                             <hr>
 
                             <div class="container-fluid">
+                                <p>@lang('pickup_request.denotes_required_field')</p>
                                 @if($site->hasFeature(Feature::PICKUP_REQUEST_EQUIPMENT_LIST))
                                     <div class="row">
                                         <div class="col-md-12">
@@ -57,7 +58,7 @@
                                         <div class="col-md-3"></div>
                                         <div class="col-md-6">
                                             <div class="form-group @if($errors->has('upload_equipment_list')) has-error @endif">
-                                                {{ Form::label('upload_equipment_list', trans('pickup_request.upload_equipment_list'), ['class' => 'control-label colon-after']) }}
+                                                {{ Form::label('upload_equipment_list', trans('pickup_request.upload_equipment_list'), ['class' => 'control-label colon-after-required']) }}
                                                 <div class="">
                                                     <div class="fileinput fileinput-new input-group margin-bottom-none"
                                                          data-provides="fileinput">
@@ -142,7 +143,7 @@
                                         {{--Left column--}}
                                         <div class="form-group @if($errors->has('company_name')) has-error @endif">
                                             <label for="company_name"
-                                                   class="control-label colon-after">@lang('pickup_request.company_name')</label>
+                                                   class="control-label colon-after @if(in_array('XXXXXX',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.company_name')</label>
                                             <input id="company_name" type="text" class="form-control"
                                                    name="company_name" value="{{ old('company_name') }}">
                                             @if ($errors->has('company_name'))
@@ -152,7 +153,7 @@
 
                                         <div class="form-group @if($errors->has('contact_name')) has-error @endif">
                                             <label for="contact_name"
-                                                   class="control-label colon-after">@lang('pickup_request.contact_name')</label>
+                                                   class="control-label colon-after @if(in_array('contact_name',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.contact_name')</label>
                                             <input id="contact_name" type="text" class="form-control"
                                                    name="contact_name" value="{{ old('contact_name') }}">
                                             @if ($errors->has('contact_name'))
@@ -161,7 +162,7 @@
                                         </div>
 
                                         <div class="form-group @if($errors->has('contact_address_1') || $errors->has('contact_address_2'))has-error @endif">
-                                            <label class="control-label colon-after">@lang('pickup_request.contact_address')</label>
+                                            <label class="control-label colon-after @if(in_array('contact_address_1',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.contact_address')</label>
                                             <input id="contact_address_1" type="text"
                                                    class="form-control"
                                                    name="contact_address_1" value="{{ old('contact_address_1') }}">
@@ -178,7 +179,7 @@
 
                                         <div class="form-group @if($errors->has('contact_city')) has-error @endif">
                                             <label for="contact_city"
-                                                   class="control-label colon-after">@lang('pickup_request.city')</label>
+                                                   class="control-label colon-after @if(in_array('contact_city',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.city')</label>
                                             <input id="contact_city" type="text" class="form-control"
                                                    name="contact_city"
                                                    value="{{ old('contact_city') }}">
@@ -189,7 +190,7 @@
 
                                         @if($data['use_state_as_select'])
                                             <div class="form-group @if($errors->has('contact_state')) has-error @endif">
-                                                <label class="control-label colon-after">@lang('pickup_request.state')</label>
+                                                <label class="control-label colon-after @if(in_array('contact_state',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.state')</label>
                                                 {{ Form::select('contact_state', array_flip($data['states']), old('contact_state'), ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'title' => trans('common.select')]) }}
                                                 @if ($errors->has('contact_state'))
                                                     {!! $errors->first('contact_state', '<small class="text-danger">:message</small>') !!}
@@ -198,7 +199,7 @@
                                         @else
                                             <div class="form-group @if($errors->has('contact_state')) has-error @endif">
                                                 <label for="contact_state"
-                                                       class="control-label colon-after">@lang('pickup_request.state_province')</label>
+                                                       class="control-label colon-after @if(in_array('contact_state',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.state_province')</label>
                                                 <input id="contact_state" type="text" class="form-control"
                                                        name="contact_state" value="{{ old('contact_state') }}">
                                                 @if ($errors->has('contact_state'))
@@ -209,7 +210,7 @@
 
                                         <div class="form-group @if($errors->has('contact_zip')) has-error @endif">
                                             <label for="contact_zip"
-                                                   class="control-label colon-after">@lang('pickup_request.zip_code')</label>
+                                                   class="control-label colon-after @if(in_array('contact_zip',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.zip_code')</label>
                                             <input id="contact_zip" type="text" class="form-control"
                                                    name="contact_zip" value="{{ old('contact_zip') }}">
                                             @if ($errors->has('contact_zip'))
@@ -223,7 +224,7 @@
                                         @if($data['use_country'])
                                             @if($data['countries'])
                                                 <div class="form-group @if($errors->has('contact_country')) has-error @endif">
-                                                    <label class="control-label colon-after">@lang('pickup_request.country')</label>
+                                                    <label class="control-label colon-after @if(in_array('contact_country',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.country')</label>
                                                     {{ Form::select('contact_country', $data['countries'], old('contact_country'), ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'title' => trans('common.select')]) }}
                                                     @if ($errors->has('contact_country'))
                                                         {!! $errors->first('contact_country', '<small class="text-danger">:message</small>') !!}
@@ -232,7 +233,7 @@
                                             @else
                                                 <div class="form-group @if($errors->has('contact_country')) has-error @endif">
                                                     <label for="contact_country"
-                                                           class="control-label colon-after">@lang('pickup_request.country')</label>
+                                                           class="control-label colon-after @if(in_array('contact_country',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.country')</label>
                                                     <input id="contact_country" type="text" class="form-control"
                                                            name="contact_country"
                                                            value="{{ old('contact_country') }}">
@@ -245,7 +246,7 @@
 
                                         @if($data['use_company_division'])
                                             <div class="form-group @if($errors->has('company_division')) has-error @endif">
-                                                <label class="control-label colon-after">{{ $data['company_division_label'] }}</label>
+                                                <label class="control-label colon-after @if(in_array('company_division',$data['required_fields'],true)) colon-after-required @endif">{{ $data['company_division_label'] }}</label>
                                                 {{ Form::select('company_division', $data['company_divisions'], old('company_division'), ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'title' => trans('common.select')]) }}
                                                 @if ($errors->has('company_division'))
                                                     {!! $errors->first('company_division', '<small class="text-danger">:message</small>') !!}
@@ -255,7 +256,7 @@
 
                                         <div class="form-group @if($errors->has('contact_phone_number')) has-error @endif">
                                             <label for="contact_phone_number"
-                                                   class="control-label colon-after">@lang('pickup_request.phone_number')</label>
+                                                   class="control-label colon-after @if(in_array('contact_phone_number',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.phone_number')</label>
                                             <input id="contact_phone_number" type="text" class="form-control"
                                                    name="contact_phone_number"
                                                    value="{{ old('contact_phone_number') }}">
@@ -266,7 +267,7 @@
 
                                         <div class="form-group @if($errors->has('contact_cell_number')) has-error @endif">
                                             <label for="contact_cell_number"
-                                                   class="control-label colon-after">@lang('pickup_request.cell_number')</label>
+                                                   class="control-label colon-after @if(in_array('contact_cell_number',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.cell_number')</label>
                                             <input id="contact_cell_number" type="text" class="form-control"
                                                    name="contact_cell_number"
                                                    value="{{ old('contact_cell_number') }}">
@@ -277,7 +278,7 @@
 
                                         <div class="form-group @if($errors->has('contact_email_address')) has-error @endif">
                                             <label for="contact_email_address"
-                                                   class="control-label colon-after">@lang('pickup_request.email_address')</label>
+                                                   class="control-label colon-after @if(in_array('contact_email_address',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.email_address')</label>
                                             <input id="contact_email_address" type="text" class="form-control"
                                                    name="contact_email_address"
                                                    value="{{ old('contact_email_address') }}">
