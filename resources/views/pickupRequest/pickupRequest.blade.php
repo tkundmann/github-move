@@ -28,11 +28,10 @@
                                     <i class="fa fa-btn fa-undo"></i> @lang('common.reset')
                                 </button>
                             </div>
-
+                            <p>@lang('pickup_request.denotes_required_field')</p>
                             <hr>
 
                             <div class="container-fluid">
-                                <p>@lang('pickup_request.denotes_required_field')</p>
                                 @if($site->hasFeature(Feature::PICKUP_REQUEST_EQUIPMENT_LIST))
                                     <div class="row">
                                         <div class="col-md-12">
@@ -300,7 +299,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group @if($errors->has('reference_number')) has-error @endif">
                                                 <label for="reference_number"
-                                                       class="control-label colon-after">{{ $data['reference_number_label'] }}</label>
+                                                       class="control-label colon-after @if(in_array('reference_number',$data['required_fields'],true)) colon-after-required @endif">{{ $data['reference_number_label'] }}</label>
                                                 <input id="reference_number" type="text" class="form-control"
                                                        name="reference_number"
                                                        value="{{ old('reference_number') }}">
@@ -615,7 +614,7 @@
                                         @if($data['use_preferred_pickup_date_information'])
                                             <div class="form-group @if($errors->has('preferred_pickup_date_information')) has-error @endif">
                                                 <label for="preferred_pickup_date_information"
-                                                       class="control-label">@lang('pickup_request.preferred_date_pickup')</label>
+                                                       class="control-label @if(in_array('preferred_pickup_date_information',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.preferred_date_pickup')</label>
                                                 <input id="preferred_pickup_date_information"
                                                        value="{{ old('preferred_pickup_date_information') }}"
                                                        name="preferred_pickup_date_information"
