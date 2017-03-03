@@ -583,6 +583,8 @@ class AssetController extends ContextController
         $numberOfIterations = $resultCheck->lastPage();
         $currentIteration = 1;
 
+        $isWinthrop = $this->site->hasFeature(Feature::IS_WINTHROP);
+
         for ($i = $currentIteration; $i <= $numberOfIterations; $i++) {
             $query = $this->prepareQuery();
             $query = $query->sortable(['asset.lot_date' => 'desc']);
@@ -642,7 +644,7 @@ class AssetController extends ContextController
 
                             }
                             else {
-                                if ($this->site->hasFeature(Feature::IS_WINTHROP)) {
+                                if ($isWinthrop) {
 
                                     if (strtoupper($assetElement[$field]) === 'N/A') {
                                         // Per Winthrop Request, any field set to N/A must be set to empty in the Asset Export
