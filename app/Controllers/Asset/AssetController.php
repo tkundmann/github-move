@@ -660,11 +660,7 @@ class AssetController extends ContextController
                             }
                         }
                         else if (in_array($field, $this->fieldCategories['date_from_to'], true)) {
-                            try {
-                                $row[$field] = !$assetElement[$field] ? null : Carbon::createFromFormat('Y-m-d H:i:s', $assetElement[$field])->format(Constants::DATE_FORMAT);
-                            } catch (\InvalidArgumentException $e) {
-                                $row[$field] = !$assetElement[$field] ? null : Carbon::createFromFormat('Y-m-d', $assetElement[$field])->format(Constants::DATE_FORMAT);
-                            }
+                            $row[$field] = !$assetElement[$field] ? null : $assetElement[$field]);
                         }
                         else {
                             $row[$field] = '';
@@ -692,12 +688,7 @@ class AssetController extends ContextController
                         }
                         else if (in_array($field, $this->fieldCategories['shipment']['date_from_to'], true)) {
                             if ($assetElement['shipment']) {
-                                try {
-                                    $row[$field] = !$assetElement['shipment'][$field] ? null : Carbon::createFromFormat('Y-m-d H:i:s', $assetElement['shipment'][$field])->format(Constants::DATE_FORMAT);
-                                }
-                                catch (\InvalidArgumentException $e) {
-                                    $row[$field] = !$assetElement['shipment'][$field] ? null : Carbon::createFromFormat('Y-m-d', $assetElement['shipment'][$field])->format(Constants::DATE_FORMAT);
-                                }
+                                $row[$field] = !$assetElement['shipment'][$field] ? null : $assetElement['shipment'][$field]);
                             }
                             else {
                                 $row[$field] = '';
