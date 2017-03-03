@@ -660,7 +660,7 @@ class AssetController extends ContextController
                             }
                         }
                         else if (in_array($field, $this->fieldCategories['date_from_to'], true)) {
-                            $row[$field] = !$assetElement[$field] ? null : $assetElement[$field]);
+                            $row[$field] = !$assetElement[$field] ? null : $assetElement[$field];
                         }
                         else {
                             $row[$field] = '';
@@ -688,7 +688,7 @@ class AssetController extends ContextController
                         }
                         else if (in_array($field, $this->fieldCategories['shipment']['date_from_to'], true)) {
                             if ($assetElement['shipment']) {
-                                $row[$field] = !$assetElement['shipment'][$field] ? null : $assetElement['shipment'][$field]);
+                                $row[$field] = !$assetElement['shipment'][$field] ? null : $assetElement['shipment'][$field];
                             }
                             else {
                                 $row[$field] = '';
