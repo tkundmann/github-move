@@ -69,10 +69,11 @@
             </tr>
             </thead>
             <tbody>
+            <?php $isWinthrop = $site->hasFeature(Feature::IS_WINTHROP) ?>
             @foreach ($assets as $asset)
                 <tr>
                     @foreach($fields as $field => $label)
-                        @if ($site->hasFeature(Feature::IS_WINTHROP) && strtoupper($asset->$field) === 'N/A')
+                        @if ($isWinthrop && strtoupper($asset->$field) === 'N/A')
                             <td class="pointer" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">
                                 {{ ' ' }}
                             </td>
