@@ -585,6 +585,18 @@ class AssetController extends ContextController
 
         $isWinthrop = $this->site->hasFeature(Feature::IS_WINTHROP);
 
+        $applicableAssetFieldCategories = array_merge($this->fieldCategories['exact'], $this->fieldCategories['string_like'], $this->fieldCategories['string_multi'], $this->fieldCategories['int_less_greater'], $this->fieldCategories['float_less_greater'], $this->fieldCategories['custom'], $this->fieldCategories['date_from_to']);
+
+        foreach($applicableAssetFieldCategories as $value) {
+            $applicableAssetFieldCatsHaystack[$value] = 1;
+        }
+
+        $applicableShipmentFieldCategories = array_merge($this->fieldCategories['shipment']['exact'], $this->fieldCategories['shipment']['string_like'], $this->fieldCategories['shipment']['string_multi'], $this->fieldCategories['shipment']['int_less_greater'], $this->fieldCategories['shipment']['float_less_greater'], $this->fieldCategories['shipment']['custom'], $this->fieldCategories['shipment']['date_from_to']);
+
+        foreach($applicableShipmentFieldCategories as $value) {
+            $applicableShipmentFieldCatsHaystack[$value] = 1;
+        }
+
         for ($i = $currentIteration; $i <= $numberOfIterations; $i++) {
             $query = $this->prepareQuery();
             $query = $query->sortable(['asset.lot_date' => 'desc']);
@@ -603,13 +615,7 @@ class AssetController extends ContextController
                         $row[$field] = str_replace('_', ' ', str_replace('hardcoded-', '', $field));
                     }
                     else if (array_key_exists($field, $assetElement)) {
-                        if (in_array($field, $this->fieldCategories['exact'], true) ||
-                            in_array($field, $this->fieldCategories['string_like'], true) ||
-                            in_array($field, $this->fieldCategories['string_multi'], true) ||
-                            in_array($field, $this->fieldCategories['int_less_greater'], true) ||
-                            in_array($field, $this->fieldCategories['float_less_greater'], true) ||
-                            in_array($field, $this->fieldCategories['custom'], true)
-                        ) {
+                        if (isset($applicableAssetFieldCatsHaystack[$field])) {
                             if ($field === 'status' && empty($assetElement[$field]) && $siteHasCustomEmptyStatus) {
                                 if (!$customStatus = $siteCustomEmptyStatus->pivot->data) {
                                     $customStatus = $siteCustomEmptyStatus->data;
@@ -659,21 +665,12 @@ class AssetController extends ContextController
                                 }
                             }
                         }
-                        else if (in_array($field, $this->fieldCategories['date_from_to'], true)) {
-                            $row[$field] = !$assetElement[$field] ? null : $assetElement[$field];
-                        }
                         else {
                             $row[$field] = '';
                         }
                     }
                     else if ($assetElement['shipment'] && array_key_exists($field, $assetElement['shipment'])) {
-                        if (in_array($field, $this->fieldCategories['shipment']['exact'], true) ||
-                            in_array($field, $this->fieldCategories['shipment']['string_like'], true) ||
-                            in_array($field, $this->fieldCategories['shipment']['string_multi'], true) ||
-                            in_array($field, $this->fieldCategories['shipment']['int_less_greater'], true) ||
-                            in_array($field, $this->fieldCategories['shipment']['float_less_greater'], true) ||
-                            in_array($field, $this->fieldCategories['shipment']['custom'], true)
-                        ) {
+                        if (isset($applicableShipmentFieldCatsHaystack[$field])) {
                             if ($assetElement['shipment']) {
                                 if ($field === 'freight_charge') {
                                     $row[$field] = Constants::CURRENCY_SYMBOL . $assetElement['shipment'][$field];
@@ -681,14 +678,6 @@ class AssetController extends ContextController
                                 else {
                                     $row[$field] = $assetElement['shipment'][$field];
                                 }
-                            }
-                            else {
-                                $row[$field] = '';
-                            }
-                        }
-                        else if (in_array($field, $this->fieldCategories['shipment']['date_from_to'], true)) {
-                            if ($assetElement['shipment']) {
-                                $row[$field] = !$assetElement['shipment'][$field] ? null : $assetElement['shipment'][$field];
                             }
                             else {
                                 $row[$field] = '';
