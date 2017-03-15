@@ -155,16 +155,14 @@ class Asset extends Model
     static function createFromLotControl(SimpleXMLElement $xml, SimpleXMLElement $lotControl) {
         $asset = new self();
 
-        // DATE_TIME_STAMP in XML has 'm/d/y h:i A' format, but apparently not needed
-
         if (isset($lotControl->LOT_DATE)) {
             $asset->lotDate = null;
             if (strlen($lotControl->LOT_DATE) > 0) {
-                if (DateTime::createFromFormat('m/d/Y', $lotControl->LOT_DATE->__toString())) {
-                    $asset->lotDate = DateTime::createFromFormat('m/d/Y', $lotControl->LOT_DATE->__toString())->setTime(0, 0, 0);
-                }
-                else if (DateTime::createFromFormat('m/d/y', $lotControl->LOT_DATE->__toString())) {
+                if (DateTime::createFromFormat('m/d/y', $lotControl->LOT_DATE->__toString())) {
                     $asset->lotDate = DateTime::createFromFormat('m/d/y', $lotControl->LOT_DATE->__toString())->setTime(0, 0, 0);
+                }
+                else if (DateTime::createFromFormat('m/d/Y', $lotControl->LOT_DATE->__toString())) {
+                    $asset->lotDate = DateTime::createFromFormat('m/d/Y', $lotControl->LOT_DATE->__toString())->setTime(0, 0, 0);
                 }
             }
         }
@@ -213,22 +211,22 @@ class Asset extends Model
         if (isset($lotControl->DATE_RECEIVED)) {
             $asset->dateArrived = null;
             if (strlen($lotControl->DATE_RECEIVED) > 0) {
-                if (DateTime::createFromFormat('m/d/Y', $lotControl->DATE_RECEIVED->__toString())) {
-                    $asset->dateArrived = DateTime::createFromFormat('m/d/Y', $lotControl->DATE_RECEIVED->__toString())->setTime(0, 0, 0);
-                }
-                else if (DateTime::createFromFormat('m/d/y', $lotControl->DATE_RECEIVED->__toString())) {
+                if (DateTime::createFromFormat('m/d/y', $lotControl->DATE_RECEIVED->__toString())) {
                     $asset->dateArrived = DateTime::createFromFormat('m/d/y', $lotControl->DATE_RECEIVED->__toString())->setTime(0, 0, 0);
+                }
+                else if (DateTime::createFromFormat('m/d/Y', $lotControl->DATE_RECEIVED->__toString())) {
+                    $asset->dateArrived = DateTime::createFromFormat('m/d/Y', $lotControl->DATE_RECEIVED->__toString())->setTime(0, 0, 0);
                 }
             }
         }
         if (isset($xml->SHIPMENT_DATE)) {
             $asset->shipmentDate = null;
             if (strlen($xml->SHIPMENT_DATE) > 0) {
-                if (DateTime::createFromFormat('m/d/Y', $xml->SHIPMENT_DATE->__toString())) {
-                    $asset->shipmentDate = DateTime::createFromFormat('m/d/Y', $xml->SHIPMENT_DATE->__toString())->setTime(0, 0, 0);
-                }
-                else if (DateTime::createFromFormat('m/d/y', $xml->SHIPMENT_DATE->__toString())) {
+                if (DateTime::createFromFormat('m/d/y', $xml->SHIPMENT_DATE->__toString())) {
                     $asset->shipmentDate = DateTime::createFromFormat('m/d/y', $xml->SHIPMENT_DATE->__toString())->setTime(0, 0, 0);
+                }
+                else if (DateTime::createFromFormat('m/d/Y', $xml->SHIPMENT_DATE->__toString())) {
+                    $asset->shipmentDate = DateTime::createFromFormat('m/d/Y', $xml->SHIPMENT_DATE->__toString())->setTime(0, 0, 0);
                 }
             }
         }
@@ -501,11 +499,11 @@ class Asset extends Model
         if (isset($xml->LOT_DATE)) {
             $asset->lotDate = null;
             if (strlen($xml->LOT_DATE) > 0) {
-                if (DateTime::createFromFormat('m/d/Y', $xml->LOT_DATE->__toString())) {
-                    $asset->lotDate = DateTime::createFromFormat('m/d/Y', $xml->LOT_DATE->__toString())->setTime(0, 0, 0);
-                }
-                else if (DateTime::createFromFormat('m/d/y', $xml->LOT_DATE->__toString())) {
+                if (DateTime::createFromFormat('m/d/y', $xml->LOT_DATE->__toString())) {
                     $asset->lotDate = DateTime::createFromFormat('m/d/y', $xml->LOT_DATE->__toString())->setTime(0, 0, 0);
+                }
+                else if (DateTime::createFromFormat('m/d/Y', $xml->LOT_DATE->__toString())) {
+                    $asset->lotDate = DateTime::createFromFormat('m/d/Y', $xml->LOT_DATE->__toString())->setTime(0, 0, 0);
                 }
             }
         }
@@ -554,22 +552,22 @@ class Asset extends Model
         if (isset($xml->DATE_RECEIVED)) {
             $asset->dateArrived = null;
             if (strlen($xml->DATE_RECEIVED) > 0) {
-                if (DateTime::createFromFormat('m/d/Y', $xml->DATE_RECEIVED->__toString())) {
-                    $asset->dateArrived = DateTime::createFromFormat('m/d/Y', $xml->DATE_RECEIVED->__toString())->setTime(0, 0, 0);
-                }
-                else if (DateTime::createFromFormat('m/d/y', $xml->DATE_RECEIVED->__toString())) {
+                if (DateTime::createFromFormat('m/d/y', $xml->DATE_RECEIVED->__toString())) {
                     $asset->dateArrived = DateTime::createFromFormat('m/d/y', $xml->DATE_RECEIVED->__toString())->setTime(0, 0, 0);
+                }
+                else if (DateTime::createFromFormat('m/d/Y', $xml->DATE_RECEIVED->__toString())) {
+                    $asset->dateArrived = DateTime::createFromFormat('m/d/Y', $xml->DATE_RECEIVED->__toString())->setTime(0, 0, 0);
                 }
             }
         }
         if (isset($xml->SHIPMENT_DATE)) {
             $asset->shipmentDate = null;
             if (strlen($xml->SHIPMENT_DATE) > 0) {
-                if (DateTime::createFromFormat('m/d/Y', $xml->SHIPMENT_DATE->__toString())) {
-                    $asset->shipmentDate = DateTime::createFromFormat('m/d/Y', $xml->SHIPMENT_DATE->__toString())->setTime(0, 0, 0);
-                }
-                else if (DateTime::createFromFormat('m/d/y', $xml->SHIPMENT_DATE->__toString())) {
+                if (DateTime::createFromFormat('m/d/y', $xml->SHIPMENT_DATE->__toString())) {
                     $asset->shipmentDate = DateTime::createFromFormat('m/d/y', $xml->SHIPMENT_DATE->__toString())->setTime(0, 0, 0);
+                }
+                else if (DateTime::createFromFormat('m/d/Y', $xml->SHIPMENT_DATE->__toString())) {
+                    $asset->shipmentDate = DateTime::createFromFormat('m/d/Y', $xml->SHIPMENT_DATE->__toString())->setTime(0, 0, 0);
                 }
             }
         }
