@@ -396,8 +396,8 @@ class SiteController extends ContextController
         }
         else {
             $input = Input::get('vendor_client');
-            $input = str_replace([',', ';', "\r\n", "\r", "\n"], ',', $input);
-            $vendorClients = explode(',', $input);
+            $input = str_replace([';', "\r\n", "\r", "\n"], '^', $input);
+            $vendorClients = explode('^', $input);
 
             foreach ($vendorClients as $vendorClient) {
 

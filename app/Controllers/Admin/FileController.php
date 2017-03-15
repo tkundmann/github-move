@@ -183,7 +183,7 @@ class FileController extends ContextController
             }
         }
 
-        // Parse the file name of the uploaded file to retrieve th Shipment Lot Number and then check to see if a shipment
+        // Parse the file name of the uploaded file to retrieve the Shipment Lot Number and then check to see if a shipment
         // record exists for the selected site per the parsed Lot Number.  This works because all 3 file types follow
         // agreed upon file naming conventions.
         $uploadedFile = Input::file('file');
@@ -199,7 +199,7 @@ class FileController extends ContextController
 
         $validator->after(function($validator) use ($shipment) {
             if (!$shipment) {
-                 $validator->errors()->add('file', 'A Shipment record was not found per the Lot Number specified in the uploaded filename for the selected site. Files can only be uploaded to sites to which the Lot Number is associated. Please be sure that the File type selected matches up with type indicated by the name of the file being uploaded.');
+                 $validator->errors()->add('file', 'A Shipment record was not found in the for the database per the Site selected above and the Lot Number specified in the uploaded filename. A Shipment record for the Lot Number specified in the file name MUST exist before any files can be upload for that shipment.  Files can only be uploaded to sites to which the Lot Number is associated. Also, please be sure that the File type selected above matches up with the file type indicated by the name of the file being uploaded.');
             }
         });
 

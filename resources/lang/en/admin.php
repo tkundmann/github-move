@@ -121,7 +121,7 @@ return [
             'create' => [
                 'vendor_client' => 'Vendor Client(s)',
                 'create' => 'Assign Vendor Client(s) to :site',
-                'info' => 'Please separate multiple Vendor Clients by either a comma, semi-colon or by listing them one per line.',
+                'info' => 'Please separate multiple Vendor Clients by either a semi-colon or by listing them one per line.',
                 'vendor_client_created' => 'Vendor Client(s) assigned.'
             ],
             'remove' => [
