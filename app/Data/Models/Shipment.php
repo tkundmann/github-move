@@ -152,14 +152,24 @@ class Shipment extends Model
         if (isset($xml->LOT_DATE)) {
             $shipment->lotDate = null;
             if (strlen($xml->LOT_DATE) > 0) {
-                $shipment->lotDate = DateTime::createFromFormat('m/d/y', $xml->LOT_DATE->__toString())->setTime(0, 0, 0);
+                if (DateTime::createFromFormat('m/d/Y', $xml->LOT_DATE->__toString())) {
+                    $shipment->lotDate = DateTime::createFromFormat('m/d/Y', $xml->LOT_DATE->__toString())->setTime(0, 0, 0);
+                }
+                else if (DateTime::createFromFormat('m/d/y', $xml->LOT_DATE->__toString())) {
+                    $shipment->lotDate = DateTime::createFromFormat('m/d/y', $xml->LOT_DATE->__toString())->setTime(0, 0, 0);
+                }
             }
         }
 
         if (isset($xml->APPROVAL_DATE)) {
             $shipment->lotApprovedDate = null;
             if (strlen($xml->APPROVAL_DATE) > 0) {
-                $shipment->lotApprovedDate = DateTime::createFromFormat('m/d/y', $xml->APPROVAL_DATE->__toString())->setTime(0, 0, 0);
+                if (DateTime::createFromFormat('m/d/Y', $xml->APPROVAL_DATE->__toString())) {
+                    $shipment->lotApprovedDate = DateTime::createFromFormat('m/d/Y', $xml->APPROVAL_DATE->__toString())->setTime(0, 0, 0);
+                }
+                else if (DateTime::createFromFormat('m/d/y', $xml->APPROVAL_DATE->__toString())) {
+                    $shipment->lotApprovedDate = DateTime::createFromFormat('m/d/y', $xml->APPROVAL_DATE->__toString())->setTime(0, 0, 0);
+                }
             }
         }
 
@@ -229,7 +239,12 @@ class Shipment extends Model
         if (isset($xml->SCHED_PICKUP_DATE)) {
             $shipment->schedulePickupDate = null;
             if (strlen($xml->SCHED_PICKUP_DATE) > 0) {
-                $shipment->schedulePickupDate = DateTime::createFromFormat('m/d/y', $xml->SCHED_PICKUP_DATE->__toString())->setTime(0, 0, 0);
+                if (DateTime::createFromFormat('m/d/Y', $xml->SCHED_PICKUP_DATE->__toString())) {
+                    $shipment->schedulePickupDate = DateTime::createFromFormat('m/d/Y', $xml->SCHED_PICKUP_DATE->__toString())->setTime(0, 0, 0);
+                }
+                else if (DateTime::createFromFormat('m/d/y', $xml->SCHED_PICKUP_DATE->__toString())) {
+                    $shipment->schedulePickupDate = DateTime::createFromFormat('m/d/y', $xml->SCHED_PICKUP_DATE->__toString())->setTime(0, 0, 0);
+                }
             }
         }
 
@@ -257,7 +272,12 @@ class Shipment extends Model
         if (isset($xml->PICKUP_REQUEST_DATE)) {
             $shipment->pickupRequestDate = null;
             if (strlen($xml->PICKUP_REQUEST_DATE) > 0) {
-                $shipment->pickupRequestDate = DateTime::createFromFormat('m/d/y', $xml->PICKUP_REQUEST_DATE->__toString())->setTime(0, 0, 0);
+                if (DateTime::createFromFormat('m/d/Y', $xml->PICKUP_REQUEST_DATE->__toString())) {
+                    $shipment->pickupRequestDate = DateTime::createFromFormat('m/d/Y', $xml->PICKUP_REQUEST_DATE->__toString())->setTime(0, 0, 0);
+                }
+                else if (DateTime::createFromFormat('m/d/y', $xml->PICKUP_REQUEST_DATE->__toString())) {
+                    $shipment->pickupRequestDate = DateTime::createFromFormat('m/d/y', $xml->PICKUP_REQUEST_DATE->__toString())->setTime(0, 0, 0);
+                }
             }
         }
 
@@ -299,21 +319,36 @@ class Shipment extends Model
         if (isset($xml->ACTUAL_PICKUP_DATE)) {
             $shipment->actualPickupDate = null;
             if (strlen($xml->ACTUAL_PICKUP_DATE) > 0) {
-                $shipment->actualPickupDate = DateTime::createFromFormat('m/d/y', $xml->ACTUAL_PICKUP_DATE->__toString())->setTime(0, 0, 0);
+                if (DateTime::createFromFormat('m/d/Y', $xml->ACTUAL_PICKUP_DATE->__toString())) {
+                    $shipment->actualPickupDate = DateTime::createFromFormat('m/d/Y', $xml->ACTUAL_PICKUP_DATE->__toString())->setTime(0, 0, 0);
+                }
+                else if (DateTime::createFromFormat('m/d/y', $xml->ACTUAL_PICKUP_DATE->__toString())) {
+                    $shipment->actualPickupDate = DateTime::createFromFormat('m/d/y', $xml->ACTUAL_PICKUP_DATE->__toString())->setTime(0, 0, 0);
+                }
             }
         }
 
         if (isset($xml->DATE_RECEIVED)) {
             $shipment->dateReceived = null;
             if (strlen($xml->DATE_RECEIVED) > 0) {
-                $shipment->dateReceived = DateTime::createFromFormat('m/d/y', $xml->DATE_RECEIVED->__toString())->setTime(0, 0, 0);
+                if (DateTime::createFromFormat('m/d/Y', $xml->DATE_RECEIVED->__toString())) {
+                    $shipment->dateReceived = DateTime::createFromFormat('m/d/Y', $xml->DATE_RECEIVED->__toString())->setTime(0, 0, 0);
+                }
+                else if (DateTime::createFromFormat('m/d/y', $xml->DATE_RECEIVED->__toString())) {
+                    $shipment->dateReceived = DateTime::createFromFormat('m/d/y', $xml->DATE_RECEIVED->__toString())->setTime(0, 0, 0);
+                }
             }
         }
 
         if (isset($xml->NF_RECEIVED_DATE )) {
             $shipment->nfReceivedDate = null;
             if (strlen($xml->NF_RECEIVED_DATE) > 0) {
-                $shipment->nfReceivedDate = DateTime::createFromFormat('m/d/y', $xml->NF_RECEIVED_DATE->__toString())->setTime(0, 0, 0);
+                if (DateTime::createFromFormat('m/d/Y', $xml->NF_RECEIVED_DATE->__toString())) {
+                    $shipment->nfReceivedDate = DateTime::createFromFormat('m/d/Y', $xml->NF_RECEIVED_DATE->__toString())->setTime(0, 0, 0);
+                }
+                else if (DateTime::createFromFormat('m/d/y', $xml->NF_RECEIVED_DATE->__toString())) {
+                    $shipment->nfReceivedDate = DateTime::createFromFormat('m/d/y', $xml->NF_RECEIVED_DATE->__toString())->setTime(0, 0, 0);
+                }
             }
         }
 
@@ -390,14 +425,24 @@ class Shipment extends Model
         if (isset($xml->PRE_AUDIT_APPROVED_DATE)) {
             $shipment->preAuditApproved = null;
             if (strlen($xml->PRE_AUDIT_APPROVED_DATE) > 0) {
-                $shipment->preAuditApproved = DateTime::createFromFormat('m/d/y', $xml->PRE_AUDIT_APPROVED_DATE->__toString())->setTime(0, 0, 0);
+                if (DateTime::createFromFormat('m/d/Y', $xml->PRE_AUDIT_APPROVED_DATE->__toString())) {
+                    $shipment->preAuditApproved = DateTime::createFromFormat('m/d/Y', $xml->PRE_AUDIT_APPROVED_DATE->__toString())->setTime(0, 0, 0);
+                }
+                else if (DateTime::createFromFormat('m/d/y', $xml->PRE_AUDIT_APPROVED_DATE->__toString())) {
+                    $shipment->preAuditApproved = DateTime::createFromFormat('m/d/y', $xml->PRE_AUDIT_APPROVED_DATE->__toString())->setTime(0, 0, 0);
+                }
             }
         }
 
         if (isset($xml->AUDIT_COMPLETED)) {
             $shipment->auditCompleted = null;
             if (strlen($xml->AUDIT_COMPLETED) > 0) {
-                $shipment->auditCompleted = DateTime::createFromFormat('m/d/y', $xml->AUDIT_COMPLETED->__toString())->setTime(0, 0, 0);
+                if (DateTime::createFromFormat('m/d/Y', $xml->AUDIT_COMPLETED->__toString())) {
+                    $shipment->auditCompleted = DateTime::createFromFormat('m/d/Y', $xml->AUDIT_COMPLETED->__toString())->setTime(0, 0, 0);
+                }
+                else if (DateTime::createFromFormat('m/d/y', $xml->AUDIT_COMPLETED->__toString())) {
+                    $shipment->auditCompleted = DateTime::createFromFormat('m/d/y', $xml->AUDIT_COMPLETED->__toString())->setTime(0, 0, 0);
+                }
             }
         }
 
@@ -433,14 +478,24 @@ class Shipment extends Model
         if (isset($xml->LOT_DATE)) {
             $shipment->lotDate = null;
             if (strlen($xml->LOT_DATE) > 0) {
-                $shipment->lotDate = DateTime::createFromFormat('m/d/y', $xml->LOT_DATE->__toString())->setTime(0, 0, 0);
+                if (DateTime::createFromFormat('m/d/Y', $xml->LOT_DATE->__toString())) {
+                    $shipment->lotDate = DateTime::createFromFormat('m/d/Y', $xml->LOT_DATE->__toString())->setTime(0, 0, 0);
+                }
+                else if (DateTime::createFromFormat('m/d/y', $xml->LOT_DATE->__toString())) {
+                    $shipment->lotDate = DateTime::createFromFormat('m/d/y', $xml->LOT_DATE->__toString())->setTime(0, 0, 0);
+                }
             }
         }
 
         if (isset($xml->APPROVAL_DATE)) {
             $shipment->lotApprovedDate = null;
             if (strlen($xml->APPROVAL_DATE) > 0) {
-                $shipment->lotApprovedDate = DateTime::createFromFormat('m/d/y', $xml->APPROVAL_DATE->__toString())->setTime(0, 0, 0);
+                if (DateTime::createFromFormat('m/d/Y', $xml->APPROVAL_DATE->__toString())) {
+                    $shipment->lotApprovedDate = DateTime::createFromFormat('m/d/Y', $xml->APPROVAL_DATE->__toString())->setTime(0, 0, 0);
+                }
+                else if (DateTime::createFromFormat('m/d/y', $xml->APPROVAL_DATE->__toString())) {
+                    $shipment->lotApprovedDate = DateTime::createFromFormat('m/d/y', $xml->APPROVAL_DATE->__toString())->setTime(0, 0, 0);
+                }
             }
         }
 
@@ -510,7 +565,12 @@ class Shipment extends Model
         if (isset($xml->SCHED_PICKUP_DATE)) {
             $shipment->schedulePickupDate = null;
             if (strlen($xml->SCHED_PICKUP_DATE) > 0) {
-                $shipment->schedulePickupDate = DateTime::createFromFormat('m/d/y', $xml->SCHED_PICKUP_DATE->__toString())->setTime(0, 0, 0);
+                if (DateTime::createFromFormat('m/d/Y', $xml->SCHED_PICKUP_DATE->__toString())) {
+                    $shipment->schedulePickupDate = DateTime::createFromFormat('m/d/Y', $xml->SCHED_PICKUP_DATE->__toString())->setTime(0, 0, 0);
+                }
+                else if (DateTime::createFromFormat('m/d/y', $xml->SCHED_PICKUP_DATE->__toString())) {
+                    $shipment->schedulePickupDate = DateTime::createFromFormat('m/d/y', $xml->SCHED_PICKUP_DATE->__toString())->setTime(0, 0, 0);
+                }
             }
         }
 
@@ -538,28 +598,48 @@ class Shipment extends Model
         if (isset($xml->PICKUP_REQUEST_DATE)) {
             $shipment->pickupRequestDate = null;
             if (strlen($xml->PICKUP_REQUEST_DATE) > 0) {
-                $shipment->pickupRequestDate = DateTime::createFromFormat('m/d/y', $xml->PICKUP_REQUEST_DATE->__toString())->setTime(0, 0, 0);
+                if (DateTime::createFromFormat('m/d/Y', $xml->PICKUP_REQUEST_DATE->__toString())) {
+                    $shipment->pickupRequestDate = DateTime::createFromFormat('m/d/Y', $xml->PICKUP_REQUEST_DATE->__toString())->setTime(0, 0, 0);
+                }
+                else if (DateTime::createFromFormat('m/d/y', $xml->PICKUP_REQUEST_DATE->__toString())) {
+                    $shipment->pickupRequestDate = DateTime::createFromFormat('m/d/y', $xml->PICKUP_REQUEST_DATE->__toString())->setTime(0, 0, 0);
+                }
             }
         }
 
         if (isset($xml->ACTUAL_PICKUP_DATE)) {
             $shipment->actualPickupDate = null;
             if (strlen($xml->ACTUAL_PICKUP_DATE) > 0) {
-                $shipment->actualPickupDate = DateTime::createFromFormat('m/d/y', $xml->ACTUAL_PICKUP_DATE->__toString())->setTime(0, 0, 0);
+                if (DateTime::createFromFormat('m/d/Y', $xml->ACTUAL_PICKUP_DATE->__toString())) {
+                    $shipment->actualPickupDate = DateTime::createFromFormat('m/d/Y', $xml->ACTUAL_PICKUP_DATE->__toString())->setTime(0, 0, 0);
+                }
+                else if (DateTime::createFromFormat('m/d/y', $xml->ACTUAL_PICKUP_DATE->__toString())) {
+                    $shipment->actualPickupDate = DateTime::createFromFormat('m/d/y', $xml->ACTUAL_PICKUP_DATE->__toString())->setTime(0, 0, 0);
+                }
             }
         }
 
         if (isset($xml->DATE_RECEIVED)) {
             $shipment->dateReceived = null;
             if (strlen($xml->DATE_RECEIVED) > 0) {
-                $shipment->dateReceived = DateTime::createFromFormat('m/d/y', $xml->DATE_RECEIVED->__toString())->setTime(0, 0, 0);
+                if (DateTime::createFromFormat('m/d/Y', $xml->DATE_RECEIVED->__toString())) {
+                    $shipment->dateReceived = DateTime::createFromFormat('m/d/Y', $xml->DATE_RECEIVED->__toString())->setTime(0, 0, 0);
+                }
+                else if (DateTime::createFromFormat('m/d/y', $xml->DATE_RECEIVED->__toString())) {
+                    $shipment->dateReceived = DateTime::createFromFormat('m/d/y', $xml->DATE_RECEIVED->__toString())->setTime(0, 0, 0);
+                }
             }
         }
 
         if (isset($xml->NF_RECEIVED_DATE)) {
             $shipment->nfReceivedDate = null;
             if (strlen($xml->NF_RECEIVED_DATE) > 0) {
-                $shipment->nfReceivedDate = DateTime::createFromFormat('m/d/y', $xml->NF_RECEIVED_DATE->__toString())->setTime(0, 0, 0);
+                if (DateTime::createFromFormat('m/d/Y', $xml->NF_RECEIVED_DATE->__toString())) {
+                    $shipment->nfReceivedDate = DateTime::createFromFormat('m/d/Y', $xml->NF_RECEIVED_DATE->__toString())->setTime(0, 0, 0);
+                }
+                else if (DateTime::createFromFormat('m/d/y', $xml->NF_RECEIVED_DATE->__toString())) {
+                    $shipment->nfReceivedDate = DateTime::createFromFormat('m/d/y', $xml->NF_RECEIVED_DATE->__toString())->setTime(0, 0, 0);
+                }
             }
         }
 
@@ -636,14 +716,24 @@ class Shipment extends Model
         if (isset($xml->PRE_AUDIT_APPROVED_DATE)) {
             $shipment->preAuditApproved = null;
             if (strlen($xml->PRE_AUDIT_APPROVED_DATE) > 0) {
-                $shipment->preAuditApproved = DateTime::createFromFormat('m/d/y', $xml->PRE_AUDIT_APPROVED_DATE->__toString())->setTime(0, 0, 0);
+                if (DateTime::createFromFormat('m/d/Y', $xml->PRE_AUDIT_APPROVED_DATE->__toString())) {
+                    $shipment->preAuditApproved = DateTime::createFromFormat('m/d/Y', $xml->PRE_AUDIT_APPROVED_DATE->__toString())->setTime(0, 0, 0);
+                }
+                else if (DateTime::createFromFormat('m/d/y', $xml->PRE_AUDIT_APPROVED_DATE->__toString())) {
+                    $shipment->preAuditApproved = DateTime::createFromFormat('m/d/y', $xml->PRE_AUDIT_APPROVED_DATE->__toString())->setTime(0, 0, 0);
+                }
             }
         }
 
         if (isset($xml->AUDIT_COMPLETED)) {
             $shipment->auditCompleted = null;
             if (strlen($xml->AUDIT_COMPLETED) > 0) {
-                $shipment->auditCompleted = DateTime::createFromFormat('m/d/y', $xml->AUDIT_COMPLETED->__toString())->setTime(0, 0, 0);
+                if (DateTime::createFromFormat('m/d/Y', $xml->AUDIT_COMPLETED->__toString())) {
+                    $shipment->auditCompleted = DateTime::createFromFormat('m/d/Y', $xml->AUDIT_COMPLETED->__toString())->setTime(0, 0, 0);
+                }
+                else if (DateTime::createFromFormat('m/d/y', $xml->AUDIT_COMPLETED->__toString())) {
+                    $shipment->auditCompleted = DateTime::createFromFormat('m/d/y', $xml->AUDIT_COMPLETED->__toString())->setTime(0, 0, 0);
+                }
             }
         }
 
