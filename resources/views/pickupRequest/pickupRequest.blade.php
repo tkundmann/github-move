@@ -142,7 +142,7 @@
                                         {{--Left column--}}
                                         <div class="form-group @if($errors->has('company_name')) has-error @endif">
                                             <label for="company_name"
-                                                   class="control-label colon-after @if(in_array('XXXXXX',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.company_name')</label>
+                                                   class="control-label colon-after @if(in_array('company_name',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.company_name')</label>
                                             <input id="company_name" type="text" class="form-control"
                                                    name="company_name" value="{{ old('company_name') }}">
                                             @if ($errors->has('company_name'))
