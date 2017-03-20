@@ -26,7 +26,7 @@ class ZetaInteractivePickupRequest extends Seeder
 
 		$pickupRequestConfiguration = array (
 			'password' => Hash::make('zi03202017sar$'),
-			'title' => 'Sipi Asset Recovery/Zeta Innteractive, LLC Pickup Request',
+			'title' => 'Sipi Asset Recovery/Zeta Interactive, LLC Pickup Request',
 			'use_company_division' => false,
 			'use_contact_section_title' => false,
 			'use_state_as_select' => true,
@@ -86,6 +86,7 @@ class ZetaInteractivePickupRequest extends Seeder
 			),
 			'use_country' => false,
 			'use_reference_number' => true,
+			'reference_number_label' => 'Customer Reference Number',
 			'use_alternative_piece_count_form' => false,
 			'use_preferred_pickup_date' => false,
 			'use_preferred_pickup_date_information' => true,
@@ -94,20 +95,21 @@ class ZetaInteractivePickupRequest extends Seeder
 			'required_fields' =>
 			array (
 				0 => 'upload_equipment_list',
-				1 => 'contact_name',
-				2 => 'contact_address_1',
-				3 => 'contact_city',
-				4 => 'contact_state',
-				5 => 'contact_zip',
-				6 => 'contact_phone_number',
-				7 => 'contact_email_address',
-				8 => 'reference_number',
-				9 => 'preferred_pickup_date_information',
-				10 => 'units_located_near_dock',
-				11 => 'units_on_single_floor',
-				12 => 'is_loading_dock_present',
-				13 => 'dock_appointment_required',
-				14 => 'assets_need_packaging',
+				1 => 'company_name',
+				2 => 'contact_name',
+				3 => 'contact_address_1',
+				4 => 'contact_city',
+				5 => 'contact_state',
+				6 => 'contact_zip',
+				7 => 'contact_phone_number',
+				8 => 'contact_email_address',
+				9 => 'reference_number',
+				10 => 'preferred_pickup_date_information',
+				11 => 'units_located_near_dock',
+				12 => 'units_on_single_floor',
+				13 => 'is_loading_dock_present',
+				14 => 'dock_appointment_required',
+				15 => 'assets_need_packaging',
 			),
 			'email_from' => 'SARZeta@sipiar.com',
 			'email_bcc' => 'SARZeta@sipiar.com;jobaker@zetaglobal.com;tony@lynch2.com',
@@ -117,5 +119,20 @@ class ZetaInteractivePickupRequest extends Seeder
 		);
 
 		$site->features()->updateExistingPivot($featureHasPickupRequest->id, ['data' => serialize($pickupRequestConfiguration)]);
+
+		$featureHasPickupRequestEquipList = Feature::where('name', '=', Feature::PICKUP_REQUEST_EQUIPMENT_LIST)->first();
+
+		$site->features()->attach([$featureHasPickupRequestEquipList->id]);
+
+		$pickupRequestEquipListConfiguration = array (
+			0 =>
+				array (
+					'name' => 'Equipment List',
+					'filename' => 'Zeta_EquipmentList.xls',
+					'url' => 'https://belmont-sipi-assets.s3.amazonaws.com/zeta/pickup_request/equipment_list_templates/Zeta_EquipmentList.xls',
+				),
+			);
+
+		$site->features()->updateExistingPivot($featureHasPickupRequestEquipList->id, ['data' => serialize($pickupRequestEquipListConfiguration)]);
 	}
 }
