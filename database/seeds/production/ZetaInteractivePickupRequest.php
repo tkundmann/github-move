@@ -9,7 +9,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class AirGasPickupRequest extends Seeder
+class ZetaInteractivePickupRequest extends Seeder
 {
     /**
      * Run the database seeds.
@@ -20,13 +20,13 @@ class AirGasPickupRequest extends Seeder
 
 		$featureHasPickupRequest = Feature::where('name', '=', Feature::HAS_PICKUP_REQUEST)->first();
 
-		$site = Site::where('code', '=', 'airgas')->first();
+		$site = Site::where('code', '=', 'zeta')->first();
 
 		$site->features()->attach([$featureHasPickupRequest->id]);
 
 		$pickupRequestConfiguration = array (
-			'password' => Hash::make('ag02202017sar$'),
-			'title' => 'Sipi Asset Recovery/Airgas Pickup Request',
+			'password' => Hash::make('zi03202017sar$'),
+			'title' => 'Sipi Asset Recovery/Zeta Innteractive, LLC Pickup Request',
 			'use_company_division' => false,
 			'use_contact_section_title' => false,
 			'use_state_as_select' => true,
@@ -109,8 +109,8 @@ class AirGasPickupRequest extends Seeder
 				13 => 'dock_appointment_required',
 				14 => 'assets_need_packaging',
 			),
-			'email_from' => 'SARAirgas@sipiar.com',
-			'email_bcc' => 'SARAirgas@sipiar.com;tony@lynch2.com',
+			'email_from' => 'SARZeta@sipiar.com',
+			'email_bcc' => 'SARZeta@sipiar.com;jobaker@zetaglobal.com;tony@lynch2.com',
 			'email_additional_bcc' =>
 			array (
 			),
