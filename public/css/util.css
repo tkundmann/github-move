@@ -212,3 +212,6 @@
 .colon-after:after {
   content: ':';
 }
+.colon-after-required:after {
+  content: ":*";
+}
