@@ -97,13 +97,6 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="col-sm-6 control-label colon-after">{{ array_key_exists('freight_charge', $fields) ? (Lang::has('shipment.'. $fields['freight_charge']) ? Lang::trans('shipment.' .  $fields['freight_charge']) :  $fields['freight_charge']) : Lang::trans('shipment.freight_charge') }}</label>
-                                            <div class="col-sm-6">
-                                                <p class="form-control-static @if($shipment->freightCharge && $shipment->freightCharge < 0) text-danger @endif">{{ isset($shipment->freightCharge) ? Constants::CURRENCY_SYMBOL . $shipment->freightCharge : '-' }}</p>
-
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
                                             <label class="col-sm-6 control-label colon-after">{{ array_key_exists('nf_received_date', $fields) ? (Lang::has('shipment.'. $fields['nf_received_date']) ? Lang::trans('shipment.' .  $fields['nf_received_date']) :  $fields['nf_received_date']) : Lang::trans('shipment.nf_received_date') }}</label>
                                             <div class="col-sm-6">
                                                 <p class="form-control-static">{{ isset($shipment->nfReceivedDate) ? $shipment->nfReceivedDate->format(Constants::DATE_FORMAT) : '-' }}</p>
