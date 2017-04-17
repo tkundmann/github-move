@@ -195,10 +195,10 @@
         </tr>
         @endif
         @if($pickupRequestData['use_preferred_pickup_date_information'])
-        <tr>
-            <td>@lang('pickup_request.preferred_date_pickup')</td>
-            <td>@if($pickupRequest->preferred_pickup_date_information) <span class="bold">{{ $pickupRequest->preferred_pickup_date_information }}</span> @endif</td>
-        </tr>
+            <tr>
+                <td>@lang('pickup_request.preferred_date_pickup')</td>
+                <td>@if($pickupRequest->preferred_pickup_date_information) <span class="bold">{{ $pickupRequest->preferred_pickup_date_information }}</span> @endif</td>
+            </tr>
         @endif
         <tr>
             <td>@lang('pickup_request.units_located_near_dock')</td>
@@ -221,71 +221,72 @@
             <td><span class="bold">{{ $pickupRequest->assets_need_packaging ? 'Yes' : 'No' }}</span></td>
         </tr>
         @if($pickupRequestData['use_hardware_on_skids'])
-        <tr>
-            <td>@lang('pickup_request.hardware_on_skids')</td>
-            <td><span class="bold">{{ $pickupRequest->hardware_on_skids ? 'Yes' : 'No' }}</span></td>
-        </tr>
-        @if($pickupRequest->hardware_on_skids)
-        <tr>
-            <td><span style="margin-left:30px">@lang('pickup_request.how_many_skids')</span></td>
-            <td>@if($pickupRequest->num_skids) <span class="bold">{{ $pickupRequest->num_skids }}</span> @endif</td>
-        </tr>
-        @endif
+            <tr>
+                <td>@lang('pickup_request.hardware_on_skids')</td>
+                <td><span class="bold">{{ $pickupRequest->hardware_on_skids ? 'Yes' : 'No' }}</span></td>
+            </tr>
+            @if($pickupRequest->hardware_on_skids)
+            <tr>
+                <td><span style="margin-left:30px">@lang('pickup_request.how_many_skids')</span></td>
+                <td>@if($pickupRequest->num_skids) <span class="bold">{{ $pickupRequest->num_skids }}</span> @endif</td>
+            </tr>
+            @endif
         @endif
     </table>
 
-    <br><hr><br>
+    @if($pickupRequest->bm_company_name) && $pickupRequest->bm_contact_name)
+        <br><hr><br>
+        <h4>@lang('pickup_request.building_manager_info_email'):</h4>
+        <br>
+        <table>
+            <tr>
+                <td>@lang('pickup_request.company_name'):</td>
+                <td> {{ $pickupRequest->bm_company_name }} </td>
+            </tr>
+            <tr>
+                <td>@lang('pickup_request.contact_name'):</td>
+                <td> {{ $pickupRequest->bm_contact_name }} </td>
+            </tr>
+            <tr>
+                <td>@lang('pickup_request.contact_address'):</td>
+                <td>
+                    @if($pickupRequest->bm_address_1) {{ $pickupRequest->bm_address_1 }} @endif
+                    @if($pickupRequest->bm_address_2) <br> {{ $pickupRequest->bm_address_2 }} @endif
+                </td>
+            </tr>
+            <tr>
+                <td>@lang('pickup_request.city'):</td>
+                <td>@if($pickupRequest->bm_city) {{ $pickupRequest->bm_city }} @endif</td>
+            </tr>
+            <tr>
+                <td>@lang('pickup_request.state'):</td>
+                <td>@if($pickupRequest->bm_state) {{ $pickupRequest->bm_state }} @endif</td>
+            </tr>
+            <tr>
+                <td>@lang('pickup_request.zip_code'):</td>
+                <td>@if($pickupRequest->bm_zip) {{ $pickupRequest->bm_zip }} @endif</td>
+            </tr>
+            @if($pickupRequestData['use_country'])
+            <tr>
+                <td>@lang('pickup_request.country'):</td>
+                <td>@if($pickupRequest->bm_country) {{ $pickupRequest->bm_country }} @endif</td>
+            </tr>
+            @endif
+            <tr>
+                <td>@lang('pickup_request.cell_number'):</td>
+                <td>@if($pickupRequest->bm_cell_number) {{ $pickupRequest->bm_cell_number }} @endif</td>
+            </tr>
+            <tr>
+                <td>@lang('pickup_request.email_address'):</td>
+                <td>@if($pickupRequest->bm_email_address) <a href="mailto:{{ $pickupRequest->bm_email_address }}">{{ $pickupRequest->bm_email_address }}</a> @endif</td>
+            </tr>
+        </table>
+    @endif
 
-    <h4>@lang('pickup_request.building_manager_info_email'):</h4>
-    <br>
-
-    <table>
-        <tr>
-            <td>@lang('pickup_request.company_name'):</td>
-            <td>@if($pickupRequest->bm_company_name) {{ $pickupRequest->bm_company_name }} @endif</td>
-        </tr>
-        <tr>
-            <td>@lang('pickup_request.contact_name'):</td>
-            <td>@if($pickupRequest->bm_contact_name) {{ $pickupRequest->bm_contact_name }} @endif</td>
-        </tr>
-        <tr>
-            <td>@lang('pickup_request.contact_address'):</td>
-            <td>
-                @if($pickupRequest->bm_address_1) {{ $pickupRequest->bm_address_1 }} @endif
-                @if($pickupRequest->bm_address_2) <br> {{ $pickupRequest->bm_address_2 }} @endif
-            </td>
-        </tr>
-        <tr>
-            <td>@lang('pickup_request.city'):</td>
-            <td>@if($pickupRequest->bm_city) {{ $pickupRequest->bm_city }} @endif</td>
-        </tr>
-        <tr>
-            <td>@lang('pickup_request.state'):</td>
-            <td>@if($pickupRequest->bm_state) {{ $pickupRequest->bm_state }} @endif</td>
-        </tr>
-        <tr>
-            <td>@lang('pickup_request.zip_code'):</td>
-            <td>@if($pickupRequest->bm_zip) {{ $pickupRequest->bm_zip }} @endif</td>
-        </tr>
-        @if($pickupRequestData['use_country'])
-        <tr>
-            <td>@lang('pickup_request.country'):</td>
-            <td>@if($pickupRequest->bm_country) {{ $pickupRequest->bm_country }} @endif</td>
-        </tr>
-        @endif
-        <tr>
-            <td>@lang('pickup_request.cell_number'):</td>
-            <td>@if($pickupRequest->bm_cell_number) {{ $pickupRequest->bm_cell_number }} @endif</td>
-        </tr>
-        <tr>
-            <td>@lang('pickup_request.email_address'):</td>
-            <td>@if($pickupRequest->bm_email_address) <a href="mailto:{{ $pickupRequest->bm_email_address }}">{{ $pickupRequest->bm_email_address }}</a> @endif</td>
-        </tr>
-    </table>
-
-    <br><hr><br>
-
-    <h4>@lang('pickup_request.special_instructions'):</h4>
-    <p>@if($pickupRequest->special_instructions) {{ $pickupRequest->special_instructions }} @endif </p>
+    @if($pickupRequest->special_instructions)
+        <br><hr><br>
+        <h4>@lang('pickup_request.special_instructions'):</h4>
+        <p>{{ $pickupRequest->special_instructions }}</p>
+    @endif
 
 @endsection
