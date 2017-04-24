@@ -20,7 +20,7 @@ class PruneAssets extends Command
      *
      * @var string
      */
-    protected $description = 'Deletes Assets for which \'manufacturerSerialNum\' starts with VOID';
+    protected $description = 'Deletes Assets for which \'manufacturerSerialNum\' starts with VOID and \'productFamily\' equals SKID.';
 
     /**
      * Create a new command instance.

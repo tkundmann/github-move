@@ -32,11 +32,11 @@ class PruneAssetsJob extends Job implements ShouldQueue
     {
         Log::info('Assets prune...');
 
-        $assetsToDelete = Asset::where('manufacturerSerialNum', 'like', 'VOID%')->get();
+        $assetsToDelete = Asset::where('manufacturerSerialNum', 'like', 'VOID%')->orWhere('productFamily', '=', 'SKID')->get();
 
         if (count($assetsToDelete) > 0) {
             Log::info('Assets to delete: ' . $assetsToDelete->toJson());
-            $deletedCount = Asset::where('manufacturerSerialNum', 'like', 'VOID%')->delete();
+            $deletedCount = Asset::where('manufacturerSerialNum', 'like', 'VOID%')->orWhere('productFamily', '=', 'SKID')->delete();
             Log::info('Assets deleted (' . $deletedCount . ')');
         }
         else {
