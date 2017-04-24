@@ -112,7 +112,7 @@ class PixarPickupRequest extends Seeder
 				15 => 'assets_need_packaging',
 			),
 			'email_from' => 'SARPixar@sipiar.com',
-			'email_bcc' => 'SARPixar@sipiar.com;banana@pixar.com;tony@lynch2.com',
+			'email_bcc' => 'SARPixar@sipiar.com;tony@lynch2.com',
 			'email_additional_bcc' =>
 			array (
 			),
