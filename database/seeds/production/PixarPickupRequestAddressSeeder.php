@@ -34,7 +34,7 @@ class PixarPickupRequestAddressSeeder extends Seeder
                 'contact_zip' => '94608',
                 'contact_country' => null,
                 'contact_cell_number' => Crypt::encrypt('510-366-6306'),
-                'contact_email_address' => 'banana@pixar.com',
+                'contact_email_address' => Crypt::encrypt('banana@pixar.com'),
                 'created_at' => Carbon::now()
             ]
         ]);
