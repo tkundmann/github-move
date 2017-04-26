@@ -460,15 +460,36 @@
                                                 </div>
                                             @endif
                                         </div>
-                                        <div class="form-group @if($errors->has('num_monitors')) has-error @endif">
-                                            <label for="num_monitors"
-                                                   class="control-label colon-after">@lang('pickup_request.monitor')</label>
-                                            <input id="num_monitors" type="text" class="form-control"
-                                                   name="num_monitors" value="{{ old('num_monitors', 0) }}">
-                                            @if ($errors->has('num_monitors'))
-                                                {!! $errors->first('num_monitors', '<small class="text-danger">:message</small>') !!}
-                                            @endif
-                                        </div>
+                                        @if($data['use_crt_and_lcd_monitors'])
+                                            <div class="form-group @if($errors->has('num_crt_monitors')) has-error @endif">
+                                                <label for="num_crt_monitors"
+                                                       class="control-label colon-after">@lang('pickup_request.crt_monitor')</label>
+                                                <input id="num_crt_monitors" type="text" class="form-control"
+                                                       name="num_crt_monitors" value="{{ old('num_crt_monitors', 0) }}">
+                                                @if ($errors->has('num_crt_monitors'))
+                                                    {!! $errors->first('num_crt_monitors', '<small class="text-danger">:message</small>') !!}
+                                                @endif
+                                            </div>
+                                            <div class="form-group @if($errors->has('num_lcd_monitors')) has-error @endif">
+                                                <label for="num_lcd_monitors"
+                                                       class="control-label colon-after">@lang('pickup_request.lcd_monitor')</label>
+                                                <input id="num_lcd_monitors" type="text" class="form-control"
+                                                       name="num_lcd_monitors" value="{{ old('num_lcd_monitors', 0) }}">
+                                                @if ($errors->has('num_lcd_monitors'))
+                                                    {!! $errors->first('num_lcd_monitors', '<small class="text-danger">:message</small>') !!}
+                                                @endif
+                                            </div>
+                                        @else
+                                            <div class="form-group @if($errors->has('num_monitors')) has-error @endif">
+                                                <label for="num_monitors"
+                                                       class="control-label colon-after">@lang('pickup_request.monitor')</label>
+                                                <input id="num_monitors" type="text" class="form-control"
+                                                       name="num_monitors" value="{{ old('num_monitors', 0) }}">
+                                                @if ($errors->has('num_monitors'))
+                                                    {!! $errors->first('num_monitors', '<small class="text-danger">:message</small>') !!}
+                                                @endif
+                                            </div>
+                                        @endif
                                         <div class="form-group @if($errors->has('num_printers')) has-error @endif">
                                             <label for="num_printers"
                                                    class="control-label colon-after">@lang('pickup_request.printer')</label>
