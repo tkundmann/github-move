@@ -130,7 +130,7 @@
                             <td>{{ $pickupRequest->laptop_hard_drive_wiped ? 'Yes' : 'No' }}</td>
                         </tr>
                     @endif
-                    @if($pickupRequestData['use_crt_and_lcd_monitors'])
+                    @if(isset($pickupRequestData['use_crt_and_lcd_monitors']) && $pickupRequestData['use_crt_and_lcd_monitors'])
                         <tr>
                             <td>@lang('pickup_request.crt_monitor'):</td>
                             <td align="right">@if($pickupRequest->num_crt_monitors) {{ $pickupRequest->num_crt_monitors }} <?php $total += $pickupRequest->num_crt_monitors; ?>@else 0 @endif</td>
