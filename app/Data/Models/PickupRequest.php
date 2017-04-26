@@ -28,6 +28,8 @@ use Sofa\Eloquence\Mappable;
  * @property integer $numDesktops
  * @property integer $numLaptops
  * @property integer $numMonitors
+ * @property integer $numCRTMonitors
+ * @property integer $numLCDMonitors
  * @property integer $numPrinters
  * @property integer $numServers
  * @property integer $numNetworking
@@ -104,6 +106,8 @@ class PickupRequest extends Model
         'numDesktops' => 'num_desktops',
         'numLaptops' => 'num_laptops',
         'numMonitors' => 'num_monitors',
+        'numCRTMonitors' => 'num_crt_monitors',
+        'numLCDMonitors' => 'num_lcd_monitors',
         'numPrinters' => 'num_printers',
         'numServers' => 'num_servers',
         'numNetworking' => 'num_networking',
