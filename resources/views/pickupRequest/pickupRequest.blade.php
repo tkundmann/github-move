@@ -460,7 +460,7 @@
                                                 </div>
                                             @endif
                                         </div>
-                                        @if($data['use_crt_and_lcd_monitors'])
+                                        @if(isset($data['use_crt_and_lcd_monitors']) && $data['use_crt_and_lcd_monitors'])
                                             <div class="form-group @if($errors->has('num_crt_monitors')) has-error @endif">
                                                 <label for="num_crt_monitors"
                                                        class="control-label colon-after">@lang('pickup_request.crt_monitor')</label>

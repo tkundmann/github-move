@@ -130,10 +130,21 @@
                             <td>{{ $pickupRequest->laptop_hard_drive_wiped ? 'Yes' : 'No' }}</td>
                         </tr>
                     @endif
-                    <tr>
-                        <td>@lang('pickup_request.monitor'):</td>
-                        <td align="right">@if($pickupRequest->num_monitors) {{ $pickupRequest->num_monitors }} <?php $total += $pickupRequest->num_monitors; ?>@else 0 @endif</td>
-                    </tr>
+                    @if($pickupRequestData['use_crt_and_lcd_monitors'])
+                        <tr>
+                            <td>@lang('pickup_request.crt_monitor'):</td>
+                            <td align="right">@if($pickupRequest->num_crt_monitors) {{ $pickupRequest->num_crt_monitors }} <?php $total += $pickupRequest->num_crt_monitors; ?>@else 0 @endif</td>
+                        </tr>
+                        <tr>
+                            <td>@lang('pickup_request.lcd_monitor'):</td>
+                            <td align="right">@if($pickupRequest->num_lcd_monitors) {{ $pickupRequest->num_lcd_monitors }} <?php $total += $pickupRequest->num_lcd_monitors; ?>@else 0 @endif</td>
+                        </tr>
+                    @else
+                        <tr>
+                            <td>@lang('pickup_request.monitor'):</td>
+                            <td align="right">@if($pickupRequest->num_monitors) {{ $pickupRequest->num_monitors }} <?php $total += $pickupRequest->num_monitors; ?>@else 0 @endif</td>
+                        </tr>
+                    @endif
                     <tr>
                         <td>@lang('pickup_request.printer'):</td>
 			            <td align="right">@if($pickupRequest->num_printers) {{ $pickupRequest->num_printers }} <?php $total += $pickupRequest->num_printers; ?>@else 0 @endif</td>

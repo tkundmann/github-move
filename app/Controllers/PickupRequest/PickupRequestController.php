@@ -266,7 +266,13 @@ class PickupRequestController extends ContextController
 
         $pickupRequest->num_desktops = trim(Input::get('num_desktops'));
         $pickupRequest->num_laptops = trim(Input::get('num_laptops'));
-        $pickupRequest->num_monitors = trim(Input::get('num_monitors'));
+        if ($this->pickupRequestData['use_crt_and_lcd_monitors']) {
+            $pickupRequest->num_crt_monitors = trim(Input::get('num_crt_monitors'));
+            $pickupRequest->num_lcd_monitors = trim(Input::get('num_lcd_monitors'));
+        }
+        else {
+            $pickupRequest->num_monitors = trim(Input::get('num_monitors'));
+        }
         $pickupRequest->num_printers = trim(Input::get('num_printers'));
         $pickupRequest->num_servers = trim(Input::get('num_servers'));
         $pickupRequest->num_networking = trim(Input::get('num_networking'));

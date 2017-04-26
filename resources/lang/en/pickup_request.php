@@ -53,6 +53,8 @@ return [
     'desktop'                      => 'Desktop',
     'laptop'                       => 'Laptop',
     'monitor'                      => 'Monitor',
+    'crt_monitor'                  => 'CRT Monitor',
+    'lcd_monitor'                  => 'LCD Monitor',
     'printer'                      => 'Printer',
     'server'                       => 'Server',
     'networking'                   => 'Networking',
