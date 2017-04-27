@@ -20,7 +20,7 @@
     RewriteCond %{REQUEST_URI} !^/(.*)/main.taf?
     RewriteRule ^(.*)$          https://portal.sipiar.com/$1/  [NC,R=301,L]
 
-#######################################################################
+    #######################################################################
     # ALWAYS SSL (Handles Situation where the SSL terminates at the load balancer)
     #######################################################################
 
