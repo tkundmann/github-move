@@ -17,11 +17,27 @@ class PayPalPickupRequestAddressSeeder extends Seeder
      */
     public function run()
     {
-        $paypal = Site::where('code', '=', 'paypal')->first();
+        $site = Site::where('code', '=', 'paypal')->first();
+
+        $featureHasPickupRequestAddressBook = Feature::where('name', '=', Feature::PICKUP_REQUEST_ADDRESS_BOOK)->first();
+
+        $site->features()->attach([$featureHasPickupRequestAddressBook->id]);
+
+        $pickupRequestAddressBookConfiguration = array (
+            0 => array (
+                'site_address_book_label' => 'Site Address Book',
+                'new_site_text' => 'Provide to a new Site Name to create a new record.',
+                'new_site_address_book_label' => 'Site Name',
+                'change_text' => 'If you want to add this site to the address book, you must supply a new <b>Site Name</b>. Otherwise, the existing <b>Site Name</b> address record will be updated with the information submitted for this request.',
+                'allow_change' => true
+            )
+        );
+
+        $site->features()->updateExistingPivot($featureHasPickupRequestAddressBook->id, ['data' => serialize($pickupRequestAddressBookConfiguration)]);
 
         DB::table('pickup_request_address')->insert([
             [
-                'site_id' => $paypal->id,
+                'site_id' => $site->id,
                 'name' => 'PayPal',
                 'company_name' => 'PayPal',
                 'company_division' => null,
