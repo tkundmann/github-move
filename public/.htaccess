@@ -44,6 +44,10 @@
     RewriteCond %{REQUEST_URI} ^/godaddy/pickuprequest$    [NC]
     RewriteRule ^.*$  "/godaddy/pickup-request"            [R,NE,L]
 
+    # PayPal Pickup Request Form Redirects
+    RewriteCond %{REQUEST_URI} ^/paypal/pickuprequest$     [NC]
+    RewriteRule ^.*$  "/paypal/pickup-request"             [R,NE,L]
+
     # Pixar Pickup Request Form Redirects
     RewriteCond %{REQUEST_URI} ^/pixar/pickuprequest$      [NC]
     RewriteRule ^.*$  "/pixar/pickup-request"              [R,NE,L]
