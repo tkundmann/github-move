@@ -195,6 +195,7 @@ return [
             'create' => [
                 'upload_file_to_page' => 'Upload file to Page: :page',
                 'file' => 'File',
+				'additional_file' => 'Additional File',
                 'file_name' => 'Name',
                 'file_date' => 'File Date',
                 'file_date_optional' => 'Optional',
@@ -241,6 +242,9 @@ return [
             'file_date_optional' => 'Optional',
             'shipment' => 'Shipment Lot Number',
             'file_created' => 'File created.',
+            'success_file_upload' => 'The following file(s) were successfully uploaded for the selected Site (PLACEHOLDER_SITE_TITLE) and File Type (PLACEHOLDER_FILE_TYPE): ',
+            'not_valid_for_file_upload' => 'The following file(s) were not uploaded for the selected Site (PLACEHOLDER_SITE_TITLE) and File Type (PLACEHOLDER_FILE_TYPE) per the reason listed below: ',
+            'shipment_not_found_for_file' => 'A Shipment record was not found in the database per the Site selected and the Lot Number specified in the file name. <br>A Shipment record for the Lot Number specified in the file name MUST exist before any files can be uploaded for that shipment.',
             'site_reload_warning' => 'Change will reload page!'
         ],
         'edit' => [
