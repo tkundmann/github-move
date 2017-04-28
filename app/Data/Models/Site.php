@@ -25,6 +25,7 @@ use Sofa\Eloquence\Mappable;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Data\Models\Page[] $pages
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Data\Models\PickupRequest[] $pickupRequests
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Data\Models\PickupRequestAddress[] $pickupRequestAddresses
+ * @method static Site find(string $id)
  */
 class Site extends Model
 {
@@ -89,6 +90,16 @@ class Site extends Model
     public static function doesContextExist($context) {
         return (bool) Site::where('code', '=', $context)->first();
     }
+
+	public static function getSitesByLotNumber($lotNumber) {
+
+		$columns = array('site.*');
+
+		return self::join('site_vendor_client', 'site_vendor_client.site_id', '=', 'site.id')
+			->join('vendor_client', 'vendor_client.id', '=', 'site_vendor_client.vendor_client_id')
+			->join('shipment', 'shipment.vendor_client', '=', 'vendor_client.name')
+			->where([['shipment.lot_number', '=', $lotNumber]])->get($columns);
+	}
 
     public static function getSiteByContext($context) {
         return Site::where('code', '=', $context)->first();

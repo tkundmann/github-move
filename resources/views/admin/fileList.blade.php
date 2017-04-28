@@ -46,11 +46,11 @@
                         <hr />
 
                         @if (Session::has('success'))
-                            <div class="alert alert-success animate">{{ session('success') }}</div>
+                            <div class="alert alert-success">{!! session('success') !!}</div>
                         @endif
 
                         @if (Session::has('fail'))
-                            <div class="alert alert-danger animate">{{ session('fail') }}</div>
+                            <div class="alert alert-danger">{!! session('fail') !!}</div>
                         @endif
 
                         @if ($files && $files->count() > 0)

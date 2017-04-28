@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\ContextController;
+use App\Controllers\Helpers\FileUploadHelper;
 use App\Data\Constants;
 use App\Data\Models\Feature;
 use App\Data\Models\File;
@@ -11,8 +12,8 @@ use App\Data\Models\Role;
 use App\Data\Models\Shipment;
 use App\Data\Models\Site;
 use App\Helpers\StringHelper;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Input;
 use Storage;
 use Validator;
@@ -22,12 +23,12 @@ class FileController extends ContextController
     const RESULTS_PER_PAGE = 50;
     const STRING_LIMIT = 50;
 
-    /**
-     * Create a new controller instance.
-     * @param  \Illuminate\Http\Request $request
-     * @return void
-     */
-    public function __construct(Request $request)
+	const NUM_FILE_UPLOADS = 10;
+	/**
+	 * FileController constructor.
+	 * @param Request $request
+	 */
+	public function __construct(Request $request)
     {
         parent::__construct($request);
         $this->middleware('auth');
@@ -47,13 +48,13 @@ class FileController extends ContextController
             if ($site) {
 
                 if (!empty(Input::get('filename_name'))) {
-                    $query->where(function ($subquery) {
+                    $query->where(function (Builder $subquery) {
                         $subquery->where('filename', 'like', '%' . StringHelper::addSlashes(trim(Input::get('filename_name'))) . '%');
                         $subquery->orWhere('name', 'like', '%' . StringHelper::addSlashes(trim(Input::get('filename_name'))) . '%');
                     });
                 }
 
-                $query->whereHas('page', function ($subquery) use ($site) {
+                $query->whereHas('page', function (Builder $subquery) use ($site) {
                     $types = [];
 
                     if ($site->hasFeature(Feature::HAS_CERTIFICATES)) {
@@ -74,7 +75,7 @@ class FileController extends ContextController
                         }
                     }
                 });
-                $query = $query->sortable(['id' => 'asc']);
+                $query = $query->sortable(['name' => 'asc']);
                 $files = $query->paginate(self::RESULTS_PER_PAGE);
             }
         }
@@ -130,42 +131,58 @@ class FileController extends ContextController
         }
 
         return view('admin.fileCreate')->with([
-            'sites' => $allSitesWithPagesArray,
-            'types' => $types,
-            'limit' => self::STRING_LIMIT
+            'sites'             => $allSitesWithPagesArray,
+            'types'             => $types,
+            'limit'             => self::STRING_LIMIT,
+			'num_upload_fields' => self::NUM_FILE_UPLOADS
         ]);
     }
 
     public function postCreate()
     {
-        $site = null;
-        $site = Site::find(trim(Input::get('site')));
-        if (Input::get('site_change')) {
-            if (!$site) {
-                throw new \Exception('Site does not exist.');
-            } else {
-                return $this->createView($site);
-            }
-        }
-
-        $rules = [
-            'site' => 'required|exists:site,id',
-            'type' => 'required',
-            'file' => 'required'
+        $fields = [
+            'site' => Input::get('site'),
+            'type' => Input::get('type')
         ];
-        $validator = Validator::make(Input::all(), $rules);
+
+        $site = null;
+        $site = Site::find(trim($fields['site']));
+        if (Input::get('site_change')) {
+			if (!$site) {
+				throw new \Exception('Site does not exist.');
+			} else {
+				return $this->createView($site);
+			}
+		}
+
+		$numFilesUploaded = 0;
+		for ($i=1; $i <= self::NUM_FILE_UPLOADS ; $i++) {
+			$uploadedFile = Input::file('file' . $i);
+        	if (isset($uploadedFile)) {
+				$numFilesUploaded++;
+				$fields['file' . $numFilesUploaded] = $uploadedFile;
+			}
+		}
+
+		$rules = [
+			'site' => 'required|exists:site,id',
+			'type' => 'required',
+			'file1' => 'required'
+		];
+
+
+		$validator = Validator::make($fields, $rules);
         if ($validator->fails()) {
             return redirect()->route('admin.file.create')->withErrors($validator)->withInput();
         }
 
         // If a page for the selected file type does exist create it and any necessary s3 directories
-        $type = Input::get('type');
-        $page = $site->pages->where('type', $type)->first();
+        $page = $site->pages->where('type', $fields['type'])->first();
 
         if (!$page) {
             $page = new Page();
-            $page->type = $type;
-            $page->name = $type;
+            $page->type = $fields['type'];
+            $page->name = $fields['type'];
             $page->site_id = $site->id;
             $page->save();
 
@@ -175,7 +192,7 @@ class FileController extends ContextController
                 Storage::cloud()->makeDirectory($siteDirectory);
             }
 
-            $pageTypeDir = $this->getFilePageTypeDir($page->type);
+            $pageTypeDir = FileUploadHelper::getFilePageTypeDir($page->type);
             if ($pageTypeDir != '') {
                 if (!Storage::cloud()->exists($siteDirectory . $pageTypeDir)) {
                     Storage::cloud()->makeDirectory($siteDirectory . $pageTypeDir);
@@ -183,13 +200,93 @@ class FileController extends ContextController
             }
         }
 
-        // Parse the file name of the uploaded file to retrieve the Shipment Lot Number and then check to see if a shipment
+        // Parse the file name of the uploaded file(s) to retrieve the Shipment Lot Number and then check to see if a shipment
         // record exists for the selected site per the parsed Lot Number.  This works because all 3 file types follow
         // agreed upon file naming conventions.
-        $uploadedFile = Input::file('file');
+		$shipmentNotFoundError = false;
+        $filesValidForUpload = array();
+        $filesNotValidForUpload = array();
+		for ($i=1; $i <= $numFilesUploaded ; $i++) {
+
+			$currentFile = $fields['file' . $i];
+			$shipment = $this->getShipmentPerFile($currentFile, $fields['type'], $site);
+
+			if ($shipment) {
+				$filesValidForUpload[$i]['upload'] = $currentFile;
+				$filesValidForUpload[$i]['shipment'] = $shipment;
+			}
+			else {
+                $fileName = $currentFile->getClientOriginalName();
+				$filesNotValidForUpload[$fileName] = $fileName;
+			}
+		}
+
+        $successfullyUploadedFiles = array();
+        foreach ($filesValidForUpload as $key => $fileToUpload) {
+
+            // Check if another file for the lot number was previously uploaded for this site/file type
+            // If so, delete file record from DB and remove from S3.  File overwriting is allowed.
+             $existingFile = $page->files->where('shipment_id', $fileToUpload['shipment']->id)->first();
+            if ($existingFile) {
+            	FileUploadHelper::removeFile($existingFile);
+            }
+
+            $file = new File();
+            $file->pageId = $page->id;
+            $file->size = $fileToUpload['upload']->getSize();
+            $file->shipmentId = $fileToUpload['shipment']->id;
+            $file->save();
+
+            $url = null;
+            $siteDirectory = Constants::UPLOAD_DIRECTORY . $site->code;
+            $pageTypeDir = FileUploadHelper::getFilePageTypeDir($fields['type']);
+
+            if ($pageTypeDir != '') {
+
+                $uploadedFileExt = $fileToUpload['upload']->getClientOriginalExtension();
+                $fileNamePrefix = FileUploadHelper::getFilePrefixPerType($fields['type']);
+                $fileName = $fileNamePrefix . strtoupper($fileToUpload['shipment']->lot_number) . '.' . $uploadedFileExt;
+                Storage::cloud()->put($siteDirectory . $pageTypeDir . '/' . $fileName, file_get_contents($fileToUpload['upload']));
+                $url = Storage::cloud()->url($siteDirectory . $pageTypeDir . '/' . $fileName);
+
+                $file->filename = $file->name = $fileName;
+                $file->url = $url;
+                $file->save();
+
+                $successfullyUploadedFiles[$fileName] = $fileName;
+            }
+        }
+
+        $messages = array();
+        $messageReplacePairs = array(
+            'PLACEHOLDER_SITE_TITLE' => $site->title,
+            'PLACEHOLDER_FILE_TYPE'  => $fields['type']
+        );
+
+        if (count($successfullyUploadedFiles) > 0) {
+
+            $successMessage = trans('admin.file.create.success_file_upload');
+            $successMessage = str_replace(array_keys($messageReplacePairs),array_values($messageReplacePairs),$successMessage);
+
+            $messages['success'] = $successMessage . '<br><strong>' . implode(' - ', $successfullyUploadedFiles) . '</strong>';
+        }
+
+        if (count($filesNotValidForUpload) > 0) {
+
+            $failMessage = trans('admin.file.create.not_valid_for_file_upload');
+            $failMessage = str_replace(array_keys($messageReplacePairs),array_values($messageReplacePairs),$failMessage);
+
+            $messages['fail'] = $failMessage . '<br><strong>' . implode(' - ', $filesNotValidForUpload) . '</strong><br><br>' . trans('admin.file.create.shipment_not_found_for_file');
+        }
+
+        return redirect()->route('admin.file.list', ['site' => $site->id])->with($messages);
+    }
+
+    public function getShipmentPerFile($uploadedFile, $fileType, $site)
+    {
         $uploadedFileName = $uploadedFile->getClientOriginalName();
 
-        $fileNamePrefixPattern = '/' . $this->getFilePrefixPerType($type) . '/';
+        $fileNamePrefixPattern = '/' . FileUploadHelper::getFilePrefixPerType($fileType) . '/';
         $withoutExtension = substr($uploadedFileName, 0, strrpos($uploadedFileName, '.'));
         $replacementLimit = 1;
 
@@ -197,47 +294,7 @@ class FileController extends ContextController
 
         $shipment = Shipment::forLotNumberAndSiteId($shipmentLotNumber, $site->id);
 
-        $validator->after(function($validator) use ($shipment) {
-            if (!$shipment) {
-                 $validator->errors()->add('file', 'A Shipment record was not found in the for the database per the Site selected above and the Lot Number specified in the uploaded filename. A Shipment record for the Lot Number specified in the file name MUST exist before any files can be upload for that shipment.  Files can only be uploaded to sites to which the Lot Number is associated. Also, please be sure that the File type selected above matches up with the file type indicated by the name of the file being uploaded.');
-            }
-        });
-
-        if ($validator->fails()) {
-            return redirect()->route('admin.file.create')->withErrors($validator)->withInput();
-        }
-
-        // Check if another file for the lot number was previously uploaded for this site/file type
-        // If so, delete file record from DB and remove from S3.  File overwriting is allowed.
-         $existingFile = $page->files->where('shipment_id', $shipment->id)->first();
-        if ($existingFile) {
-             $this->removeFile($existingFile);
-        }
-
-        $file = new File();
-        $file->pageId = $page->id;
-        $file->size = $uploadedFile->getSize();
-        $file->shipmentId = $shipment->id;
-        $file->save();
-
-        $url = null;
-        $siteDirectory = Constants::UPLOAD_DIRECTORY . $site->code;
-        $pageTypeDir = $this->getFilePageTypeDir($type);
-
-        if ($pageTypeDir != '') {
-
-            $uploadedFileExt = $uploadedFile->getClientOriginalExtension();
-            $fileNamePrefix = $this->getFilePrefixPerType($type);
-            $fileName = $fileNamePrefix . strtoupper($shipment->lot_number) . '.' . $uploadedFileExt;
-            Storage::cloud()->put($siteDirectory . $pageTypeDir . '/' . $fileName, file_get_contents($uploadedFile));
-            $url = Storage::cloud()->url($siteDirectory . $pageTypeDir . '/' . $fileName);
-
-            $file->filename = $file->name = $fileName;
-            $file->url = $url;
-            $file->save();
-
-        }
-        return redirect()->route('admin.file.list', ['site' => $site->id])->with('success', trans('admin.page.file.create.file_created'));
+        return $shipment;
     }
 
     public function getEdit($context = null, $id)
@@ -325,52 +382,7 @@ class FileController extends ContextController
         if (!$file) {
             return redirect()->route('admin.file.list')->with('fail', trans('admin.file.remove.not_exist'));
         }
-
-        $this->removeFile($file);
+				FileUploadHelper::removeFile($file);
         return redirect()->route('admin.file.list',  ['site' => $file->page->site_id])->with('success', trans('admin.file.remove.file_removed'));
-    }
-
-    public function getFilePageTypeDir($type)
-    {
-
-        $pageTypeDir = '';
-        if ($type == 'Certificates of Data Wipe') {
-            $pageTypeDir = '/certificate_of_data_wipe';
-        }
-        else if ($type == 'Certificates of Recycling') {
-            $pageTypeDir = '/certificate_of_destruction';
-        }
-        else if ($type == 'Settlements') {
-            $pageTypeDir = '/settlement';
-        }
-        return $pageTypeDir;
-    }
-
-    public function getFilePrefixPerType($type)
-    {
-
-        $fileNamePrefix = '';
-        if ($type == 'Certificates of Data Wipe') {
-            $fileNamePrefix = 'DATA';
-        }
-        else if ($type == 'Certificates of Recycling') {
-            $fileNamePrefix = 'DEST';
-        }
-        else if ($type == 'Settlements') {
-            $fileNamePrefix = 'settlement';
-        }
-        return $fileNamePrefix;
-    }
-
-    public function removeFile($file)
-    {
-
-        $pageTypeDir = $this->getFilePageTypeDir($file->page->type);
-        if ($pageTypeDir != '') {
-            if (Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $file->page->site->code . $pageTypeDir . '/' . $file->filename)) {
-                Storage::cloud()->delete(Constants::UPLOAD_DIRECTORY . $file->page->site->code . $pageTypeDir . '/' . $file->filename);
-            }
-        }
-        $file->delete();
     }
 }

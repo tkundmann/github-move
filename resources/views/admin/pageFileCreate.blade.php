@@ -109,17 +109,23 @@
     $(document).ready(function() {
         $('.fileinput').on("change.bs.fileinput", function() {
             var value = $('input[name="file"]').val();
-            if (value) {
-                if (value.length > {{ $limit }}) {
-                    $('.fileinput-filename').text(value.substr(0, {{ $limit }}) + '...');
+            var filePathPieces = value.split("\\");
+            var fileName = filePathPieces[filePathPieces.length-1];
+            if (fileName) {
+                if (fileName.length > {{ $limit }}) {
+                    $('.fileinput-filename').text(fileName.substr(0, {{ $limit }}) + '...');
                 }
                 else {
-                    $('.fileinput-filename').text(value);
+                    $('.fileinput-filename').text(fileName);
                 }
+                $('input[name="name"]').val(fileName);
             }
         });
         $('.fileinput').on("change.bs.fileinput clear.bs.fileinput reset.bs.fileinput", function() {
-            $('input[name="name"]').val(($('input[name="file"]').val()));
+            var value = $('input[name="file"]').val();
+            var filePathPieces = value.split("\\");
+            var fileName = filePathPieces[filePathPieces.length-1];
+            $('input[name="name"]').val(fileName);
         });
     });
 </script>
