@@ -966,12 +966,14 @@
 
             $('.fileinput').on("change.bs.fileinput", function() {
                 var value = $('input[name="upload_equipment_list"]').val();
-                if (value) {
-                    if (value.length > {{ $limit }}) {
-                        $('.fileinput-filename').text(value.substr(0, {{ $limit }}) + '...');
+                var filePathPieces = value.split("\\");
+                var fileName = filePathPieces[filePathPieces.length-1];
+                if (fileName) {
+                    if (fileName.length > {{ $limit }}) {
+                        $('.fileinput-filename').text(fileName.substr(0, {{ $limit }}) + '...');
                     }
                     else {
-                        $('.fileinput-filename').text(value);
+                        $('.fileinput-filename').text(fileName);
                     }
                 }
             });
