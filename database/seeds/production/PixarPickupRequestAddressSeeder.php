@@ -25,8 +25,8 @@ class PixarPickupRequestAddressSeeder extends Seeder
                 'name' => 'Pixar Animation Studios',
                 'company_name' => 'Pixar Animation Studios',
                 'company_division' => null,
-                'contact_name' => Crypt::encrypt(''),
-                'contact_phone_number' => Crypt::encrypt(''),
+                'contact_name' => Crypt::encrypt('Travis Kopp'),
+                'contact_phone_number' => Crypt::encrypt('619-847-2743'),
                 'contact_address_1' => Crypt::encrypt(''),
                 'contact_address_2' => null,
                 'contact_city' => null,
@@ -34,7 +34,7 @@ class PixarPickupRequestAddressSeeder extends Seeder
                 'contact_zip' => null,
                 'contact_country' => null,
                 'contact_cell_number' => Crypt::encrypt(''),
-                'contact_email_address' => Crypt::encrypt(''),
+                'contact_email_address' => Crypt::encrypt('tkopp@pixar.com'),
                 'created_at' => Carbon::now()
             ]
         ]);

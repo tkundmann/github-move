@@ -129,7 +129,7 @@ class PixarPickupRequest extends Seeder
 				array (
 					'name' => 'Equipment List',
 					'filename' => 'Pixar_EquipmentList.xls',
-					'url' => 'https://belmont-sipi-assets.s3.amazonaws.com/pixar/pickup_request/equipment_list_templates/Pixar_EquipmentList.xls',
+					'url' => 'https://belmont-sipi-assets.s3.amazonaws.com/pixar/pickup_request/equipment_list_templates/Pixar_EquipmentList.xls?v=1',
 				),
 			);
 
