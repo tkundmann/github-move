@@ -35,6 +35,11 @@ class ShipmentController extends ContextController
         'city_of_origin'          => 'city_of_origin',
         'schedule_pickup_date'    => 'schedule_pickup_date',
         'freight_carrier'         => 'freight_carrier',
+        'pickup_address'          => 'pickup_address',
+        'pickup_address_2'        => 'pickup_address_2',
+        'pickup_city'             => 'pickup_city',
+        'pickup_state'            => 'pickup_state',
+        'pickup_zip_code'         => 'pickup_zip_code',
         'date_received'           => 'date_received',
         'total_weight_received'   => 'total_weight_received',
         'number_of_skids'         => 'number_of_skids',
@@ -65,6 +70,11 @@ class ShipmentController extends ContextController
         'city_of_origin'          => 'city_of_origin',
         'schedule_pickup_date'    => 'schedule_pickup_date',
         'freight_carrier'         => 'freight_carrier',
+        'pickup_address'          => 'pickup_address',
+        'pickup_address_2'        => 'pickup_address_2',
+        'pickup_city'             => 'pickup_city',
+        'pickup_state'            => 'pickup_state',
+        'pickup_zip_code'         => 'pickup_zip_code',
         'date_received'           => 'date_received',
         'total_weight_received'   => 'total_weight_received',
         'number_of_skids'         => 'number_of_skids',
@@ -86,6 +96,11 @@ class ShipmentController extends ContextController
         'city_of_origin'          => 'city_of_origin',
         'schedule_pickup_date'    => 'schedule_pickup_date',
         'freight_carrier'         => 'freight_carrier',
+        'pickup_address'          => 'pickup_address',
+        'pickup_address_2'        => 'pickup_address_2',
+        'pickup_city'             => 'pickup_city',
+        'pickup_state'            => 'pickup_state',
+        'pickup_zip_code'         => 'pickup_zip_code',
         'date_received'           => 'date_received',
         'total_weight_received'   => 'total_weight_received',
         'number_of_skids'         => 'number_of_skids',
@@ -148,7 +163,7 @@ class ShipmentController extends ContextController
         $this->modelSearchResultFields = $this->site->hasFeature(Feature::SHIPMENT_CUSTOM_SEARCH_RESULT_FIELDS) ? $this->site->getFeature(Feature::SHIPMENT_CUSTOM_SEARCH_RESULT_FIELDS)->pivot->data : $this->defaultSearchResultFields;
         $this->modelExportFields = $this->site->hasFeature(Feature::SHIPMENT_CUSTOM_EXPORT_FIELDS) ? $this->site->getFeature(Feature::SHIPMENT_CUSTOM_EXPORT_FIELDS)->pivot->data : $this->defaultExportFields;
 
-        $userRestrictedVendorClients = Auth::user()->vendorClients()->lists('name', 'name')->toArray();
+            $userRestrictedVendorClients = Auth::user()->vendorClients()->lists('name', 'name')->toArray();
         if (Auth::user() && ($this->site->hasFeature(Feature::VENDOR_CLIENT_CODE_ACCESS_RESTRICTED) && count($userRestrictedVendorClients) > 0) && !Auth::user()->hasRole(Role::SUPERUSER)) {
             $this->vendorClients = $userRestrictedVendorClients;
         }
