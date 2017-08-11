@@ -244,7 +244,7 @@ return [
             'file_created' => 'File created.',
             'success_file_upload' => 'The following file(s) were successfully uploaded for the selected Site (PLACEHOLDER_SITE_TITLE) and File Type (PLACEHOLDER_FILE_TYPE): ',
             'not_valid_for_file_upload' => 'The following file(s) were not uploaded for the selected Site (PLACEHOLDER_SITE_TITLE) and File Type (PLACEHOLDER_FILE_TYPE) per the reason listed below: ',
-            'shipment_not_found_for_file' => 'A Shipment record was not found in the database per the Site selected and the Lot Number specified in the file name. <br>A Shipment record for the Lot Number specified in the file name MUST exist before any files can be uploaded for that shipment.',
+            'shipment_not_found_for_file' => 'A Shipment record was not found in the database per the Site selected and the Lot Number specified in the file name. <br>A Shipment record for the Lot Number specified in the file name MUST exist before any files can be uploaded for that shipment.<br><strong>PLEASE NOTE:</strong> All files being uploaded at one time MUST conform with the selected file <strong>Type</strong>.  Those files that do not conform, are rejected and not uploaded.',
             'site_reload_warning' => 'Change will reload page!'
         ],
         'edit' => [
