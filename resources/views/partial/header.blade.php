@@ -13,7 +13,7 @@
         <a class="logo" href="{{ route('main.home') }}">
             <img class="img-responsive" src="{{ secure_asset('/img/logo/logo-sipi.png') }}">
         </a>
-        <h3 class="companyName">@lang('main.layout.admin')</h3>
+        <h3 class="companyName {{ $site->code }}">@lang('main.layout.admin')</h3>
     @endif
     </div>
 </div>
