@@ -3,7 +3,7 @@
     <div class="container">
     @if (isset($site))
         <a class="logo" href="{{ route('main.home') }}">
-            <img class="img-responsive" src="{{ secure_asset($site->logoUrl) }}">
+            <img class="img-responsive {{ $site->code }}" src="{{ secure_asset($site->logoUrl) }}">
         </a>
         @if (!$site->hasFeature(Feature::HIDE_TITLE))
             <h3 class="companyName {{ $site->code }}">{{ $site->title or '' }}</h3>
