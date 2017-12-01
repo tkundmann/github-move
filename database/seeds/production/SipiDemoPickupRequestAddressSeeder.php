@@ -38,9 +38,9 @@ class SipiDemoPickupRequestAddressSeeder extends Seeder
         DB::table('pickup_request_address')->insert([
             [
                 'site_id' => $site->id,
-                'name' => 'ABC Company',
-                'company_name' => 'ABC Company',
-                'company_division' => 'Dept XYZ',
+                'name' => 'ABABC Company - Dept XYZ',
+                'company_name' => 'ABC Company - Dept XYZ',
+                'company_division' => '',
                 'contact_name' => Crypt::encrypt('Henry Brickhouse'),
                 'contact_phone_number' => Crypt::encrypt(''),
                 'contact_address_1' => Crypt::encrypt('1303 E. Herndon Ave'),
@@ -55,9 +55,9 @@ class SipiDemoPickupRequestAddressSeeder extends Seeder
             ],
             [
                 'site_id' => $site->id,
-                'name' => 'ABC Company',
-                'company_name' => 'ABC Company',
-                'company_division' => 'Dept Housing',
+                'name' => 'ABC Company - Dept Housing',
+                'company_name' => 'ABC Company - Dept Housing',
+                'company_division' => '',
                 'contact_name' => Crypt::encrypt('Henry Brickhouse'),
                 'contact_phone_number' => Crypt::encrypt(''),
                 'contact_address_1' => Crypt::encrypt('701 N. Clayton St'),
