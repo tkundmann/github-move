@@ -57,7 +57,8 @@
                                         <div class="col-md-3"></div>
                                         <div class="col-md-6">
                                             <div class="form-group @if($errors->has('upload_equipment_list')) has-error @endif">
-                                                {{ Form::label('upload_equipment_list', trans('pickup_request.upload_equipment_list'), ['class' => 'control-label colon-after-required']) }}
+                                                <label for="upload_equipment_list"
+                                                   class="control-label colon-after @if(in_array('upload_equipment_list',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.upload_equipment_list')</label>
                                                 <div class="">
                                                     <div class="fileinput fileinput-new input-group margin-bottom-none"
                                                          data-provides="fileinput">
