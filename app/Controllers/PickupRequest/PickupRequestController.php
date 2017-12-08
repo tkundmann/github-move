@@ -386,6 +386,6 @@ class PickupRequestController extends ContextController
             }
         });
 
-        return redirect()->route('pickupRequest', ['token' => Input::get('token')])->with('success', trans('pickup_request.success'));
+        return redirect()->route('pickupRequest', ['token' => Input::get('token')])->with('success', trans('pickup_request.success', ['pickup_request_id' => $pickupRequest->id]));
     }
 }

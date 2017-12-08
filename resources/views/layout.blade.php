@@ -80,6 +80,9 @@
         <script src="{{ secure_asset("/lib/bootbox/bootbox.js") }}"></script>
 
         <!-- JS / Application -->
+
+        <script src="{{ secure_asset("/js/helpers.js") }}"></script>
+
         @if (session('toast')){{--
      --}}<script>
             toastr.error('{{ session('toast') }}', 'Error!', { positionClass: 'toast-center' })
@@ -90,6 +93,10 @@
             setTimeout(function() {
                 $('.alert.animate').fadeOut(2000);
             }, 5000);
+            $('.alert.animate-slowly').fadeIn(2000);
+            setTimeout(function() {
+                $('.alert.animate-slowly').fadeOut(2000);
+            }, 15000);
         </script>
 
         <script>

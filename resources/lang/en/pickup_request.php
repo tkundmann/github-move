@@ -85,6 +85,6 @@ return [
     'product_type_quantities'      => 'Product Type Quantities',
     'building_manager_info_email'  => 'Building Manager Contact Information',
 
-    'success'                      => 'Pickup Request submitted successfully.',
+    'success'                      => 'Pickup Request #:pickup_request_id submitted successfully.',
     'error'                        => 'Pickup Request submit error! Please check for all the required fields.'
 ];

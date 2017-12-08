@@ -8,7 +8,7 @@
                     <div class="panel-heading">@lang('pickup_request.title', [ 'title' => $data['title']])</div>
                     <div class="panel-body">
                         @if (Session::has('success'))
-                            <div class="alert alert-success animate">{{ session('success') }}</div>
+                            <div class="alert alert-success animate-slowly">{{ session('success') }}</div>
                         @endif
 
                         @if (!$errors->isEmpty())
