@@ -68,6 +68,7 @@ return [
     'hard_drive_wiped'             => 'Hard Drives wiped',
 
     'preferred_date_pickup'        => 'What is the preferred Date and Time for pickup?',
+    'preferred_date_pickup_note'   => 'Please allow at least 48 hours notice for the pick-up request',
     'units_located_near_dock'      => 'Are the units centrally located near loading dock?',
     'lift_gate_needed'             => 'Is a Lift Gate needed?',
     'units_on_single_floor'        => 'Are the units on single floor?',

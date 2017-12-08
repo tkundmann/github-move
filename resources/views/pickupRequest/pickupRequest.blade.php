@@ -631,6 +631,7 @@
                                                 @if ($errors->has('preferred_pickup_date'))
                                                     {!! $errors->first('preferred_pickup_date', '<small class="text-danger">:message</small>') !!}
                                                 @endif
+                                                <p class="small">@lang('pickup_request.preferred_date_pickup_note')</p>
                                             </div>
                                         @endif
                                         @if($data['use_preferred_pickup_date_information'])
@@ -644,6 +645,7 @@
                                                 @if ($errors->has('preferred_pickup_date_information'))
                                                     {!! $errors->first('preferred_pickup_date_information', '<small class="text-danger">:message</small>') !!}
                                                 @endif
+                                                <p class="small">@lang('pickup_request.preferred_date_pickup_note')</p>
                                             </div>
                                         @endif
 
