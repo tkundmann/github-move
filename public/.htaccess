@@ -72,10 +72,16 @@
     RewriteCond %{REQUEST_URI} ^/workday/pickuprequest$    [NC]
     RewriteRule ^.*$  "/workday/pickup-request"            [R,NE,L]
 
-    # Yahoo Pickup Request Form Redirects
-    RewriteCond %{REQUEST_URI} ^/yahoo/page/pickuprequest$ [OR,NC]
-    RewriteCond %{REQUEST_URI} ^/yahoo/pickuprequest$      [NC]
-    RewriteRule ^.*$  "/yahoo/pickup-request"              [R,NE,L]
+    # Redirect hits to Yahoo to Oath
+    RewriteCond %{REQUEST_URI} ^/yahoo$                   [OR,NC]
+    RewriteCond %{REQUEST_URI} ^/yahoo/home$              [OR,NC]
+    RewriteCond %{REQUEST_URI} ^/yahoo/login$             [NC]
+    RewriteRule ^.*$  "/oath"                             [R,NE,L]
+
+    # Oath (previously Yahoo) Pickup Request Form Redirects
+    RewriteCond %{REQUEST_URI} ^/oath/page/pickuprequest$ [OR,NC]
+    RewriteCond %{REQUEST_URI} ^/oath/pickuprequest$      [NC]
+    RewriteRule ^.*$  "/oath/pickup-request"              [R,NE,L]
 
     # Zeta Interactive Pickup Request Form Redirects
     RewriteCond %{REQUEST_URI} ^/zeta/pickuprequest$       [NC]
