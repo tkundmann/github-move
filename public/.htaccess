@@ -81,7 +81,8 @@
     # Oath (previously Yahoo) Pickup Request Form Redirects
     RewriteCond %{REQUEST_URI} ^/yahoo/page/pickuprequest$ [OR,NC]
     RewriteCond %{REQUEST_URI} ^/yahoo/pickuprequest$      [OR,NC]
-    RewriteCond %{REQUEST_URI} ^/yahoo/pickup-request$     [OR,NC]
+    RewriteCond %{REQUEST_URI} ^/yahoo/pickup-request$        [OR,NC]
+    RewriteCond %{REQUEST_URI} ^/yahoo/pickup-request/login$   [OR,NC]
     RewriteCond %{REQUEST_URI} ^/oath/page/pickuprequest$  [OR,NC]
     RewriteCond %{REQUEST_URI} ^/oath/pickuprequest$       [NC]
     RewriteRule ^.*$  "/oath/pickup-request"               [R,NE,L]
