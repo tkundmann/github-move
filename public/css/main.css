@@ -72,6 +72,14 @@ button.single-click.disabled {
 .form-control.no-float {
   float: none;
 }
+.toggle-password-display-container {
+  margin-top: 3px;
+  text-align: right;
+}
+.toggle-password-display-container a {
+  cursor: pointer;
+  text-decoration: none;
+}
 /* bigger bootstrap fixed-width responsive container */
 @media (min-width: 1400px) {
   .container {

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('content')
-<div class="container">
+<div class="container js-form-container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
@@ -43,12 +43,12 @@
                                 <label for="password" class="col-md-4 control-label colon-after">@lang('auth.password.password')</label>
 
                                 <div class="col-md-6">
-                                    <input id="password" type="password" class="form-control" name="password">
+                                    <input id="password" type="password" class="form-control js-password-input" name="password">
 
                                     @if ($errors->has('password'))
                                         <span class="help-block">
-                                    <strong>{{ $errors->first('password') }}</strong>
-                                </span>
+                                            <strong>{{ $errors->first('password') }}</strong>
+                                        </span>
                                     @endif
                                 </div>
                             </div>
@@ -56,12 +56,16 @@
                             <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
                                 <label for="password-confirm" class="col-md-4 control-label colon-after">@lang('auth.password.confirm_password')</label>
                                 <div class="col-md-6">
-                                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation">
+                                    <input id="password-confirm" type="password" class="form-control js-password-input" name="password_confirmation">
+                                    <div class="toggle-password-display-container js-toggle-password-display-container">
+                                        <a class="js-toggle-password-display" data-password-display="show"><i class="fa fa-eye"></i> @lang('auth.login.show_passwords')</a>
+                                        <a class="js-toggle-password-display" data-password-display="hide" style="display:none;"><i class="fa fa-eye-slash"></i> @lang('auth.login.hide_passwords')</a>
+                                    </div>
 
                                     @if ($errors->has('password_confirmation'))
                                         <span class="help-block">
-                                    <strong>{{ $errors->first('password_confirmation') }}</strong>
-                                </span>
+                                            <strong>{{ $errors->first('password_confirmation') }}</strong>
+                                        </span>
                                     @endif
                                 </div>
                             </div>

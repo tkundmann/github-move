@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('content')
-<div class="container">
+<div class="container js-form-container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
@@ -61,11 +61,15 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }} margin-bottom-none">
                             <label for="password" class="col-md-4 control-label colon-after">@lang('auth.login.password')</label>
 
                             <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password">
+                                <input id="password" type="password" class="form-control js-password-input" name="password">
+                                <div class="toggle-password-display-container js-toggle-password-display-container">
+                                    <a class="js-toggle-password-display" data-password-display="show"><i class="fa fa-eye"></i> @lang('auth.login.show_password')</a>
+                                    <a class="js-toggle-password-display" data-password-display="hide" style="display:none;"><i class="fa fa-eye-slash"></i> @lang('auth.login.hide_password')</a>
+                                </div>
 
                                 @if ($errors->has('password'))
                                     <span class="help-block">

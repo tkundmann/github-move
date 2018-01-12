@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('content')
-    <div class="container">
+    <div class="container js-form-container">
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
@@ -58,17 +58,21 @@
                             <div class="form-group @if($errors->has('password')) has-error @endif">
                                 {{ Form::label('password', trans('admin.accounts.user.password'), ['class' => 'col-sm-3 control-label colon-after']) }}
                                 <div class="col-sm-6">
-                                    {{ Form::password('password', ['class' => 'form-control']) }}
+                                    {{ Form::password('password', ['class' => 'form-control js-password-input']) }}
                                     @if ($errors->has('password'))
                                         {!! $errors->first('password', '<small class="text-danger">:message</small>') !!}
                                     @endif
                                 </div>
                             </div>
 
-                            <div class="form-group @if($errors->has('password_confirmation')) has-error @endif">
+                            <div class="form-group @if($errors->has('password_confirmation')) has-error @endif margin-bottom-none">
                                 {{ Form::label('password_confirmation', trans('admin.accounts.user.password_confirmation'), ['class' => 'col-sm-3 control-label colon-after']) }}
                                 <div class="col-sm-6">
-                                    {{ Form::password('password_confirmation', ['class' => 'form-control']) }}
+                                    {{ Form::password('password_confirmation', ['class' => 'form-control js-password-input']) }}
+                                    <div class="toggle-password-display-container js-toggle-password-display-container">
+                                        <a class="js-toggle-password-display" data-password-display="show"><i class="fa fa-eye"></i> @lang('auth.login.show_passwords')</a>
+                                        <a class="js-toggle-password-display" data-password-display="hide" style="display:none;"><i class="fa fa-eye-slash"></i> @lang('auth.login.hide_passwords')</a>
+                                    </div>
                                     @if ($errors->has('password_confirmation'))
                                         {!! $errors->first('password_confirmation', '<small class="text-danger">:message</small>') !!}
                                     @endif

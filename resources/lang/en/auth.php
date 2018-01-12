@@ -12,7 +12,7 @@ return [
     | these language lines according to your application's requirements.
     |
     */
-    
+
     'login' => [
         'shipments_assets_access_login' => 'Shipments/Assets Access Login',
         'admin_login' => 'Admin Login',
@@ -21,6 +21,10 @@ return [
         'username' => 'Username',
         'email_address' => 'E-mail address',
         'password' => 'Password',
+        'show_password' => 'Show Password',
+        'hide_password' => 'Hide Password',
+        'show_passwords' => 'Show Passwords',
+        'hide_passwords' => 'Hide Passwords',
         'remember_me' => 'Remember me',
         'login' => 'Login',
         'forgot_password' => 'Forgot your password?',
