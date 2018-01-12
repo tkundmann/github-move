@@ -1,5 +1,5 @@
 .header {
-  height: 80px;
+  height: 84px;
   background-color: #000000;
 }
 .header .container {
@@ -10,8 +10,14 @@
   top: 5px;
   left: 10px;
 }
+.header .container .logo .lasalledemo {
+  display: none;
+}
 .header .container .companyName {
   text-align: center;
   color: #999999;
-  margin-top: 25px;
+  margin-top: 28px;
+}
+.header .container .companyName.lasalledemo {
+  font-size: 29px;
 }
