@@ -968,7 +968,7 @@
     <script>
         $(document).ready(function () {
 
-            @if(! $site->getFeature(Feature::PICKUP_REQUEST_ADDRESS_BOOK)->pivot->data['allow_change'] && $site->getFeature(Feature::PICKUP_REQUEST_ADDRESS_BOOK)->pivot->data['address_readonly'])
+            @if($site->hasFeature(Feature::PICKUP_REQUEST_ADDRESS_BOOK) && !$site->getFeature(Feature::PICKUP_REQUEST_ADDRESS_BOOK)->pivot->data['allow_change'] && $site->getFeature(Feature::PICKUP_REQUEST_ADDRESS_BOOK)->pivot->data['address_readonly'])
             $('.js-site-address-fields input, .js-site-address-fields select').attr('readonly', 'readonly');
             @endif
 
