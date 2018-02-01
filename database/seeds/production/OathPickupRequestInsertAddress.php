@@ -34,7 +34,7 @@ class OathPickupRequestInsertAddress extends Seeder
                 'contact_zip' => '90094',
                 'contact_country' => 'USA',
                 'contact_cell_number' => Crypt::encrypt(''),
-                'contact_email_address' => Crypt::encrypt('tkopp@pixar.com'),
+                'contact_email_address' => Crypt::encrypt(''),
                 'created_at' => Carbon::now()
             ]
         ]);
