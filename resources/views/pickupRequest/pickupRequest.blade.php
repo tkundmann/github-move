@@ -1018,7 +1018,11 @@
                         @endif
                         $('input[name="contact_zip"]').val(address.contact_zip);
                         @if($data['use_country'])
-                        $('select[name="contact_country"]').selectpicker('val', address.contact_country);
+                          @if(isset($data['countries']) && $data['countries'])
+                            $('select[name="contact_country"]').selectpicker('val', address.contact_country);
+                          @else
+                            $('input[name="contact_country"]').val(address.contact_country);
+                          @endif
                         @endif
                         $('input[name="contact_cell_number"]').val(address.contact_cell_number);
                         $('input[name="contact_email_address"]').val(address.contact_email_address);
