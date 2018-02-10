@@ -223,7 +223,7 @@
                                         <div class="col-md-5">
                                             {{--Right column--}}
                                             @if($data['use_country'])
-                                                @if($data['countries'])
+                                                @if(isset($data['countries']) && $data['countries'])
                                                     <div class="form-group @if($errors->has('contact_country')) has-error @endif">
                                                         <label class="control-label colon-after @if(in_array('contact_country',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.country')</label>
                                                         {{ Form::select('contact_country', $data['countries'], old('contact_country'), ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'title' => trans('common.select')]) }}
