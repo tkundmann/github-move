@@ -878,7 +878,7 @@
                                     <div class="col-md-1"></div>
                                     <div class="col-md-5">
                                         {{--Right column--}}
-                                        @if($data['use_country'])
+                                        @if($data['use_country'] && isset($data['countries']) && $data['countries'])
                                             <div class="form-group @if($errors->has('bm_country')) has-error @endif">
                                                 <label class="control-label colon-after">@lang('pickup_request.country')</label>
                                                 {{ Form::select('bm_country', $data['countries'], old('bm_country'), ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'title' => trans('common.select')]) }}
