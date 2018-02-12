@@ -44,6 +44,10 @@
     RewriteCond %{REQUEST_URI} ^/godaddy/pickuprequest$    [NC]
     RewriteRule ^.*$  "/godaddy/pickup-request"            [R,NE,L]
 
+    # LinkedIn Pickup Request Form Redirects
+    RewriteCond %{REQUEST_URI} ^/linkedin/pickuprequest$   [NC]
+    RewriteRule ^.*$  "/linkedin/pickup-request"           [R,NE,L]
+
     # Magento Pickup Request Form Redirects
     RewriteCond %{REQUEST_URI} ^/magento/pickuprequest$    [NC]
     RewriteRule ^.*$  "/magento/pickup-request"            [R,NE,L]
