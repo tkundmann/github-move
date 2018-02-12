@@ -278,7 +278,7 @@
                 <td>@if($pickupRequest->bm_state) {{ $pickupRequest->bm_state }} @endif</td>
             </tr>
             <tr>
-                <td>@lang('pickup_request.zip_code'):</td>
+                <td>@lang('pickup_request.zip_postal_code'):</td>
                 <td>@if($pickupRequest->bm_zip) {{ $pickupRequest->bm_zip }} @endif</td>
             </tr>
             @if($pickupRequestData['use_country'])

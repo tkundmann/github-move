@@ -46,8 +46,6 @@ class LinkedInPickupRequest extends Seeder
 				2 => 'contact_name',
 				3 => 'contact_address_1',
 				4 => 'contact_city',
-				5 => 'contact_state',
-				6 => 'contact_zip',
 				7 => 'contact_phone_number',
 				8 => 'contact_email_address',
 				9 => 'reference_number',
