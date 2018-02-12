@@ -83,7 +83,7 @@
                     @if($pickupRequestData['use_alternative_piece_count_form'])
                         <tr>
                             <td>@lang('pickup_request.internal_hard_drives'):</td>
-			                <td align="right">@if($pickupRequest->num_internal_hard_drives) {{ $pickupRequest->num_internal_hard_drives }} <?php $total += $pickupRequest->num_internal_hard_drives; ?>@else 0 @endif</td>
+                            <td align="right">@if($pickupRequest->num_internal_hard_drives) {{ $pickupRequest->num_internal_hard_drives }} <?php $total += $pickupRequest->num_internal_hard_drives; ?>@else 0 @endif</td>
                         </tr>
                     @endif
                     @if($pickupRequestData['use_alternative_piece_count_form'])
@@ -100,7 +100,7 @@
                     @endif
                     <tr>
                         <td>@lang('pickup_request.desktop'):</td>
-			            <td align="right">@if($pickupRequest->num_desktops) {{ $pickupRequest->num_desktops }} <?php $total += $pickupRequest->num_desktops; ?>@else 0 @endif</td>
+                        <td align="right">@if($pickupRequest->num_desktops) {{ $pickupRequest->num_desktops }} <?php $total += $pickupRequest->num_desktops; ?>@else 0 @endif</td>
                     </tr>
                     @if($pickupRequestData['use_alternative_piece_count_form'])
                         <tr>
@@ -116,7 +116,7 @@
                     @endif
                     <tr>
                         <td>@lang('pickup_request.laptop'):</td>
-			            <td align="right">@if($pickupRequest->num_laptops) {{ $pickupRequest->num_laptops }} <?php $total += $pickupRequest->num_laptops; ?>@else 0 @endif</td>
+                        <td align="right">@if($pickupRequest->num_laptops) {{ $pickupRequest->num_laptops }} <?php $total += $pickupRequest->num_laptops; ?>@else 0 @endif</td>
                     </tr>
                     @if($pickupRequestData['use_alternative_piece_count_form'])
                         <tr>
@@ -147,7 +147,11 @@
                     @endif
                     <tr>
                         <td>@lang('pickup_request.printer'):</td>
-			            <td align="right">@if($pickupRequest->num_printers) {{ $pickupRequest->num_printers }} <?php $total += $pickupRequest->num_printers; ?>@else 0 @endif</td>
+                        <td align="right">@if($pickupRequest->num_printers) {{ $pickupRequest->num_printers }} <?php $total += $pickupRequest->num_printers; ?>@else 0 @endif</td>
+                    </tr>
+                    <tr>
+                        <td>@lang('pickup_request.server'):</td>
+                        <td align="right">@if($pickupRequest->num_servers) {{ $pickupRequest->num_servers }} <?php $total += $pickupRequest->num_servers; ?>@else 0 @endif</td>
                     </tr>
                     @if($pickupRequestData['use_alternative_piece_count_form'])
                         <tr>
@@ -163,29 +167,29 @@
                     @endif
                     <tr>
                         <td>@lang('pickup_request.networking'):</td>
-			            <td align="right">@if($pickupRequest->num_networking) {{ $pickupRequest->num_networking }} <?php $total += $pickupRequest->num_networking; ?>@else 0 @endif</td>
+                        <td align="right">@if($pickupRequest->num_networking) {{ $pickupRequest->num_networking }} <?php $total += $pickupRequest->num_networking; ?>@else 0 @endif</td>
                     </tr>
                     <tr>
                         <td>@lang('pickup_request.storage_system'):</td>
-			            <td align="right">@if($pickupRequest->num_storage_systems) {{ $pickupRequest->num_storage_systems }} <?php $total += $pickupRequest->num_storage_systems; ?>@else 0 @endif</td>
+                        <td align="right">@if($pickupRequest->num_storage_systems) {{ $pickupRequest->num_storage_systems }} <?php $total += $pickupRequest->num_storage_systems; ?>@else 0 @endif</td>
                     </tr>
                     <tr>
                         <td>@lang('pickup_request.ups'):</td>
-			            <td align="right">@if($pickupRequest->num_ups) {{ $pickupRequest->num_ups }} <?php $total += $pickupRequest->num_ups; ?>@else 0 @endif</td>
+                        <td align="right">@if($pickupRequest->num_ups) {{ $pickupRequest->num_ups }} <?php $total += $pickupRequest->num_ups; ?>@else 0 @endif</td>
                     </tr>
                     @if(!$pickupRequestData['use_alternative_piece_count_form'])
                     <tr>
                         <td>@lang('pickup_request.racks'):</td>
-			            <td align="right">@if($pickupRequest->num_racks) {{ $pickupRequest->num_racks }} <?php $total += $pickupRequest->num_racks; ?>@else 0 @endif</td>
+                        <td align="right">@if($pickupRequest->num_racks) {{ $pickupRequest->num_racks }} <?php $total += $pickupRequest->num_racks; ?>@else 0 @endif</td>
                     </tr>
                     @endif
                     <tr>
                         <td>@lang('pickup_request.other'):</td>
-			            <td align="right">@if($pickupRequest->num_other) {{ $pickupRequest->num_other }} <?php $total += $pickupRequest->num_other; ?>@else 0 @endif</td>
+                        <td align="right">@if($pickupRequest->num_other) {{ $pickupRequest->num_other }} <?php $total += $pickupRequest->num_other; ?>@else 0 @endif</td>
                     </tr>
                     <tr>
                         <td>@lang('pickup_request.misc'):</td>
-			            <td align="right">@if($pickupRequest->num_misc) {{ $pickupRequest->num_misc }} <?php $total += $pickupRequest->num_misc; ?>@else 0 @endif</td>
+                        <td align="right">@if($pickupRequest->num_misc) {{ $pickupRequest->num_misc }} <?php $total += $pickupRequest->num_misc; ?>@else 0 @endif</td>
                     </tr>
                     <tr>
                         <td><span class="bold">@lang('pickup_request.total')</span></td>
