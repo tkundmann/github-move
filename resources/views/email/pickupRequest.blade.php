@@ -249,7 +249,7 @@
         @endif
     </table>
 
-    @if($pickupRequest->bm_company_name) && $pickupRequest->bm_contact_name)
+    @if($pickupRequest->bm_company_name && $pickupRequest->bm_contact_name)
         <br><hr><br>
         <h4>@lang('pickup_request.building_manager_info_email'):</h4>
         <br>
