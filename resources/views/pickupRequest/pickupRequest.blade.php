@@ -138,7 +138,7 @@
                                 <div class="container-fluid">
                                     <div class="row">
                                         @if($data['use_contact_section_title'])
-                                            <p class="bold text-center">{{ $data['contact_section_title'] }}</p>
+                                            <p class="bold">{{ $data['contact_section_title'] }}</p>
                                         @endif
                                         <div class="col-md-5">
                                             {{--Left column--}}
@@ -291,6 +291,187 @@
                                     </div>
                                 </div>
                             </fieldset>
+
+                            <hr>
+
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                    </div>
+                                    <div class="col-md-6">
+                                        @if($data['use_preferred_pickup_date'])
+                                            <div class="form-group @if($errors->has('preferred_pickup_date')) has-error @endif">
+                                                <label for="preferred_pickup_date"
+                                                       class="control-label">@lang('pickup_request.preferred_date_pickup')</label>
+
+                                                <div class="form-inline">
+                                                    <input id="preferred_pickup_date" name="preferred_pickup_date" value="{{ old('preferred_pickup_date') }}" class="form-control" data-provide="datepicker">
+                                                    {{ Form::select('preferred_pickup_date_hour', ['00' => '00', '01' => '01', '02' => '02', '03' => '03', '04' => '04', '05' => '05', '06' => '06', '07' => '07', '08' => '08', '09' => '09', '10' => '10', '11' => '11', '12' => '12'], old('preferred_pickup_date_hour'), ['class' => 'selectpicker form-control col-md-1', 'title' => trans('common.hour')]) }}
+                                                    {{ Form::select('preferred_pickup_date_min', ['00' => '00', '15' => '15', '30' => '30', '45' => '45'], old('preferred_pickup_date_min'), ['class' => 'selectpicker form-control col-md-1', 'title' => trans('common.minute')]) }}
+                                                    {{ Form::select('preferred_pickup_date_am_pm', ['AM' => 'AM', 'PM' => 'PM'], old('preferred_pickup_date_am_pm'), ['class' => 'selectpicker form-control col-md-1', 'title' => trans('common.meridiem')]) }}
+                                                </div>
+                                                @if ($errors->has('preferred_pickup_date'))
+                                                    {!! $errors->first('preferred_pickup_date', '<small class="text-danger">:message</small>') !!}
+                                                @endif
+                                                <p class="small">@lang('pickup_request.preferred_date_pickup_note')</p>
+                                            </div>
+                                        @endif
+                                        @if($data['use_preferred_pickup_date_information'])
+                                            <div class="form-group @if($errors->has('preferred_pickup_date_information')) has-error @endif">
+                                                <label for="preferred_pickup_date_information"
+                                                       class="control-label @if(in_array('preferred_pickup_date_information',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.preferred_date_pickup')</label>
+                                                <input id="preferred_pickup_date_information"
+                                                       value="{{ old('preferred_pickup_date_information') }}"
+                                                       name="preferred_pickup_date_information"
+                                                       class="form-control">
+                                                @if ($errors->has('preferred_pickup_date_information'))
+                                                    {!! $errors->first('preferred_pickup_date_information', '<small class="text-danger">:message</small>') !!}
+                                                @endif
+                                                <p class="small">@lang('pickup_request.preferred_date_pickup_note')</p>
+                                            </div>
+                                        @endif
+
+                                        <div class="form-group @if($errors->has('is_loading_dock_present')) has-error @endif">
+                                            {{ Form::label('is_loading_dock_present', trans('pickup_request.is_loading_dock_present'), ['class' => 'col-sm-8 control-label']) }}
+                                            <div class="col-sm-4">
+                                                <label class="radio-inline">
+                                                    {{ Form::radio('is_loading_dock_present', 1, old('is_loading_dock_present')) }}
+                                                    @lang('common.yes')
+                                                </label>
+                                                <label class="radio-inline">
+                                                    {{ Form::radio('is_loading_dock_present', 0, !old('is_loading_dock_present')) }}
+                                                    @lang('common.no')
+                                                </label>
+                                            </div>
+                                            @if ($errors->has('is_loading_dock_present'))
+                                                {!! $errors->first('is_loading_dock_present', '<small class="text-danger">:message</small>') !!}
+                                            @endif
+                                        </div>
+
+                                        <div class="form-group @if($errors->has('dock_appointment_required')) has-error @endif">
+                                            {{ Form::label('dock_appointment_required', trans('pickup_request.dock_appointment_required'), ['class' => 'col-sm-8 control-label']) }}
+                                            <div class="col-sm-4">
+                                                <label class="radio-inline">
+                                                    {{ Form::radio('dock_appointment_required', 1, old('dock_appointment_required')) }}
+                                                    @lang('common.yes')
+                                                </label>
+                                                <label class="radio-inline">
+                                                    {{ Form::radio('dock_appointment_required', 0, !old('dock_appointment_required')) }}
+                                                    @lang('common.no')
+                                                </label>
+                                            </div>
+                                            @if ($errors->has('dock_appointment_required'))
+                                                {!! $errors->first('dock_appointment_required', '<small class="text-danger">:message</small>') !!}
+                                            @endif
+                                        </div>
+
+                                        <div class="form-group @if($errors->has('units_located_near_dock')) has-error @endif">
+                                            {{ Form::label('units_located_near_dock', trans('pickup_request.units_located_near_dock'), ['class' => 'col-sm-8 control-label']) }}
+                                            <div class="col-sm-4">
+                                                <label class="radio-inline">
+                                                    {{ Form::radio('units_located_near_dock', 1, old('units_located_near_dock')) }}
+                                                    @lang('common.yes')
+                                                </label>
+                                                <label class="radio-inline">
+                                                    {{ Form::radio('units_located_near_dock', 0, !old('units_located_near_dock')) }}
+                                                    @lang('common.no')
+                                                </label>
+                                            </div>
+                                            @if ($errors->has('units_located_near_dock'))
+                                                {!! $errors->first('units_located_near_dock', '<small class="text-danger">:message</small>') !!}
+                                            @endif
+                                        </div>
+
+                                        <div class="form-group @if($errors->has('units_on_single_floor')) has-error @endif">
+                                            {{ Form::label('units_on_single_floor', trans('pickup_request.units_on_single_floor'), ['class' => 'col-sm-8 control-label']) }}
+                                            <div class="col-sm-4">
+                                                <label class="radio-inline">
+                                                    {{ Form::radio('units_on_single_floor', 1, old('units_on_single_floor')) }}
+                                                    @lang('common.yes')
+                                                </label>
+                                                <label class="radio-inline">
+                                                    {{ Form::radio('units_on_single_floor', 0, !old('units_on_single_floor')) }}
+                                                    @lang('common.no')
+                                                </label>
+                                            </div>
+                                            @if ($errors->has('units_on_single_floor'))
+                                                {!! $errors->first('units_on_single_floor', '<small class="text-danger">:message</small>') !!}
+                                            @endif
+                                        </div>
+
+                                        <div class="form-group @if($errors->has('assets_need_packaging')) has-error @endif">
+                                            {{ Form::label('assets_need_packaging', trans('pickup_request.assets_need_packaging'), ['class' => 'col-sm-8 control-label']) }}
+                                            <div class="col-sm-4">
+                                                <label class="radio-inline">
+                                                    {{ Form::radio('assets_need_packaging', 1, old('assets_need_packaging')) }}
+                                                    @lang('common.yes')
+                                                </label>
+                                                <label class="radio-inline">
+                                                    {{ Form::radio('assets_need_packaging', 0, !old('assets_need_packaging')) }}
+                                                    @lang('common.no')
+                                                </label>
+                                            </div>
+                                            @if ($errors->has('assets_need_packaging'))
+                                                {!! $errors->first('assets_need_packaging', '<small class="text-danger">:message</small>') !!}
+                                            @endif
+                                        </div>
+
+                                        @if($data['use_lift_gate'])
+                                            <div class="form-group @if($errors->has('is_lift_gate_needed')) has-error @endif">
+                                                {{ Form::label('is_lift_gate_needed', trans('pickup_request.lift_gate_needed'), ['class' => 'col-sm-8 control-label']) }}
+                                                <div class="col-sm-4">
+                                                    <label class="radio-inline">
+                                                        {{ Form::radio('is_lift_gate_needed', 1, old('is_lift_gate_needed')) }}
+                                                        @lang('common.yes')
+                                                    </label>
+                                                    <label class="radio-inline">
+                                                        {{ Form::radio('is_lift_gate_needed', 0, !old('is_lift_gate_needed')) }}
+                                                        @lang('common.no')
+                                                    </label>
+                                                </div>
+                                                @if ($errors->has('is_lift_gate_needed'))
+                                                    {!! $errors->first('is_lift_gate_needed', '<small class="text-danger">:message</small>') !!}
+                                                @endif
+                                            </div>
+                                        @endif
+
+                                        @if($data['use_hardware_on_skids'])
+                                            <div class="form-group @if($errors->has('hardware_on_skids')) has-error @endif">
+                                                {{ Form::label('hardware_on_skids', trans('pickup_request.hardware_on_skids'), ['class' => 'col-sm-8 control-label']) }}
+                                                <div class="col-sm-4">
+                                                    <label class="radio-inline">
+                                                        {{ Form::radio('hardware_on_skids', 1, old('hardware_on_skids')) }}
+                                                        @lang('common.yes')
+                                                    </label>
+                                                    <label class="radio-inline">
+                                                        {{ Form::radio('hardware_on_skids', 0, !old('hardware_on_skids')) }}
+                                                        @lang('common.no')
+                                                    </label>
+                                                </div>
+                                                @if ($errors->has('hardware_on_skids'))
+                                                    {!! $errors->first('hardware_on_skids', '<small class="text-danger">:message</small>') !!}
+                                                @endif
+                                            </div>
+
+                                            <div class="form-group form-inline @if($errors->has('num_skids')) has-error @endif">
+                                                <label for="num_skids" class="col-sm-9 control-label"><i class="fa fa-arrow-up"></i> @lang('pickup_request.how_many_skids')</label>
+                                                <div class="col-sm-3">
+                                                    <input id="num_skids" type="text" class="form-control"
+                                                           name="num_skids"
+                                                           value="{{ old('num_skids', 0) }}">
+                                                </div>
+                                                @if ($errors->has('num_skids'))
+                                                    {!! $errors->first('num_skids', '<small class="text-danger">:message</small>') !!}
+                                                @endif
+                                            </div>
+                                        @endif
+
+                                    </div>
+                                    <div class="col-md-3">
+                                    </div>
+                                </div>
+                            </div>
+
                             <hr>
 
                             @if($data['use_reference_number'])
@@ -615,187 +796,7 @@
 
                             <div class="container-fluid">
                                 <div class="row">
-                                    <div class="col-md-3">
-                                    </div>
-                                    <div class="col-md-6">
-                                        @if($data['use_preferred_pickup_date'])
-                                            <div class="form-group @if($errors->has('preferred_pickup_date')) has-error @endif">
-                                                <label for="preferred_pickup_date"
-                                                       class="control-label">@lang('pickup_request.preferred_date_pickup')</label>
-
-                                                <div class="form-inline">
-                                                    <input id="preferred_pickup_date" name="preferred_pickup_date" value="{{ old('preferred_pickup_date') }}" class="form-control" data-provide="datepicker">
-                                                    {{ Form::select('preferred_pickup_date_hour', ['00' => '00', '01' => '01', '02' => '02', '03' => '03', '04' => '04', '05' => '05', '06' => '06', '07' => '07', '08' => '08', '09' => '09', '10' => '10', '11' => '11', '12' => '12'], old('preferred_pickup_date_hour'), ['class' => 'selectpicker form-control col-md-1', 'title' => trans('common.hour')]) }}
-                                                    {{ Form::select('preferred_pickup_date_min', ['00' => '00', '15' => '15', '30' => '30', '45' => '45'], old('preferred_pickup_date_min'), ['class' => 'selectpicker form-control col-md-1', 'title' => trans('common.minute')]) }}
-                                                    {{ Form::select('preferred_pickup_date_am_pm', ['AM' => 'AM', 'PM' => 'PM'], old('preferred_pickup_date_am_pm'), ['class' => 'selectpicker form-control col-md-1', 'title' => trans('common.meridiem')]) }}
-                                                </div>
-                                                @if ($errors->has('preferred_pickup_date'))
-                                                    {!! $errors->first('preferred_pickup_date', '<small class="text-danger">:message</small>') !!}
-                                                @endif
-                                                <p class="small">@lang('pickup_request.preferred_date_pickup_note')</p>
-                                            </div>
-                                        @endif
-                                        @if($data['use_preferred_pickup_date_information'])
-                                            <div class="form-group @if($errors->has('preferred_pickup_date_information')) has-error @endif">
-                                                <label for="preferred_pickup_date_information"
-                                                       class="control-label @if(in_array('preferred_pickup_date_information',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.preferred_date_pickup')</label>
-                                                <input id="preferred_pickup_date_information"
-                                                       value="{{ old('preferred_pickup_date_information') }}"
-                                                       name="preferred_pickup_date_information"
-                                                       class="form-control">
-                                                @if ($errors->has('preferred_pickup_date_information'))
-                                                    {!! $errors->first('preferred_pickup_date_information', '<small class="text-danger">:message</small>') !!}
-                                                @endif
-                                                <p class="small">@lang('pickup_request.preferred_date_pickup_note')</p>
-                                            </div>
-                                        @endif
-
-                                        <div class="form-group @if($errors->has('units_located_near_dock')) has-error @endif">
-                                            {{ Form::label('units_located_near_dock', trans('pickup_request.units_located_near_dock'), ['class' => 'col-sm-8 control-label']) }}
-                                            <div class="col-sm-4">
-                                                <label class="radio-inline">
-                                                    {{ Form::radio('units_located_near_dock', 1, old('units_located_near_dock')) }}
-                                                    @lang('common.yes')
-                                                </label>
-                                                <label class="radio-inline">
-                                                    {{ Form::radio('units_located_near_dock', 0, !old('units_located_near_dock')) }}
-                                                    @lang('common.no')
-                                                </label>
-                                            </div>
-                                            @if ($errors->has('units_located_near_dock'))
-                                                {!! $errors->first('units_located_near_dock', '<small class="text-danger">:message</small>') !!}
-                                            @endif
-                                        </div>
-
-                                        <div class="form-group @if($errors->has('units_on_single_floor')) has-error @endif">
-                                            {{ Form::label('units_on_single_floor', trans('pickup_request.units_on_single_floor'), ['class' => 'col-sm-8 control-label']) }}
-                                            <div class="col-sm-4">
-                                                <label class="radio-inline">
-                                                    {{ Form::radio('units_on_single_floor', 1, old('units_on_single_floor')) }}
-                                                    @lang('common.yes')
-                                                </label>
-                                                <label class="radio-inline">
-                                                    {{ Form::radio('units_on_single_floor', 0, !old('units_on_single_floor')) }}
-                                                    @lang('common.no')
-                                                </label>
-                                            </div>
-                                            @if ($errors->has('units_on_single_floor'))
-                                                {!! $errors->first('units_on_single_floor', '<small class="text-danger">:message</small>') !!}
-                                            @endif
-                                        </div>
-
-                                        <div class="form-group @if($errors->has('is_loading_dock_present')) has-error @endif">
-                                            {{ Form::label('is_loading_dock_present', trans('pickup_request.is_loading_dock_present'), ['class' => 'col-sm-8 control-label']) }}
-                                            <div class="col-sm-4">
-                                                <label class="radio-inline">
-                                                    {{ Form::radio('is_loading_dock_present', 1, old('is_loading_dock_present')) }}
-                                                    @lang('common.yes')
-                                                </label>
-                                                <label class="radio-inline">
-                                                    {{ Form::radio('is_loading_dock_present', 0, !old('is_loading_dock_present')) }}
-                                                    @lang('common.no')
-                                                </label>
-                                            </div>
-                                            @if ($errors->has('is_loading_dock_present'))
-                                                {!! $errors->first('is_loading_dock_present', '<small class="text-danger">:message</small>') !!}
-                                            @endif
-                                        </div>
-
-                                        <div class="form-group @if($errors->has('dock_appointment_required')) has-error @endif">
-                                            {{ Form::label('dock_appointment_required', trans('pickup_request.dock_appointment_required'), ['class' => 'col-sm-8 control-label']) }}
-                                            <div class="col-sm-4">
-                                                <label class="radio-inline">
-                                                    {{ Form::radio('dock_appointment_required', 1, old('dock_appointment_required')) }}
-                                                    @lang('common.yes')
-                                                </label>
-                                                <label class="radio-inline">
-                                                    {{ Form::radio('dock_appointment_required', 0, !old('dock_appointment_required')) }}
-                                                    @lang('common.no')
-                                                </label>
-                                            </div>
-                                            @if ($errors->has('dock_appointment_required'))
-                                                {!! $errors->first('dock_appointment_required', '<small class="text-danger">:message</small>') !!}
-                                            @endif
-                                        </div>
-
-                                        <div class="form-group @if($errors->has('assets_need_packaging')) has-error @endif">
-                                            {{ Form::label('assets_need_packaging', trans('pickup_request.assets_need_packaging'), ['class' => 'col-sm-8 control-label']) }}
-                                            <div class="col-sm-4">
-                                                <label class="radio-inline">
-                                                    {{ Form::radio('assets_need_packaging', 1, old('assets_need_packaging')) }}
-                                                    @lang('common.yes')
-                                                </label>
-                                                <label class="radio-inline">
-                                                    {{ Form::radio('assets_need_packaging', 0, !old('assets_need_packaging')) }}
-                                                    @lang('common.no')
-                                                </label>
-                                            </div>
-                                            @if ($errors->has('assets_need_packaging'))
-                                                {!! $errors->first('assets_need_packaging', '<small class="text-danger">:message</small>') !!}
-                                            @endif
-                                        </div>
-
-                                        @if($data['use_lift_gate'])
-                                            <div class="form-group @if($errors->has('is_lift_gate_needed')) has-error @endif">
-                                                {{ Form::label('is_lift_gate_needed', trans('pickup_request.lift_gate_needed'), ['class' => 'col-sm-8 control-label']) }}
-                                                <div class="col-sm-4">
-                                                    <label class="radio-inline">
-                                                        {{ Form::radio('is_lift_gate_needed', 1, old('is_lift_gate_needed')) }}
-                                                        @lang('common.yes')
-                                                    </label>
-                                                    <label class="radio-inline">
-                                                        {{ Form::radio('is_lift_gate_needed', 0, !old('is_lift_gate_needed')) }}
-                                                        @lang('common.no')
-                                                    </label>
-                                                </div>
-                                                @if ($errors->has('is_lift_gate_needed'))
-                                                    {!! $errors->first('is_lift_gate_needed', '<small class="text-danger">:message</small>') !!}
-                                                @endif
-                                            </div>
-                                        @endif
-
-                                        @if($data['use_hardware_on_skids'])
-                                            <div class="form-group @if($errors->has('hardware_on_skids')) has-error @endif">
-                                                {{ Form::label('hardware_on_skids', trans('pickup_request.hardware_on_skids'), ['class' => 'col-sm-8 control-label']) }}
-                                                <div class="col-sm-4">
-                                                    <label class="radio-inline">
-                                                        {{ Form::radio('hardware_on_skids', 1, old('hardware_on_skids')) }}
-                                                        @lang('common.yes')
-                                                    </label>
-                                                    <label class="radio-inline">
-                                                        {{ Form::radio('hardware_on_skids', 0, !old('hardware_on_skids')) }}
-                                                        @lang('common.no')
-                                                    </label>
-                                                </div>
-                                                @if ($errors->has('hardware_on_skids'))
-                                                    {!! $errors->first('hardware_on_skids', '<small class="text-danger">:message</small>') !!}
-                                                @endif
-                                            </div>
-
-                                            <div class="form-group form-inline @if($errors->has('num_skids')) has-error @endif">
-                                                <label for="num_skids" class="col-sm-9 control-label"><i class="fa fa-arrow-up"></i> @lang('pickup_request.how_many_skids')</label>
-                                                <div class="col-sm-3">
-                                                    <input id="num_skids" type="text" class="form-control"
-                                                           name="num_skids"
-                                                           value="{{ old('num_skids', 0) }}">
-                                                </div>
-                                                @if ($errors->has('num_skids'))
-                                                    {!! $errors->first('num_skids', '<small class="text-danger">:message</small>') !!}
-                                                @endif
-                                            </div>
-                                        @endif
-
-                                    </div>
-                                    <div class="col-md-3">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <hr>
-
-                            <div class="container-fluid">
-                                <div class="row">
-                                    <p class="bold text-center">@lang('pickup_request.building_manager_info')</p>
+                                    <p class="bold">@lang('pickup_request.building_manager_info')</p>
 
                                     <div class="col-md-5">
                                         {{--Left column--}}

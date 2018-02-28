@@ -72,6 +72,55 @@
 
     <br><hr><br>
 
+    <table>
+        @if($pickupRequestData['use_preferred_pickup_date'])
+        <tr>
+            <td>@lang('pickup_request.preferred_date_pickup')</td>
+            <td>@if($pickupRequest->preferred_pickup_date) <span class="bold">{{ $pickupRequest->preferred_pickup_date }}</span> @endif</td>
+        </tr>
+        @endif
+        @if($pickupRequestData['use_preferred_pickup_date_information'])
+            <tr>
+                <td>@lang('pickup_request.preferred_date_pickup')</td>
+                <td>@if($pickupRequest->preferred_pickup_date_information) <span class="bold">{{ $pickupRequest->preferred_pickup_date_information }}</span> @endif</td>
+            </tr>
+        @endif
+        <tr>
+            <td>@lang('pickup_request.is_loading_dock_present')</td>
+            <td><span class="bold">{{ $pickupRequest->is_loading_dock_present ? 'Yes' : 'No' }}</span></td>
+        </tr>
+        <tr>
+            <td>@lang('pickup_request.dock_appointment_required')</td>
+            <td><span class="bold">{{ $pickupRequest->dock_appointment_required ? 'Yes' : 'No' }}</span></td>
+        </tr>
+        <tr>
+            <td>@lang('pickup_request.units_located_near_dock')</td>
+            <td><span class="bold">{{ $pickupRequest->units_located_near_dock ? 'Yes' : 'No' }}</span></td>
+        </tr>
+        <tr>
+            <td>@lang('pickup_request.units_on_single_floor')</td>
+            <td><span class="bold">{{ $pickupRequest->units_on_single_floor ? 'Yes' : 'No' }}</span></td>
+        </tr>
+        <tr>
+            <td>@lang('pickup_request.assets_need_packaging')</td>
+            <td><span class="bold">{{ $pickupRequest->assets_need_packaging ? 'Yes' : 'No' }}</span></td>
+        </tr>
+        @if($pickupRequestData['use_hardware_on_skids'])
+            <tr>
+                <td>@lang('pickup_request.hardware_on_skids')</td>
+                <td><span class="bold">{{ $pickupRequest->hardware_on_skids ? 'Yes' : 'No' }}</span></td>
+            </tr>
+            @if($pickupRequest->hardware_on_skids)
+            <tr>
+                <td><span style="margin-left:30px">@lang('pickup_request.how_many_skids')</span></td>
+                <td>@if($pickupRequest->num_skids) <span class="bold">{{ $pickupRequest->num_skids }}</span> @endif</td>
+            </tr>
+            @endif
+        @endif
+    </table>
+
+    <br><hr><br>
+
     <h4>@lang('pickup_request.product_type_quantities'):</h4>
     <br>
 
@@ -198,55 +247,6 @@
                 </table>
             </td>
         </tr>
-    </table>
-
-    <br><hr><br>
-
-    <table>
-        @if($pickupRequestData['use_preferred_pickup_date'])
-        <tr>
-            <td>@lang('pickup_request.preferred_date_pickup')</td>
-            <td>@if($pickupRequest->preferred_pickup_date) <span class="bold">{{ $pickupRequest->preferred_pickup_date }}</span> @endif</td>
-        </tr>
-        @endif
-        @if($pickupRequestData['use_preferred_pickup_date_information'])
-            <tr>
-                <td>@lang('pickup_request.preferred_date_pickup')</td>
-                <td>@if($pickupRequest->preferred_pickup_date_information) <span class="bold">{{ $pickupRequest->preferred_pickup_date_information }}</span> @endif</td>
-            </tr>
-        @endif
-        <tr>
-            <td>@lang('pickup_request.units_located_near_dock')</td>
-            <td><span class="bold">{{ $pickupRequest->units_located_near_dock ? 'Yes' : 'No' }}</span></td>
-        </tr>
-        <tr>
-            <td>@lang('pickup_request.units_on_single_floor')</td>
-            <td><span class="bold">{{ $pickupRequest->units_on_single_floor ? 'Yes' : 'No' }}</span></td>
-        </tr>
-        <tr>
-            <td>@lang('pickup_request.is_loading_dock_present')</td>
-            <td><span class="bold">{{ $pickupRequest->is_loading_dock_present ? 'Yes' : 'No' }}</span></td>
-        </tr>
-        <tr>
-            <td>@lang('pickup_request.dock_appointment_required')</td>
-            <td><span class="bold">{{ $pickupRequest->dock_appointment_required ? 'Yes' : 'No' }}</span></td>
-        </tr>
-        <tr>
-            <td>@lang('pickup_request.assets_need_packaging')</td>
-            <td><span class="bold">{{ $pickupRequest->assets_need_packaging ? 'Yes' : 'No' }}</span></td>
-        </tr>
-        @if($pickupRequestData['use_hardware_on_skids'])
-            <tr>
-                <td>@lang('pickup_request.hardware_on_skids')</td>
-                <td><span class="bold">{{ $pickupRequest->hardware_on_skids ? 'Yes' : 'No' }}</span></td>
-            </tr>
-            @if($pickupRequest->hardware_on_skids)
-            <tr>
-                <td><span style="margin-left:30px">@lang('pickup_request.how_many_skids')</span></td>
-                <td>@if($pickupRequest->num_skids) <span class="bold">{{ $pickupRequest->num_skids }}</span> @endif</td>
-            </tr>
-            @endif
-        @endif
     </table>
 
     @if($pickupRequest->bm_company_name && $pickupRequest->bm_contact_name)

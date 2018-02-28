@@ -24,7 +24,7 @@ return [
             'remove_from_site' => 'Remove from Site',
             'pages' => 'Pages',
             'files' => 'Files',
-            'pickup_request' => 'Pickup Request'
+            'pickup_request_form' => 'Pickup Request Form'
         ],
         'footer' => [
             'terms_and_notices' => 'Terms and Notices',

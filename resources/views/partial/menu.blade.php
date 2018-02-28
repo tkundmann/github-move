@@ -16,7 +16,7 @@
             @if (isset($menu))
                 <ul class="nav navbar-nav">
                     @foreach ($menu as $menuItem)
-                        <li @if ($menuItem['active'])class="active"@endif><a href="{{ $menuItem['url'] }}"><i class="fa fa-btn {{ $menuItem['icon'] }}"></i>@lang($menuItem['label'])</a></li>
+                        <li @if ($menuItem['active'])class="active"@endif><a @if (isset($menuItem['url']))href="{{ $menuItem['url'] }}"@endif><i class="fa fa-btn {{ $menuItem['icon'] }}"></i>@lang($menuItem['label'])</a></li>
                     @endforeach
                 </ul>
             @endif

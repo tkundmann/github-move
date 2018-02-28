@@ -9,6 +9,7 @@ use App\Helpers\ContextHelper;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Input;
 
 class MenuComposer
 {
@@ -114,9 +115,9 @@ class MenuComposer
                     // array_push($this->menu, ['url' => route('pickupRequest'), 'label' => 'main.layout.menu.pickup_request', 'icon' => 'fa-envelope-o', 'active' => in_array($this->currentRoute->getName(), ['pickupRequest'])]);
                 }
             }
-            else if (($this->currentRoute->getName() == 'pickupRequest') || ($this->currentRoute->getName() == 'pickupRequest.login')) {
+            else if (($this->currentRoute->getName() == 'pickupRequest')) {
                 if ($site->hasFeature(Feature::HAS_PICKUP_REQUEST)) {
-                    array_push($this->menu, ['url' => route('pickupRequest'), 'label' => 'main.layout.menu.pickup_request', 'icon' => 'fa-envelope-o', 'active' => in_array($this->currentRoute->getName(), ['pickupRequest', 'pickupRequest.login'])]);
+                    array_push($this->menu, ['label' => 'main.layout.menu.pickup_request_form', 'icon' => 'fa-envelope-o', 'active' => ($this->currentRoute->getName() == 'pickupRequest')]);
                 }
             }
         }
