@@ -24,6 +24,7 @@ use Sofa\Eloquence\Mappable;
  * @property string $contactCountry
  * @property string $contactCellNumber
  * @property string $contactEmailAddress
+ * @property boolean $hasDock
  * @property \Carbon\Carbon $createdAt
  * @property \Carbon\Carbon $updatedAt
  * @property-read \App\Data\Models\Site $site
@@ -55,6 +56,7 @@ class PickupRequestAddress extends Model
         'contactCountry' => 'contact_country',
         'contactCellNumber' => 'contact_cell_number',
         'contactEmailAddress' => 'contact_email_address',
+        'hasDock' => 'has_dock',
         'createdAt' => 'created_at',
         'updatedAt' => 'updated_at',
     ];
