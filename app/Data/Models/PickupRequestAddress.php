@@ -25,6 +25,8 @@ use Sofa\Eloquence\Mappable;
  * @property string $contactCellNumber
  * @property string $contactEmailAddress
  * @property boolean $hasDock
+ * @property boolean $dockAppointmentRequired
+ * @property boolean $unitsLocatedNearDock
  * @property \Carbon\Carbon $createdAt
  * @property \Carbon\Carbon $updatedAt
  * @property-read \App\Data\Models\Site $site
@@ -43,22 +45,24 @@ class PickupRequestAddress extends Model
     protected $maps = [
         // 'id' => 'id'
         // 'name' => 'name'
-        'siteId' => 'site_id',
-        'companyName' => 'company_name',
-        'companyDivision' => 'company_division',
-        'contactName' => 'contact_name',
-        'contactPhoneNumber' => 'contact_phone_number',
-        'contactAddress1' => 'contact_address_1',
-        'contactAddress2' => 'contact_address_2',
-        'contactCity' => 'contact_city',
-        'contactState' => 'contact_state',
-        'contactZip' => 'contact_zip',
-        'contactCountry' => 'contact_country',
-        'contactCellNumber' => 'contact_cell_number',
-        'contactEmailAddress' => 'contact_email_address',
-        'hasDock' => 'has_dock',
-        'createdAt' => 'created_at',
-        'updatedAt' => 'updated_at',
+        'siteId'                  => 'site_id',
+        'companyName'             => 'company_name',
+        'companyDivision'         => 'company_division',
+        'contactName'             => 'contact_name',
+        'contactPhoneNumber'      => 'contact_phone_number',
+        'contactAddress1'         => 'contact_address_1',
+        'contactAddress2'         => 'contact_address_2',
+        'contactCity'             => 'contact_city',
+        'contactState'            => 'contact_state',
+        'contactZip'              => 'contact_zip',
+        'contactCountry'          => 'contact_country',
+        'contactCellNumber'       => 'contact_cell_number',
+        'contactEmailAddress'     => 'contact_email_address',
+        'hasDock'                 => 'has_dock',
+        'dockAppointmentRequired' => 'dock_appointment_required',
+        'unitsLocatedNearDock'    => 'units_located_near_dock',
+        'createdAt'               => 'created_at',
+        'updatedAt'               => 'updated_at',
     ];
 
     public function site() {
