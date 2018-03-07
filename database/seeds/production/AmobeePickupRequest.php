@@ -63,5 +63,6 @@ class AmobeePickupRequest extends Seeder
 		);
 
 		$site->features()->updateExistingPivot($featureHasPickupRequest->id, ['data' => serialize($pickupRequestConfiguration)]);
+
 	}
 }
