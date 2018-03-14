@@ -49,6 +49,8 @@ return [
     'reference_number_note'        => 'If you do not have a :reference_number_label, please enter "N/A" in this field.',
 
     'provide_piece_counts'         => 'Please provide piece counts for what will be picked up at your facility:',
+    'remove_all_passwords'         => '***All passwords must be removed from all devices prior to shipping***',
+
     'internal_hard_drives'         => 'Individual Hard Drive(s)',
     'desktop'                      => 'Desktop',
     'laptop'                       => 'Laptop',

@@ -504,7 +504,11 @@
                                     <div class="col-md-3">
                                     </div>
                                     <div class="col-md-6">
-                                        <p class="bold text-center">@lang('pickup_request.provide_piece_counts')</p>
+                                        <p class="bold text-center">
+                                            @lang('pickup_request.provide_piece_counts')
+                                            <br/>
+                                            <span class="text-danger">@lang('pickup_request.remove_all_passwords')</span>
+                                        </p>
                                         @if($data['use_alternative_piece_count_form'])
                                             <div>
                                                 <div class="form-group @if($errors->has('num_internal_hard_drives')) has-error @endif">
