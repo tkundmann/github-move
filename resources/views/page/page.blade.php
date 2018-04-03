@@ -47,7 +47,7 @@
                                     </td>
                                     @if ($hasFilesWithDate)
                                     <td>
-                                        <span>{{ $file->fileDate ? $file->fileDate->format('m/Y') : '-'}}</span>
+                                        <span>{{ $file->fileDate ? $file->fileDate->format('m/d/Y') : '-'}}</span>
                                     </td>
                                     @endif
                                 </tr>
