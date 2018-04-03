@@ -52,7 +52,7 @@
                                     <td class="pointer" onclick="window.document.location='{{ route('admin.page.file.edit', ['fileId' => $file->id, 'pageId' => $page->id]) }}';">{{ $file->shipment ? $file->shipment->lotNumber : '-' }}</td>
                                     @endif
                                     @if ($page->type == 'Standard')
-                                    <td class="pointer" onclick="window.document.location='{{ route('admin.page.file.edit', ['fileId' => $file->id, 'pageId' => $page->id]) }}';">{{ $file->fileDate ? $file->fileDate->format('m/Y') : '-' }}</td>
+                                    <td class="pointer" onclick="window.document.location='{{ route('admin.page.file.edit', ['fileId' => $file->id, 'pageId' => $page->id]) }}';">{{ $file->fileDate ? $file->fileDate->format('m/d/Y') : '-' }}</td>
                                     @endif
                                     <td class="text-center">
                                         <a href="{{ route('admin.page.file.remove', ['fileId' => $file->id, 'pageId' => $page->id]) }}"
