@@ -78,7 +78,7 @@ class PickupRequestController extends ContextController
 
         if ($this->site->hasFeature(Feature::PICKUP_REQUEST_ADDRESS_BOOK)) {
             $addressBook = $this->site->pickupRequestAddresses->pluck('name', 'id')->toArray();
-            array_multisort(array_map('strtolower', $addressBook), $addressBook);
+            asort($addressBook, SORT_STRING);
         }
 
         return view('pickupRequest.pickupRequest', [
