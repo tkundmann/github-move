@@ -409,7 +409,7 @@ class PageController extends ContextController
         $file->save();
 
         if (($page->type == 'Standard') && Input::get('file_date')) {
-            $file->fileDate = Carbon::createFromFormat('m/Y' , trim(Input::get('file_date')));
+            $file->fileDate = Carbon::createFromFormat('m/d/Y' , trim(Input::get('file_date')));
         }
 
         if (($page->type == 'Standard') && $page->lotNumberRestricted) {

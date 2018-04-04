@@ -43,8 +43,8 @@
                             <div class="form-group{{----}}@if($errors->has('file_date')) has-error @endif">
                                 {{ Form::label('file_date', trans('admin.page.file.edit.file_date'), ['class' => 'col-sm-4 control-label colon-after']) }}
                                 <div class="col-sm-6">
-                                    <input id="file_date" name="file_date" data-provide="datepicker" data-date-clear-btn="true" data-date-min-view-mode="months" data-date-autoclose="true" data-date-format="mm/yyyy"
-                                           type="text" class="form-control" placeholder="@lang('common.select')" value="{{ Input::get('vendor_clients') ? Input::get('file_date') : (old('file_date') ? old('file_date') : ($file->fileDate ? $file->fileDate->format('m/Y') : null )) }}"/>
+                                    <input id="file_date" name="file_date" data-provide="datepicker" data-date-clear-btn="true" data-date-autoclose="true" data-date-format="mm/dd/yyyy"
+                                           type="text" class="form-control" placeholder="@lang('common.select')" value="{{ Input::get('vendor_clients') ? Input::get('file_date') : (old('file_date') ? old('file_date') : ($file->fileDate ? $file->fileDate->format('m/d/Y') : null )) }}"/>
                                     @if ($errors->has('file_date'))
                                         {!! $errors->first('file_date', '<small class="text-danger">:message</small>') !!}
                                     @endif
