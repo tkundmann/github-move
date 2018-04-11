@@ -33,7 +33,7 @@
                                     <td>
                                         <i class="fa fa-file-o margin-right-sm"></i>
                                         @if ($fileAvailability[$file->id])
-                                            <a href="{{ $file->url }}" target="_blank">{{ str_limit($file->filename, $limit) }}</a>
+                                            <a href="{{ $file->url . '?v=' . $file->updatedAt->format('Ymdhis')}}" target="_blank">{{ str_limit($file->filename, $limit) }}</a>
                                         @else
                                             <i class="fa fa-exclamation-triangle margin-right-sm" title="@lang('page.file_not_found')"></i>
                                             <span>{{ str_limit($file->filename, $limit) }}</span>

@@ -60,7 +60,7 @@
                                            data-file="{{ $file->name }}">
                                             <i class="fa fa-btn fa-trash"></i>@lang('common.remove')
                                         </a>
-                                        <a href="{{ $file->url }}" target="_blank"
+                                        <a href="{{ $file->url  . '?v=' . $file->updatedAt->format('Ymdhis')}}" target="_blank"
                                            class="btn btn-primary btn-xs">
                                             <i class="fa fa-btn fa-download"></i>@lang('common.download')
                                         </a>
