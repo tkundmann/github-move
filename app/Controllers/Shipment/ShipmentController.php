@@ -163,18 +163,18 @@ class ShipmentController extends ContextController
         $this->modelSearchResultFields = $this->site->hasFeature(Feature::SHIPMENT_CUSTOM_SEARCH_RESULT_FIELDS) ? $this->site->getFeature(Feature::SHIPMENT_CUSTOM_SEARCH_RESULT_FIELDS)->pivot->data : $this->defaultSearchResultFields;
         $this->modelExportFields = $this->site->hasFeature(Feature::SHIPMENT_CUSTOM_EXPORT_FIELDS) ? $this->site->getFeature(Feature::SHIPMENT_CUSTOM_EXPORT_FIELDS)->pivot->data : $this->defaultExportFields;
 
+        $this->vendorClients = $this->site->vendorClients->lists('name', 'name')->toArray();
+        if (Auth::user() && !Auth::user()->hasRole(Role::SUPERUSER && $this->site->hasFeature(Feature::VENDOR_CLIENT_CODE_ACCESS_RESTRICTED))) {
             $userRestrictedVendorClients = Auth::user()->vendorClients()->lists('name', 'name')->toArray();
-        if (Auth::user() && ($this->site->hasFeature(Feature::VENDOR_CLIENT_CODE_ACCESS_RESTRICTED) && count($userRestrictedVendorClients) > 0) && !Auth::user()->hasRole(Role::SUPERUSER)) {
-            $this->vendorClients = $userRestrictedVendorClients;
-        }
-        else {
-            $this->vendorClients = $this->site->vendorClients->lists('name', 'name')->toArray();
+            if (count($userRestrictedVendorClients) > 0) {
+                $this->vendorClients = $userRestrictedVendorClients;
+            }
         }
 
         // Sort Vendor Client Array
         asort($this->vendorClients);
 
-        if (Auth::user() && $this->site->hasFeature(Feature::LOT_NUMBER_PREFIX_ACCESS_RESTRICTED) && !Auth::user()->hasRole(Role::SUPERUSER)) {
+        if (Auth::user() && !Auth::user()->hasRole(Role::SUPERUSER) && $this->site->hasFeature(Feature::LOT_NUMBER_PREFIX_ACCESS_RESTRICTED)) {
             $this->lotNumberPrefixes = Auth::user()->lotNumbers()->lists('prefix')->toArray();
             asort($this->lotNumberPrefixes);
         }
