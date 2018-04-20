@@ -248,28 +248,16 @@ class AssetController extends ContextController
         $this->modelSearchResultFields = $this->site->hasFeature(Feature::ASSET_CUSTOM_SEARCH_RESULT_FIELDS) ? $this->site->getFeature(Feature::ASSET_CUSTOM_SEARCH_RESULT_FIELDS)->pivot->data : $this->defaultSearchResultFields;
         $this->modelExportFields = $this->site->hasFeature(Feature::ASSET_CUSTOM_EXPORT_FIELDS) ? $this->site->getFeature(Feature::ASSET_CUSTOM_EXPORT_FIELDS)->pivot->data : $this->defaultExportFields;
 
-
+        // Initialize the list of searchable Vendor Clients to all those applicable to the site.
+        $this->vendorClients = $this->site->vendorClients->lists('name', 'name')->toArray();
         if (Auth::user() && !Auth::user()->hasRole(Role::SUPERUSER) && $this->site->hasFeature(Feature::VENDOR_CLIENT_CODE_ACCESS_RESTRICTED)) {
             $userRestrictedVendorClients = Auth::user()->vendorClients()->lists('name', 'name')->toArray();
             if (count($userRestrictedVendorClients) > 0) {
+                // The user has restricted vendor client access.  Reset the list of
+                // searchable vendor clients to only those to which the client has access.
                 $this->vendorClients = $userRestrictedVendorClients;
             }
         }
-        else {
-            $this->vendorClients = $this->site->vendorClients->lists('name', 'name')->toArray();
-        }
-
-        $userRestrictedVendorClients = array();
-        if (Auth::user()) {
-            $userRestrictedVendorClients = Auth::user()->vendorClients()->lists('name', 'name')->toArray();
-        }
-        if (Auth::user() && !Auth::user()->hasRole(Role::SUPERUSER) && ($this->site->hasFeature(Feature::VENDOR_CLIENT_CODE_ACCESS_RESTRICTED) && count($userRestrictedVendorClients) > 0)) {
-            $this->vendorClients = $userRestrictedVendorClients;
-        }
-        else {
-            $this->vendorClients = $this->site->vendorClients->lists('name', 'name')->toArray();
-        }
-
 
         // Sort Vendor Client Array
         asort($this->vendorClients);
