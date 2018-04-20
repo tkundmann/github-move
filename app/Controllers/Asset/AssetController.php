@@ -259,6 +259,18 @@ class AssetController extends ContextController
             $this->vendorClients = $this->site->vendorClients->lists('name', 'name')->toArray();
         }
 
+        $userRestrictedVendorClients = array();
+        if (Auth::user()) {
+            $userRestrictedVendorClients = Auth::user()->vendorClients()->lists('name', 'name')->toArray();
+        }
+        if (Auth::user() && !Auth::user()->hasRole(Role::SUPERUSER) && ($this->site->hasFeature(Feature::VENDOR_CLIENT_CODE_ACCESS_RESTRICTED) && count($userRestrictedVendorClients) > 0)) {
+            $this->vendorClients = $userRestrictedVendorClients;
+        }
+        else {
+            $this->vendorClients = $this->site->vendorClients->lists('name', 'name')->toArray();
+        }
+
+
         // Sort Vendor Client Array
         asort($this->vendorClients);
 
