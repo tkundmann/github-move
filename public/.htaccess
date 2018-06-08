@@ -68,6 +68,10 @@
     RewriteCond %{REQUEST_URI} ^/principal/pickuprequest$  [NC]
     RewriteRule ^.*$  "/principal/pickup-request"          [R,NE,L]
 
+    # Quadbridge Pickup Request Form Redirects
+    RewriteCond %{REQUEST_URI} ^/quadbridge/pickuprequest$ [NC]
+    RewriteRule ^.*$  "/quadbridge/pickup-request"         [R,NE,L]
+
     # SipiDemo Pickup Request Form Redirects
     RewriteCond %{REQUEST_URI} ^/sipidemo/pickuprequest$   [NC]
     RewriteRule ^.*$  "/sipidemo/pickup-request"            [R,NE,L]
