@@ -90,6 +90,7 @@
                                     @endif
                                     <div class="row">
                                         <div class="col-md-5">
+                                                @if(count($addressBook) > 0)
                                             <div class="form-group @if($errors->has('site')) has-error @endif">
                                                 <label class="control-label colon-after">{{ $site->getFeature(Feature::PICKUP_REQUEST_ADDRESS_BOOK)->pivot->data['site_address_book_label'] }}</label>
                                                 {{ Form::select('site', $addressBook, null, ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'title' => trans('common.select')]) }}
@@ -97,9 +98,10 @@
                                                     {!! $errors->first('site', '<small class="text-danger">:message</small>') !!}
                                                 @endif
                                             </div>
+                                                @endif
                                             @if($site->getFeature(Feature::PICKUP_REQUEST_ADDRESS_BOOK)->pivot->data['allow_change'])
                                                 <div class="form-group margin-vertical-none">
-                                                    <p class="bold margin-top-md">@lang('common.or')</p>
+                                                        @if(count($addressBook) > 0)<p class="bold margin-top-md">@lang('common.or')</p>@endif
                                                     <p>{{ $site->getFeature(Feature::PICKUP_REQUEST_ADDRESS_BOOK)->pivot->data['new_site_text'] }}</p>
                                                 </div>
                                                 <div class="form-group margin-vertical-none @if($errors->has('site_name')) has-error @endif">
