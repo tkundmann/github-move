@@ -41,6 +41,7 @@ class QuadbridgePickupRequest extends Seeder
 			'use_hardware_on_skids' => true,
 			'required_fields' =>
 			array (
+				'upload_equipment_list',
 				'company_name',
 				'contact_name',
 				'contact_address_1',
