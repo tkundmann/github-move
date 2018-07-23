@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\ContextController;
+use App\Controllers\Helpers\FileUploadHelper;
 use App\Data\Constants;
 use App\Data\Models\Feature;
 use App\Data\Models\File;
@@ -21,6 +22,8 @@ class PageController extends ContextController
 {
     const RESULTS_PER_PAGE = 50;
     const STRING_LIMIT = 50;
+
+    const DO_NOT_DELETE_FILE_RECORD = false;
 
     /**
      * Create a new controller instance.
@@ -546,8 +549,29 @@ class PageController extends ContextController
 
             $file->name = trim(Input::get('name'));
 
-            if (($page->type == 'Standard') && Input::get('file_date')) {
-                $file->fileDate = Carbon::createFromFormat('m/Y' , trim(Input::get('file_date')));
+            $uploadedFile = Input::file('file');
+            if (($page->type == 'Standard') && isset($uploadedFile)) {
+
+                if (Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $file->page->site->code . '/page/' . $page->code . '/' . $file->filename)) {
+                    Storage::cloud()->delete(Constants::UPLOAD_DIRECTORY . $file->page->site->code . '/page/' . $page->code . '/' . $file->filename);
+                }
+
+                $fileName = $uploadedFile->getClientOriginalName();
+                Storage::cloud()->put(Constants::UPLOAD_DIRECTORY . $page->site->code . '/page/' . $page->code . '/' . $fileName, file_get_contents($uploadedFile));
+
+                $file->size = $uploadedFile->getSize();
+                $file->filename = $fileName;
+                $url = Storage::cloud()->url(Constants::UPLOAD_DIRECTORY . $page->site->code . '/page/' . $page->code . '/' . $fileName);
+                $file->url = $url;
+            }
+
+            if (($page->type == 'Standard')) {
+                if (Input::get('file_date')) {
+                    $file->fileDate = Carbon::createFromFormat('m/d/Y' , trim(Input::get('file_date')));
+                }
+                else {
+                    $file->fileDate = null;
+                }
             }
 
             if (($page->type == 'Standard') && $page->lotNumberRestricted) {

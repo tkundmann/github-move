@@ -216,6 +216,8 @@ return [
                 'lot_numbers_optional' => 'Optional',
                 'not_exist' => 'File does not exist.',
                 'file_saved' => 'File saved.',
+                'replace_file' => 'Replace File',
+                'replace_file_optional' => 'Optional'
             ],
             'remove' => [
                 'not_exist' => 'File does not exist.',

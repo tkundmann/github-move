@@ -40,6 +40,30 @@
                         </div>
 
                         @if ($page->type == 'Standard')
+                            <div class="form-group{{----}}@if($errors->has('file')) has-error @endif">
+                                {{ Form::label('file', trans('admin.page.file.edit.replace_file'), ['class' => 'col-sm-4 control-label colon-after']) }}
+                                <div class="col-sm-6">
+                                    <div class="fileinput fileinput-new input-group margin-bottom-none" data-provides="fileinput">
+                                        <div class="form-control" data-trigger="fileinput">
+                                            <i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span>
+                                        </div>
+                                        <span class="input-group-addon btn btn-default btn-file">
+                                            <span class="fileinput-new">@lang('common.file.select_file')</span>
+                                            <span class="fileinput-exists">@lang('common.file.change')</span>
+                                            <input type="file" name="file">
+                                        </span>
+                                        <span class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">@lang('common.file.remove')</span>
+                                    </div>
+                                    @if ($errors->has('file'))
+                                        {!! $errors->first('file', '<small class="text-danger">:message</small>') !!}
+                                    @endif
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="alert alert-field alert-info text-center">
+                                        @lang('admin.page.file.edit.replace_file_optional')
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-group{{----}}@if($errors->has('file_date')) has-error @endif">
                                 {{ Form::label('file_date', trans('admin.page.file.edit.file_date'), ['class' => 'col-sm-4 control-label colon-after']) }}
                                 <div class="col-sm-6">
