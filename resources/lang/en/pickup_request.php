@@ -40,7 +40,7 @@ return [
     'equipment_list_info'          => 'Please download and fill out the Equipment List spreadsheet.',
     'upload_equipment_list'        => 'Upload Equipment List',
 
-    'sar_box_program'                     => 'SAR Box Program',
+    'sar_box_program'                     => 'SipiAR Box Program',
     'sar_box_program_info'                => 'If you wish to use the box program, please download, fill out the Electronics Disposition Form and Upload it as part of this Pickup Request.',
     'upload_electronics_disposition_form' => 'Upload Electronics Disposition Form',
 

@@ -326,7 +326,7 @@ class PickupRequestController extends ContextController
         }
         $siteCode = $this->site->code;
 
-        Mail::queue('email.pickupRequest', ['title' => $title, 'pickupRequest' => $pickupRequest, 'pickupRequestData' => $pickupRequestData], function ($mail) use ($title, $siteCode, $fileName, $pickupRequest, $emailFrom, $emailsBcc) {
+        Mail::queue('email.pickupRequest', ['title' => $title, 'pickupRequest' => $pickupRequest, 'pickupRequestData' => $pickupRequestData], function ($mail) use ($title, $siteCode, $fileName, $electronicsDispositionFileName, $pickupRequest, $emailFrom, $emailsBcc) {
             $mail->from($emailFrom, $emailFrom);
             $mail->to($pickupRequest->contact_email_address);
             $mail->bcc($emailsBcc);
