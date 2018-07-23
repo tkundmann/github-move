@@ -55,6 +55,8 @@ class Feature extends Model
     const PICKUP_REQUEST_EQUIPMENT_LIST             = 'PICKUP_REQUEST_EQUIPMENT_LIST';
     const PICKUP_REQUEST_ADDRESS_BOOK               = 'PICKUP_REQUEST_ADDRESS_BOOK';
 
+    const PICKUP_REQUEST_SAR_BOX_PROGRAM            = 'PICKUP_REQUEST_SAR_BOX_PROGRAM';
+
     protected $table = 'feature';
 
     protected $dates = [
