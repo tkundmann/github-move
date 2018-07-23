@@ -17,6 +17,16 @@ return [
         'login'                    => 'Login'
     ],
 
+    'list' => [
+        'title'                    => ':title List',
+        'record'                   => '{0}records|{1}record|[2,Inf]records',
+        'status'                   => 'Status',
+        'editable'                 => 'Editable',
+        'not_editable'             => 'Not Editable',
+        'pickup_request_id'        => 'Pickup Request ID',
+        'created_at'               => 'Created At',
+    ],
+
     'title'                        => ':title Questionnaire',
 
     'site_address_book'            => 'Site Address Book',
@@ -29,6 +39,10 @@ return [
     'equipment_list'               => 'Equipment List',
     'equipment_list_info'          => 'Please download and fill out the Equipment List spreadsheet.',
     'upload_equipment_list'        => 'Upload Equipment List',
+
+    'sar_box_program'                     => 'SAR Box Program',
+    'sar_box_program_info'                => 'If you wish to use the box program, please download, fill out the Electronics Disposition Form and Upload it as part of this Pickup Request.',
+    'upload_electronics_disposition_form' => 'Upload Electronics Disposition Form',
 
     'denotes_required_field'       => '* Denotes required field',
 

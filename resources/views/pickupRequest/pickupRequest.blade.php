@@ -7,11 +7,11 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">@lang('pickup_request.title', [ 'title' => $data['title']])</div>
                     <div class="panel-body">
-                        @if (Session::has('success'))
+                        @if(Session::has('success'))
                             <div class="alert alert-success animate-slowly">{{ session('success') }}</div>
                         @endif
 
-                        @if (!$errors->isEmpty())
+                        @if(!$errors->isEmpty())
                             <div class="alert alert-danger animate">
                                 <strong>@lang('pickup_request.error')</strong>
                             </div>
@@ -19,6 +19,9 @@
 
                         <form id="pickupRequest" class="form-horizontal" method="POST" enctype="multipart/form-data"
                               action="{{ route('pickupRequest', ['token' => Input::get('token')]) }}">
+                            @if(isset($pickupRequest->id))
+                                <input type="hidden" name="pickup_request_id" value="{{ $pickupRequest->id }}"/>
+                            @endif
                             {{ csrf_field() }}
 
                             <div class="text-center">
@@ -31,15 +34,16 @@
                             <p>@lang('pickup_request.denotes_required_field')</p>
                             <hr>
 
-                            <div class="container-fluid">
-                                @if($site->hasFeature(Feature::PICKUP_REQUEST_EQUIPMENT_LIST))
-                                    <div class="row">
+                            @if(!isset($pickupRequest->id))
+                                <div class="container-fluid">
+                                @if($site->hasFeature(Feature::PICKUP_REQUEST_SAR_BOX_PROGRAM))
+                                    <div class="row sar-box-program">
                                         <div class="col-md-12">
                                             <div class="form-group margin-bottom-none">
-                                                <label for="upload_equipment_list"
-                                                       class="control-label colon-after">@lang('pickup_request.equipment_list')</label>
-                                                <p class="small">@lang('pickup_request.equipment_list_info')</p>
-                                                @foreach($site->getFeature(Feature::PICKUP_REQUEST_EQUIPMENT_LIST)->pivot->data as $file)
+                                                <label for="upload_electronics_disposition_form"
+                                                       class="control-label colon-after">@lang('pickup_request.sar_box_program')</label>
+                                                <p class="small">@lang('pickup_request.sar_box_program_info')</p>
+                                                @foreach($site->getFeature(Feature::PICKUP_REQUEST_SAR_BOX_PROGRAM)->pivot->data as $file)
                                                     <div class="alert-info margin-bottom-md margin-top-md padding-md">
                                                         <a href="{{ $file['url'] }}" target="_blank"
                                                            class="btn btn-md btn-primary"><i
@@ -50,15 +54,12 @@
                                                 @endforeach
                                             </div>
                                         </div>
-                                    </div>
-                                    <hr>
 
-                                    <div class="row">
                                         <div class="col-md-3"></div>
                                         <div class="col-md-6">
-                                            <div class="form-group @if($errors->has('upload_equipment_list')) has-error @endif">
-                                                <label for="upload_equipment_list"
-                                                   class="control-label colon-after @if(in_array('upload_equipment_list',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.upload_equipment_list')</label>
+                                            <div class="form-group @if($errors->has('upload_electronics_disposition_form')) has-error @endif">
+                                                <label for="upload_electronics_disposition_form"
+                                                   class="control-label colon-after @if(in_array('upload_electronics_disposition_form',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.upload_electronics_disposition_form')</label>
                                                 <div class="">
                                                     <div class="fileinput fileinput-new input-group margin-bottom-none"
                                                          data-provides="fileinput">
@@ -69,13 +70,13 @@
                                                         <span class="input-group-addon btn btn-default btn-file">
                                                             <span class="fileinput-new">@lang('common.file.select_file')</span>
                                                             <span class="fileinput-exists">@lang('common.file.change')</span>
-                                                            <input type="file" id="upload_equipment_list" name="upload_equipment_list">
+                                                            <input type="file" id="upload_electronics_disposition_form" name="upload_electronics_disposition_form">
                                                         </span>
                                                         <span class="input-group-addon btn btn-default fileinput-exists"
                                                               data-dismiss="fileinput">@lang('common.file.remove')</span>
                                                     </div>
-                                                    @if ($errors->has('upload_equipment_list'))
-                                                        {!! $errors->first('upload_equipment_list', '<small class="text-danger">:message</small>') !!}
+                                                    @if ($errors->has('upload_electronics_disposition_form'))
+                                                        {!! $errors->first('upload_electronics_disposition_form', '<small class="text-danger">:message</small>') !!}
                                                     @endif
                                                 </div>
                                             </div>
@@ -84,57 +85,109 @@
                                     </div>
                                 @endif
 
-                                @if($site->hasFeature(Feature::PICKUP_REQUEST_ADDRESS_BOOK))
                                     @if($site->hasFeature(Feature::PICKUP_REQUEST_EQUIPMENT_LIST))
-                                    <hr>
-                                    @endif
-                                    <div class="row">
-                                        <div class="col-md-5">
-                                                @if(count($addressBook) > 0)
-                                            <div class="form-group @if($errors->has('site')) has-error @endif">
-                                                <label class="control-label colon-after">{{ $site->getFeature(Feature::PICKUP_REQUEST_ADDRESS_BOOK)->pivot->data['site_address_book_label'] }}</label>
-                                                {{ Form::select('site', $addressBook, null, ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'title' => trans('common.select')]) }}
-                                                @if ($errors->has('site'))
-                                                    {!! $errors->first('site', '<small class="text-danger">:message</small>') !!}
-                                                @endif
-                                            </div>
-                                                @endif
-                                            @if($site->getFeature(Feature::PICKUP_REQUEST_ADDRESS_BOOK)->pivot->data['allow_change'])
-                                                <div class="form-group margin-vertical-none">
-                                                        @if(count($addressBook) > 0)<p class="bold margin-top-md">@lang('common.or')</p>@endif
-                                                    <p>{{ $site->getFeature(Feature::PICKUP_REQUEST_ADDRESS_BOOK)->pivot->data['new_site_text'] }}</p>
+                                        @if($site->hasFeature(Feature::PICKUP_REQUEST_SAR_BOX_PROGRAM))
+                                        <hr>
+                                        @endif
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group margin-bottom-none">
+                                                    <label for="upload_equipment_list"
+                                                           class="control-label colon-after">@lang('pickup_request.equipment_list')</label>
+                                                    <p class="small">@lang('pickup_request.equipment_list_info')</p>
+                                                    @foreach($site->getFeature(Feature::PICKUP_REQUEST_EQUIPMENT_LIST)->pivot->data as $file)
+                                                        <div class="alert-info margin-bottom-md margin-top-md padding-md">
+                                                            <a href="{{ $file['url'] }}" target="_blank"
+                                                               class="btn btn-md btn-primary"><i
+                                                                        class="fa fa-btn fa-download"></i>@lang('pickup_request.click_here')
+                                                            </a>
+                                                            <span class="margin-left-md">@lang('pickup_request.to_download') {{ $file['name'] }}</span>
+                                                        </div>
+                                                    @endforeach
                                                 </div>
-                                                <div class="form-group margin-vertical-none @if($errors->has('site_name')) has-error @endif">
-                                                <label for="site_name"
-                                                       class="control-label colon-after">{{ $site->getFeature(Feature::PICKUP_REQUEST_ADDRESS_BOOK)->pivot->data['new_site_address_book_label'] }}</label>
-                                                <input id="site_name" type="text" class="form-control"
-                                                       name="site_name" value="{{ old('site_name') }}">
-                                                    @if ($errors->has('site_name'))
-                                                        {!! $errors->first('site_name', '<small class="text-danger">:message</small>') !!}
-                                                    @endif
                                             </div>
-                                            @endif
-                                        </div>
-                                        <div class="col-md-1"></div>
-                                        <div class="col-md-5">
-                                            <p>{!! $site->getFeature(Feature::PICKUP_REQUEST_ADDRESS_BOOK)->pivot->data['change_text'] !!}</p>
-                                            @if($site->getFeature(Feature::PICKUP_REQUEST_ADDRESS_BOOK)->pivot->data['allow_change'])
-                                                <div class="checkbox @if($errors->has('allow_change')) has-error @endif">
-                                                    <label><input type="checkbox" name="allow_change"
-                                                                  @if (old('allow_change')) checked="true" @endif
-                                                                  id="allow_change">@lang('pickup_request.change_address_book_checkbox')
-                                                    </label>
-                                                    @if ($errors->has('allow_change'))
-                                                        {!! $errors->first('allow_change', '<small class="text-danger">:message</small>') !!}
-                                                    @endif
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </div>
-                                @endif
-                            </div>
 
-                            <hr>
+                                            <div class="col-md-3"></div>
+                                            <div class="col-md-6">
+                                                <div class="form-group @if($errors->has('upload_equipment_list')) has-error @endif">
+                                                    <label for="upload_equipment_list"
+                                                       class="control-label colon-after @if(in_array('upload_equipment_list',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.upload_equipment_list')</label>
+                                                    <div class="">
+                                                        <div class="fileinput fileinput-new input-group margin-bottom-none"
+                                                             data-provides="fileinput">
+                                                            <div class="form-control" data-trigger="fileinput">
+                                                                <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                                                                <span class="fileinput-filename"></span>
+                                                            </div>
+                                                            <span class="input-group-addon btn btn-default btn-file">
+                                                                <span class="fileinput-new">@lang('common.file.select_file')</span>
+                                                                <span class="fileinput-exists">@lang('common.file.change')</span>
+                                                                <input type="file" id="upload_equipment_list" name="upload_equipment_list">
+                                                            </span>
+                                                            <span class="input-group-addon btn btn-default fileinput-exists"
+                                                                  data-dismiss="fileinput">@lang('common.file.remove')</span>
+                                                        </div>
+                                                        @if ($errors->has('upload_equipment_list'))
+                                                            {!! $errors->first('upload_equipment_list', '<small class="text-danger">:message</small>') !!}
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3"></div>
+                                        </div>
+                                    @endif
+
+                                    @if($site->hasFeature(Feature::PICKUP_REQUEST_ADDRESS_BOOK))
+                                    @if($site->hasFeature(Feature::PICKUP_REQUEST_EQUIPMENT_LIST) || $site->hasFeature(Feature::PICKUP_REQUEST_SAR_BOX_PROGRAM))
+                                        <hr>
+                                        @endif
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                @if(count($addressBook) > 0)
+                                                    <div class="form-group @if($errors->has('site')) has-error @endif">
+                                                        <label class="control-label colon-after">{{ $site->getFeature(Feature::PICKUP_REQUEST_ADDRESS_BOOK)->pivot->data['site_address_book_label'] }}</label>
+                                                        {{ Form::select('site', $addressBook, null, ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'title' => trans('common.select')]) }}
+                                                        @if ($errors->has('site'))
+                                                            {!! $errors->first('site', '<small class="text-danger">:message</small>') !!}
+                                                        @endif
+                                                    </div>
+                                                @endif
+                                                @if($site->getFeature(Feature::PICKUP_REQUEST_ADDRESS_BOOK)->pivot->data['allow_change'])
+                                                    <div class="form-group margin-vertical-none">
+                                                        @if(count($addressBook) > 0)<p class="bold margin-top-md">@lang('common.or')</p>@endif
+                                                        <p>{{ $site->getFeature(Feature::PICKUP_REQUEST_ADDRESS_BOOK)->pivot->data['new_site_text'] }}</p>
+                                                    </div>
+                                                    <div class="form-group margin-vertical-none @if($errors->has('site_name')) has-error @endif">
+                                                    <label for="site_name"
+                                                           class="control-label colon-after">{{ $site->getFeature(Feature::PICKUP_REQUEST_ADDRESS_BOOK)->pivot->data['new_site_address_book_label'] }}</label>
+                                                    <input id="site_name" type="text" class="form-control"
+                                                           name="site_name" value="{{ old('site_name') }}">
+                                                        @if ($errors->has('site_name'))
+                                                            {!! $errors->first('site_name', '<small class="text-danger">:message</small>') !!}
+                                                        @endif
+                                                </div>
+                                                @endif
+                                            </div>
+                                            <div class="col-md-1"></div>
+                                            <div class="col-md-5">
+                                                <p>{!! $site->getFeature(Feature::PICKUP_REQUEST_ADDRESS_BOOK)->pivot->data['change_text'] !!}</p>
+                                                @if($site->getFeature(Feature::PICKUP_REQUEST_ADDRESS_BOOK)->pivot->data['allow_change'])
+                                                    <div class="checkbox @if($errors->has('allow_change')) has-error @endif">
+                                                        <label><input type="checkbox" name="allow_change"
+                                                                      @if (old('allow_change')) checked="true" @endif
+                                                                      id="allow_change">@lang('pickup_request.change_address_book_checkbox')
+                                                        </label>
+                                                        @if ($errors->has('allow_change'))
+                                                            {!! $errors->first('allow_change', '<small class="text-danger">:message</small>') !!}
+                                                        @endif
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+                                <hr>
+                            @endif
 
                             <fieldset class="js-site-address-fields">
                                 <div class="container-fluid">
@@ -148,7 +201,7 @@
                                                 <label for="company_name"
                                                        class="control-label colon-after @if(in_array('company_name',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.company_name')</label>
                                                 <input id="company_name" type="text" class="form-control"
-                                                    name="company_name" value="{{ old('company_name') }}">
+                                                    name="company_name" value="{{ isset($pickupRequest->id) ? $pickupRequest->company_name : (Input::get('company_name') ? Input::get('company_name') : old('company_name')) }}">
                                                 @if ($errors->has('company_name'))
                                                     {!! $errors->first('company_name', '<small class="text-danger">:message</small>') !!}
                                                 @endif
@@ -158,7 +211,7 @@
                                                 <label for="contact_name"
                                                        class="control-label colon-after @if(in_array('contact_name',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.contact_name')</label>
                                                 <input id="contact_name" type="text" class="form-control"
-                                                       name="contact_name" value="{{ old('contact_name') }}">
+                                                       name="contact_name" value="{{ isset($pickupRequest->id) ? $pickupRequest->contact_name : (Input::get('contact_name') ? Input::get('contact_name') : old('contact_name')) }}">
                                                 @if ($errors->has('contact_name'))
                                                     {!! $errors->first('contact_name', '<small class="text-danger">:message</small>') !!}
                                                 @endif
@@ -168,13 +221,13 @@
                                                 <label class="control-label colon-after @if(in_array('contact_address_1',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.contact_address')</label>
                                                 <input id="contact_address_1" type="text"
                                                        class="form-control"
-                                                       name="contact_address_1" value="{{ old('contact_address_1') }}">
+                                                       name="contact_address_1" value="{{ isset($pickupRequest->id) ? $pickupRequest->contact_address_1 : (Input::get('contact_address_1') ? Input::get('contact_address_1') : old('contact_address_1')) }}">
                                                 @if ($errors->has('contact_address_1'))
                                                     {!! $errors->first('contact_address_1', '<small class="text-danger">:message</small>') !!}
                                                 @endif
                                                 <input id="contact_address_2" type="text"
                                                        class="form-control margin-top-sm"
-                                                       name="contact_address_2" value="{{ old('contact_address_2') }}">
+                                                       name="contact_address_2" value="{{ isset($pickupRequest->id) ? $pickupRequest->contact_address_2 : (Input::get('contact_address_2') ? Input::get('contact_address_2') : old('contact_address_2')) }}">
                                                 @if ($errors->has('contact_address_2'))
                                                     {!! $errors->first('contact_address_2', '<small class="text-danger">:message</small>') !!}
                                                 @endif
@@ -185,7 +238,7 @@
                                                        class="control-label colon-after @if(in_array('contact_city',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.city')</label>
                                                 <input id="contact_city" type="text" class="form-control"
                                                        name="contact_city"
-                                                       value="{{ old('contact_city') }}">
+                                                       value="{{ isset($pickupRequest->id) ? $pickupRequest->contact_city : (Input::get('contact_city') ? Input::get('contact_city') : old('contact_city')) }}">
                                                 @if ($errors->has('contact_city'))
                                                     {!! $errors->first('contact_city', '<small class="text-danger">:message</small>') !!}
                                                 @endif
@@ -194,7 +247,7 @@
                                             @if($data['use_state_as_select'])
                                                 <div class="form-group @if($errors->has('contact_state')) has-error @endif">
                                                     <label class="control-label colon-after @if(in_array('contact_state',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.state')</label>
-                                                    {{ Form::select('contact_state', array_flip($data['states']), old('contact_state'), ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'title' => trans('common.select')]) }}
+                                                    {{ Form::select('contact_state', array_flip($data['states']), isset($pickupRequest->id) ? $pickupRequest->contact_state : (Input::get('contact_state') ? Input::get('contact_state') : old('contact_state')), ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'title' => trans('common.select')]) }}
                                                     @if ($errors->has('contact_state'))
                                                         {!! $errors->first('contact_state', '<small class="text-danger">:message</small>') !!}
                                                     @endif
@@ -204,7 +257,7 @@
                                                     <label for="contact_state"
                                                            class="control-label colon-after @if(in_array('contact_state',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.state_province')</label>
                                                     <input id="contact_state" type="text" class="form-control"
-                                                           name="contact_state" value="{{ old('contact_state') }}">
+                                                           name="contact_state" value="{{ isset($pickupRequest->id) ? $pickupRequest->contact_state : (Input::get('contact_state') ? Input::get('contact_state') : old('contact_state')) }}">
                                                     @if ($errors->has('contact_state'))
                                                         {!! $errors->first('contact_state', '<small class="text-danger">:message</small>') !!}
                                                     @endif
@@ -215,7 +268,7 @@
                                                 <label for="contact_zip"
                                                        class="control-label colon-after @if(in_array('contact_zip',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.zip_code')</label>
                                                 <input id="contact_zip" type="text" class="form-control"
-                                                       name="contact_zip" value="{{ old('contact_zip') }}">
+                                                       name="contact_zip" value="{{ isset($pickupRequest->id) ? $pickupRequest->contact_zip : (Input::get('contact_zip') ? Input::get('contact_zip') : old('contact_zip')) }}">
                                                 @if ($errors->has('contact_zip'))
                                                     {!! $errors->first('contact_zip', '<small class="text-danger">:message</small>') !!}
                                                 @endif
@@ -228,7 +281,7 @@
                                                 @if(isset($data['countries']) && $data['countries'])
                                                     <div class="form-group @if($errors->has('contact_country')) has-error @endif">
                                                         <label class="control-label colon-after @if(in_array('contact_country',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.country')</label>
-                                                        {{ Form::select('contact_country', $data['countries'], old('contact_country'), ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'title' => trans('common.select')]) }}
+                                                        {{ Form::select('contact_country', $data['countries'], isset($pickupRequest->id) ? $pickupRequest->contact_country : (Input::get('contact_country') ? Input::get('contact_country') : old('contact_country')), ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'title' => trans('common.select')]) }}
                                                         @if ($errors->has('contact_country'))
                                                             {!! $errors->first('contact_country', '<small class="text-danger">:message</small>') !!}
                                                         @endif
@@ -239,7 +292,7 @@
                                                                class="control-label colon-after @if(in_array('contact_country',$data['required_fields'],true)) colon-after-required @endif">@lang('pickup_request.country')</label>
                                                         <input id="contact_country" type="text" class="form-control"
                                                                name="contact_country"
-                                                               value="{{ old('contact_country') }}">
+                                                               value="{{ isset($pickupRequest->id) ? $pickupRequest->contact_country : (Input::get('contact_country') ? Input::get('contact_country') : old('contact_country')) }}">
                                                         @if ($errors->has('contact_country'))
                                                             {!! $errors->first('contact_country', '<small class="text-danger">:message</small>') !!}
                                                         @endif
@@ -250,7 +303,7 @@
                                             @if($data['use_company_division'])
                                                 <div class="form-group @if($errors->has('company_division')) has-error @endif">
                                                     <label class="control-label colon-after @if(in_array('company_division',$data['required_fields'],true)) colon-after-required @endif">{{ $data['company_division_label'] }}</label>
-                                                    {{ Form::select('company_division', $data['company_divisions'], old('company_division'), ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'title' => trans('common.select')]) }}
+                                                    {{ Form::select('company_division', $data['company_divisions'], isset($pickupRequest->id) ? $pickupRequest->company_division : (Input::get('company_division') ? Input::get('company_division') : old('company_division')), ['class' => 'selectpicker form-control', 'data-live-search' => 'true', 'title' => trans('common.select')]) }}
                                                     @if ($errors->has('company_division'))
                                                         {!! $errors->first('company_division', '<small class="text-danger">:message</small>') !!}
                                                     @endif
@@ -1035,6 +1088,8 @@
                         $('input[name="contact_email_address"]').val(address.contact_email_address);
 
                         $("input[name=is_loading_dock_present][value=" + address.has_dock + "]").prop('checked', 'checked');
+                        $("input[name=dock_appointment_required][value=" + address.dock_appointment_required + "]").prop('checked', 'checked');
+                        $("input[name=units_located_near_dock][value=" + address.units_located_near_dock + "]").prop('checked', 'checked');
                     }
                 });
             });

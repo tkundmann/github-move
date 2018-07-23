@@ -18,4 +18,5 @@ elixir(function(mix) {
   mix.less('main.less', 'public/css');
   mix.less('header.less', 'public/css');
   mix.less('menu.less', 'public/css');
+  mix.less('pickup_request.less', 'public/css');
 });

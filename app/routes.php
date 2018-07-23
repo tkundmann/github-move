@@ -54,7 +54,7 @@ Route::group(['prefix' => '{'.Constants::CONTEXT_PARAMETER.'}'], function() {
     Route::get('asset/search/export', 'Asset\AssetController@getSearchExport')->name('asset.search.export');
     Route::post('asset/search/modify', 'Asset\AssetController@postModifySearch')->name('asset.search.modify');
     Route::get('asset/{id}', 'Asset\AssetController@getDetails')->name('asset.details');
-    
+
     // Admin
     Route::get('account/list', 'Admin\AccountController@getList')->name('admin.account.list');
     Route::get('account/create', 'Admin\AccountController@getCreate')->name('admin.account.create');
@@ -105,8 +105,13 @@ Route::group(['prefix' => '{'.Constants::CONTEXT_PARAMETER.'}'], function() {
     // Pickup Request
     Route::get('pickup-request/login', 'PickupRequest\PickupRequestController@getPickupRequestLogin')->name('pickupRequest.login');
     Route::post('pickup-request/login', 'PickupRequest\PickupRequestController@postPickupRequestLogin')->name('pickupRequest.login');
-    Route::get('pickup-request', 'PickupRequest\PickupRequestController@getPickupRequest')->name('pickupRequest');
-    Route::post('pickup-request', 'PickupRequest\PickupRequestController@postPickupRequest')->name('pickupRequest');
+    Route::get('pickup-request', 'PickupRequest\PickupRequestController@getPickupRequestForm')->name('pickupRequest');
+    Route::post('pickup-request', 'PickupRequest\PickupRequestController@postPickupRequestForm')->name('pickupRequest');
     Route::get('pickup-request/address/{id}/get', 'PickupRequest\PickupRequestController@getPickupRequestAddress')->name('pickupRequest.address.get');
+
+    Route::get('pickup-request/list', 'PickupRequest\PickupRequestController@getList')->name('pickupRequest.list');
+    Route::post('pickup-request/list', 'PickupRequest\PickupRequestController@getList')->name('pickupRequest.list');
+    Route::get('pickup-request/{id}/edit', 'PickupRequest\PickupRequestController@getPickupRequestForm')->name('pickupRequest.edit');
+    Route::put('pickup-request/{id}/edit', 'PickupRequest\PickupRequestController@postEdit')->name('pickupRequest.edit');
 });
 
