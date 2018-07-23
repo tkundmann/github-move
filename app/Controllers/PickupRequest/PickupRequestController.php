@@ -321,7 +321,7 @@ class PickupRequestController extends ContextController
         $pickupRequestData = $this->pickupRequestData;
 
         $title = $pickupRequestData['title'] . ' #' . $pickupRequest->id;
-        if ($existingPickupRequestId =! '') {
+        if ($existingPickupRequestId != '') {
             $title = 'Updated ' . $title;
         }
         $siteCode = $this->site->code;
