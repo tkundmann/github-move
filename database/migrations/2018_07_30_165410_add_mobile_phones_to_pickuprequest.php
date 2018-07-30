@@ -12,8 +12,8 @@ class AddMobilePhonesToPickuprequest extends Migration
      */
     public function up()
     {
-        Schema::table('pickuprequest', function (Blueprint $table) {
-            $table->integer('num_mobile_phones')>after('num_racks')->nullable()->default(null);
+        Schema::table('pickup_request', function (Blueprint $table) {
+            $table->integer('num_mobile_phones')->after('num_racks')->nullable()->default(null);
         });
     }
 
@@ -24,7 +24,7 @@ class AddMobilePhonesToPickuprequest extends Migration
      */
     public function down()
     {
-        Schema::table('pickuprequest', function (Blueprint $table) {
+        Schema::table('pickup_request', function (Blueprint $table) {
             $table->dropColumn('num_mobile_phones');
         });
     }
