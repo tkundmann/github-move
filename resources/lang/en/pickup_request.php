@@ -77,6 +77,7 @@ return [
     'storage_system'               => 'Storage System',
     'ups'                          => 'UPS',
     'racks'                        => 'Racks',
+    'mobile_phones'                => 'Mobile Phones',
     'other'                        => 'Other',
     'misc'                         => 'Misc.',
     'total'                        => 'Total Number of Assets',

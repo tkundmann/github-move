@@ -115,6 +115,7 @@ class PickupRequest extends Model
         'numStorageSystems' => 'num_storage_systems',
         'numUps' => 'num_ups',
         'numRacks' => 'num_racks',
+        'numMobilePhones' => 'num_mobile_phones',
         'numOther' => 'num_other',
         'numMisc' => 'num_misc',
         'totalNumAssets' => 'total_num_assets',

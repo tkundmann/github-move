@@ -422,6 +422,7 @@ class PickupRequestController extends ContextController
         $pickupRequest->num_storage_systems = trim(Input::get('num_storage_systems'));
         $pickupRequest->num_ups = trim(Input::get('num_ups'));
         $pickupRequest->num_racks = trim(Input::get('num_racks'));
+        $pickupRequest->num_mobile_phones = trim(Input::get('num_mobile_phones'));
         $pickupRequest->num_other = trim(Input::get('num_other'));
         $pickupRequest->num_misc = trim(Input::get('num_misc'));
 

@@ -233,6 +233,10 @@
                     </tr>
                     @endif
                     <tr>
+                        <td>@lang('pickup_request.mobile_phones'):</td>
+                        <td align="right">@if($pickupRequest->num_mobile_phones) {{ $pickupRequest->num_mobile_phones }} <?php $total += $pickupRequest->num_mobile_phones; ?>@else 0 @endif</td>
+                    </tr>
+                    <tr>
                         <td>@lang('pickup_request.other'):</td>
                         <td align="right">@if($pickupRequest->num_other) {{ $pickupRequest->num_other }} <?php $total += $pickupRequest->num_other; ?>@else 0 @endif</td>
                     </tr>

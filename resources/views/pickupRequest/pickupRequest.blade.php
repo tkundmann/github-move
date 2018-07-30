@@ -825,6 +825,15 @@
                                                 @endif
                                             </div>
                                         @endif
+                                        <div class="form-group @if($errors->has('num_mobile_phones')) has-error @endif">
+                                            <label for="num_mobile_phones"
+                                                   class="control-label colon-after">@lang('pickup_request.mobile_phones')</label>
+                                            <input id="num_mobile_phones" type="text" class="form-control"
+                                                   name="num_mobile_phones" value="{{ old('num_mobile_phones', 0) }}">
+                                            @if ($errors->has('num_mobile_phones'))
+                                                {!! $errors->first('num_mobile_phones', '<small class="text-danger">:message</small>') !!}
+                                            @endif
+                                        </div>
                                         <div class="form-group @if($errors->has('num_other')) has-error @endif">
                                             <label for="num_other"
                                                    class="control-label colon-after">@lang('pickup_request.other')</label>
