@@ -107,7 +107,9 @@ class ShipmentController extends ContextController
         'number_of_pieces'        => 'number_of_pieces',
         'audit_completed'         => 'audit_completed',
         'cert_of_data_wipe_num'   => 'cert_of_data_wipe_num',
-        'cert_of_destruction_num' => 'cert_of_destruction_num'
+        'has_cert_of_data_wipe'   => 'has_cert_of_data_wipe',
+        'cert_of_destruction_num' => 'cert_of_destruction_num',
+        'has_cert_of_destruction' => 'has_cert_of_destruction'
     ];
 
     protected $modelSearchFields = [];
@@ -139,7 +141,7 @@ class ShipmentController extends ContextController
                 'pre_audit_approved', 'audit_completed'],
             'int_less_greater' => ['number_of_skids', 'number_of_pieces'],
             'float_less_greater' => ['freight_charge', 'total_weight_received'],
-            'custom' => ['vendor_client']
+            'custom' => ['vendor_client','has_cert_of_data_wipe','has_cert_of_destruction']
         ];
 
         // Turn on USE SELECT EXACT VALUES on a per field basis.
@@ -375,6 +377,8 @@ class ShipmentController extends ContextController
 
             foreach ($shipments as $shipment) {
                 $shipmentElement = $shipment->toArray();
+                $shipmentElement['has_cert_of_data_wipe'] = '';
+                $shipmentElement['has_cert_of_destruction'] = '';
 
                 $row = [];
                 foreach ($this->modelExportFields as $field => $label) {
@@ -396,30 +400,30 @@ class ShipmentController extends ContextController
                                 $row[$field] = $shipmentElement[$field];
                             }
 
-                            if ($field === 'cert_of_data_wipe_num') {
-								$row[$field] = '';
+                            if ($field === 'has_cert_of_data_wipe') {
+								$row[$field] = 'No';
                                 if (isset($shipment->certOfDataWipeNum)) {
                                     if ($this->site->hasFeature(Feature::HAS_CERTIFICATES)) {
                                         $certOfDataWipePage = $this->site->pages->where('type', 'Certificates of Data Wipe')->first();
                                         $certOfDataWipe = $certOfDataWipePage ? $shipment->files->where('page_id', $certOfDataWipePage->id)->first() : null;
                                         if ($certOfDataWipe) {
                                             if ($this->site->hasFeature(Feature::CERTIFICATE_OF_DATA_WIPE_NUMBER_AS_FILE) && isset($shipment->auditCompleted)) {
-                                                $row[$field] = $certOfDataWipe->filename;
+                                                $row[$field] = 'Yes (' . $certOfDataWipe->filename . ')';
                                             }
                                         }
                                     }
                                 }
                             }
 
-							if ($field === 'cert_of_destruction_num') {
-								$row[$field] = '';
+							if ($field === 'has_cert_of_destruction') {
+								$row[$field] = 'No';
 								if (isset($shipment->certOfDestructionNum)) {
 									if ($this->site->hasFeature(Feature::HAS_CERTIFICATES)) {
 										$certOfDestructionPage = $this->site->pages->where('type', 'Certificates of Recycling')->first();
 										$certOfDestruction = $certOfDestructionPage ? $shipment->files->where('page_id', $certOfDestructionPage->id)->first() : null;
 										if ($certOfDestruction) {
 											if ($this->site->hasFeature(Feature::CERTIFICATE_OF_DESTRUCTION_NUMBER_AS_FILE) && isset($shipment->auditCompleted)) {
-												$row[$field] = $certOfDestruction->filename;
+												$row[$field] = 'Yes (' . $certOfDestruction->filename . ')';
 											}
 										}
 									}

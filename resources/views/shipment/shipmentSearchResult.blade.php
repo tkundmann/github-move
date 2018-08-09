@@ -95,13 +95,13 @@
                                         @elseif ($field === 'cert_of_destruction_num')
                                             @if (isset($shipment->certOfDestructionNum))
                                                 @if ($site->hasFeature(Feature::HAS_CERTIFICATES))
-                                                    <?php $certOfDataDestructionPage = $site->pages->where('type', 'Certificates of Recycling')->first(); ?>
-                                                    <?php $certOfDataDestruction = $certOfDataDestructionPage ? $shipment->files->where('page_id', $certOfDataDestructionPage->id)->first() : null; ?>
-                                                    @if ($certOfDataDestruction)
+                                                    <?php $certOfDestructionPage = $site->pages->where('type', 'Certificates of Recycling')->first(); ?>
+                                                    <?php $certOfDestruction = $certOfDestructionPage ? $shipment->files->where('page_id', $certOfDestructionPage->id)->first() : null; ?>
+                                                    @if ($certOfDestruction)
                                                         @if ($site->hasFeature(Feature::CERTIFICATE_OF_DESTRUCTION_NUMBER_AS_FILE))
-                                                            <a href="{{ $certOfDataDestruction->url }}" target="_blank">{{ str_limit($shipment->certOfDestructionNum, $limit) }} ({{ str_limit($certOfDataDestruction->filename, $limit) }})</a>
+                                                            <a href="{{ $certOfDestruction->url }}" target="_blank">{{ str_limit($shipment->certOfDestructionNum, $limit) }} ({{ str_limit($certOfDestruction->filename, $limit) }})</a>
                                                         @else
-                                                            <span>{{ str_limit($shipment->certOfDestructionNum, $limit) }} ({{ str_limit($certOfDataDestruction->filename, $limit) }})</span>
+                                                            <span>{{ str_limit($shipment->certOfDestructionNum, $limit) }} ({{ str_limit($certOfDestruction->filename, $limit) }})</span>
                                                         @endif
                                                     @else
                                                         <span>{{ str_limit($shipment->certOfDestructionNum, $limit) }}</span>

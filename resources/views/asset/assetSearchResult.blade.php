@@ -143,13 +143,13 @@
                                                 @if (in_array($asset->status, $statusArray))
                                                     @if (isset($asset->certOfDestructionNum))
                                                         @if ($site->hasFeature(Feature::HAS_CERTIFICATES))
-                                                            <?php $certOfDataDestructionPage = $site->pages->where('type', 'Certificates of Recycling')->first(); ?>
-                                                            <?php $certOfDataDestruction = ($certOfDataDestructionPage && isset($asset->shipment)) ? $asset->shipment->files->where('page_id', $certOfDataDestructionPage->id)->first() : null; ?>
-                                                            @if ($certOfDataDestruction)
+                                                            <?php $certOfDestructionPage = $site->pages->where('type', 'Certificates of Recycling')->first(); ?>
+                                                            <?php $certOfDestruction = ($certOfDestructionPage && isset($asset->shipment)) ? $asset->shipment->files->where('page_id', $certOfDestructionPage->id)->first() : null; ?>
+                                                            @if ($certOfDestruction)
                                                                 @if ($site->hasFeature(Feature::CERTIFICATE_OF_DESTRUCTION_NUMBER_AS_FILE))
-                                                                    <a href="{{ $certOfDataDestruction->url }}" target="_blank">{{ str_limit($asset->certOfDestructionNum, $limit) }} ({{ str_limit($certOfDataDestruction->filename, $limit) }})</a>
+                                                                    <a href="{{ $certOfDestruction->url }}" target="_blank">{{ str_limit($asset->certOfDestructionNum, $limit) }} ({{ str_limit($certOfDestruction->filename, $limit) }})</a>
                                                                 @else
-                                                                    <span>{{ str_limit($asset->certOfDestructionNum, $limit) }} ({{ str_limit($certOfDataDestruction->filename, $limit) }})</span>
+                                                                    <span>{{ str_limit($asset->certOfDestructionNum, $limit) }} ({{ str_limit($certOfDestruction->filename, $limit) }})</span>
                                                                 @endif
                                                             @else
                                                                 <span>{{ str_limit($asset->certOfDestructionNum, $limit) }}</span>
@@ -164,13 +164,13 @@
                                             @else
                                                 @if (isset($asset->certOfDestructionNum))
                                                     @if ($site->hasFeature(Feature::HAS_CERTIFICATES))
-                                                        <?php $certOfDataDestructionPage = $site->pages->where('type', 'Certificates of Recycling')->first(); ?>
-                                                        <?php $certOfDataDestruction = ($certOfDataDestructionPage && isset($asset->shipment)) ? $asset->shipment->files->where('page_id', $certOfDataDestructionPage->id)->first() : null; ?>
-                                                        @if ($certOfDataDestruction)
+                                                        <?php $certOfDestructionPage = $site->pages->where('type', 'Certificates of Recycling')->first(); ?>
+                                                        <?php $certOfDestruction = ($certOfDestructionPage && isset($asset->shipment)) ? $asset->shipment->files->where('page_id', $certOfDestructionPage->id)->first() : null; ?>
+                                                        @if ($certOfDestruction)
                                                             @if ($site->hasFeature(Feature::CERTIFICATE_OF_DESTRUCTION_NUMBER_AS_FILE))
-                                                                <a href="{{ $certOfDataDestruction->url }}" target="_blank">{{ str_limit($asset->certOfDestructionNum, $limit) }} ({{ str_limit($certOfDataDestruction->filename, $limit) }})</a>
+                                                                <a href="{{ $certOfDestruction->url }}" target="_blank">{{ str_limit($asset->certOfDestructionNum, $limit) }} ({{ str_limit($certOfDestruction->filename, $limit) }})</a>
                                                             @else
-                                                                <span>{{ str_limit($asset->certOfDestructionNum, $limit) }} ({{ str_limit($certOfDataDestruction->filename, $limit) }})</span>
+                                                                <span>{{ str_limit($asset->certOfDestructionNum, $limit) }} ({{ str_limit($certOfDestruction->filename, $limit) }})</span>
                                                             @endif
                                                         @else
                                                             <span>{{ str_limit($asset->certOfDestructionNum, $limit) }}</span>
