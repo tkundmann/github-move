@@ -395,6 +395,36 @@ class ShipmentController extends ContextController
                             else {
                                 $row[$field] = $shipmentElement[$field];
                             }
+
+                            if ($field === 'cert_of_data_wipe_num') {
+								$row[$field] = '';
+                                if (isset($shipment->certOfDataWipeNum)) {
+                                    if ($this->site->hasFeature(Feature::HAS_CERTIFICATES)) {
+                                        $certOfDataWipePage = $this->site->pages->where('type', 'Certificates of Data Wipe')->first();
+                                        $certOfDataWipe = $certOfDataWipePage ? $shipment->files->where('page_id', $certOfDataWipePage->id)->first() : null;
+                                        if ($certOfDataWipe) {
+                                            if ($this->site->hasFeature(Feature::CERTIFICATE_OF_DATA_WIPE_NUMBER_AS_FILE) && isset($shipment->auditCompleted)) {
+                                                $row[$field] = $certOfDataWipe->filename;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+							if ($field === 'cert_of_destruction_num') {
+								$row[$field] = '';
+								if (isset($shipment->certOfDestructionNum)) {
+									if ($this->site->hasFeature(Feature::HAS_CERTIFICATES)) {
+										$certOfDestructionPage = $this->site->pages->where('type', 'Certificates of Recycling')->first();
+										$certOfDestruction = $certOfDestructionPage ? $shipment->files->where('page_id', $certOfDestructionPage->id)->first() : null;
+										if ($certOfDestruction) {
+											if ($this->site->hasFeature(Feature::CERTIFICATE_OF_DESTRUCTION_NUMBER_AS_FILE) && isset($shipment->auditCompleted)) {
+												$row[$field] = $certOfDestruction->filename;
+											}
+										}
+									}
+								}
+							}
                         }
                         else if (in_array($field, $this->fieldCategories['date_from_to'], true)) {
                             try {
