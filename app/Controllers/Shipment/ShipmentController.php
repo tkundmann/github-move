@@ -107,9 +107,9 @@ class ShipmentController extends ContextController
         'number_of_pieces'        => 'number_of_pieces',
         'audit_completed'         => 'audit_completed',
         'cert_of_data_wipe_num'   => 'cert_of_data_wipe_num',
-        'has_cert_of_data_wipe'   => 'has_cert_of_data_wipe',
+        //'has_cert_of_data_wipe'   => 'has_cert_of_data_wipe',
         'cert_of_destruction_num' => 'cert_of_destruction_num',
-        'has_cert_of_destruction' => 'has_cert_of_destruction'
+        //'has_cert_of_destruction' => 'has_cert_of_destruction'
     ];
 
     protected $modelSearchFields = [];
@@ -377,8 +377,8 @@ class ShipmentController extends ContextController
 
             foreach ($shipments as $shipment) {
                 $shipmentElement = $shipment->toArray();
-                $shipmentElement['has_cert_of_data_wipe'] = '';
-                $shipmentElement['has_cert_of_destruction'] = '';
+                //$shipmentElement['has_cert_of_data_wipe'] = '';
+                //$shipmentElement['has_cert_of_destruction'] = '';
 
                 $row = [];
                 foreach ($this->modelExportFields as $field => $label) {
