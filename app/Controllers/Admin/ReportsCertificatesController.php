@@ -225,7 +225,7 @@ class ReportsCertificatesController extends ContextController
       $fileNamePrefix .= Carbon::createFromFormat(Constants::DATE_FORMAT, $fields['audit_completed_to'])->format('Ymd');
     }
     else {
-      $fileNamePrefix .= Carbon::now()->format('mdY');
+      $fileNamePrefix .= 'as_of_' . Carbon::now()->format('mdY');
     }
     $filename = $fileNamePrefix . '.csv';
 
