@@ -36,7 +36,8 @@ class MenuComposer
                         ['url' => route('admin.site.list'), 'label' => 'main.layout.menu.sites', 'icon' => 'fa-university', 'active' => in_array($this->currentRoute->getName(), ['admin.site.list', 'admin.site.create', 'admin.site.edit', 'admin.site.vendorClient.list', 'admin.site.vendorClient.create', 'admin.site.lotNumber.list', 'admin.site.lotNumber.create'])],
                         ['url' => route('admin.remove'), 'label' => 'main.layout.menu.remove_from_site', 'icon' => 'fa-trash', 'active' => in_array($this->currentRoute->getName(), ['admin.remove'])],
                         ['url' => route('admin.page.list'), 'label' => 'main.layout.menu.pages', 'icon' => 'fa fa-files-o', 'active' => in_array($this->currentRoute->getName(), ['admin.page.list', 'admin.page.create', 'admin.page.edit', 'admin.page.file.list', 'admin.page.file.create', 'admin.page.file.edit'])],
-                        ['url' => route('admin.file.list'), 'label' => 'main.layout.menu.files', 'icon' => 'fa fa-file-o', 'active' => in_array($this->currentRoute->getName(), ['admin.file.list', 'admin.file.create', 'admin.file.edit'])]
+                        ['url' => route('admin.file.list'), 'label' => 'main.layout.menu.files', 'icon' => 'fa fa-file-o', 'active' => in_array($this->currentRoute->getName(), ['admin.file.list', 'admin.file.create', 'admin.file.edit'])],
+                        ['url' => route('admin.reports.home'), 'label' => 'main.layout.menu.reports', 'icon' => 'fa fa-file-text-o', 'active' => in_array($this->currentRoute->getName(), ['admin.reports.home', 'admin.reports.certificates'])]
                     ];
                 } else if (Auth::user()->hasRole([ Role::USER, Role::SUPERUSER ]) && ContextHelper::isSiteContext($this->context) && (ContextHelper::doesContextMatchUserSite(Auth::user(), $this->context) || (Auth::user()->hasRole([Role::SUPERUSER])))) {
                     $this->menu = [

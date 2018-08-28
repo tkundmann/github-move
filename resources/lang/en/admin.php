@@ -80,6 +80,40 @@ return [
             'not_exist' => 'User does not exist.',
         ]
     ],
+    'reports' => [
+        'go_to_reporting_tool' => 'Go to Reporting Tool',
+        'home' => [
+            'title' => 'Reports Home',
+            'message' => 'To get started, select one of the report options listed below.',
+        ],
+        'certificates' => [
+            'title' => 'Certificate Status Report',
+            'description' => 'Use this tool to assemble a report of the current status (ie. exists/does not exist) of a certificate file on a per Lot/Shipment record basic.  Reports can be made for all portals, a specific portal and for a specific Audit Completed Date Range. Report allows for only Audit Completed Dates ocurring within the past two years.',
+            'record' => '{0}records|{1}record|[2,Inf]records',
+            'report_filter_form' => [
+                'site' => 'Site',
+                'audit_completed_range' => 'Audit Completed Range',
+                'generate_report' => 'Generate Report',
+                'export_report' => 'Export Report to CSV',
+                'has_data_wipe_cert' => "Has Certificate of Data Wipe?",
+                'has_recycling_cert' => "Has Certificate of Recycling?",
+                'complete_date_range_required' => 'A complete Date range is required. Incomplete Audit Completed Date ranges are ignored.'
+            ],
+            'report_headers' => [
+                'portal' => 'Portal',
+                'portal_name' => 'Portal Name',
+                'portal_url' => 'Portal URL',
+                'vendor_client' => 'Vendor Client',
+                'lot_date' => 'Lot Date',
+                'lot_number' => 'Lot Number',
+                'audit_completed' => 'Audit Completed',
+                'has_certificate_of_data_wipe' => 'Has Certificate of Data Wipe?',
+                'certificate_of_data_wipe_file' => 'Certificate of Data Wipe File',
+                'has_certificate_of_recycling' => 'Has Certificate of Recycling?',
+                'certificate_of_recycling_file' => 'Certificate of Recycling File'
+            ],
+        ],
+    ],
     'site' => [
         'site_list' => 'Site list',
         'record' => '{0}records|{1}record|[2,Inf]records',
