@@ -215,7 +215,19 @@ class ReportsCertificatesController extends ContextController
     }
 
     $csv->finalize();
-    $filename = 'certificate_file_status_' . Carbon::now()->format('mdY') . '.csv';
+
+    $fileNamePrefix = 'certificate_file_status_';
+    if (isset($fields['site']) && $fields['site'] != 0) {
+      $fileNamePrefix .= $row['portalURL'] . '_';
+    }
+    if ($fields['audit_completed_from'] != '' && $fields['audit_completed_to'] != '') {
+      $fileNamePrefix .= Carbon::createFromFormat(Constants::DATE_FORMAT, $fields['audit_completed_from'])->format('Ymd') . '_';
+      $fileNamePrefix .= Carbon::createFromFormat(Constants::DATE_FORMAT, $fields['audit_completed_to'])->format('Ymd');
+    }
+    else {
+      $fileNamePrefix .= Carbon::now()->format('mdY');
+    }
+    $filename = $fileNamePrefix . '.csv';
 
     return $csv->download($filename);
   }
