@@ -112,48 +112,52 @@
 
 
                         @if ($certificates && count($certificates) > 0)
-                        <table class="table-certificates-report table table-striped table-bordered withHover">
-                            <thead>
-                                <tr>
-                                    @foreach ($certReportColumns as $label => $headerConfig)
-                                        @if (is_array($headerConfig))
-                                            @if ($headerConfig['sortable'])
-                                                <th>@sortablelink($headerConfig['sort_column'], Lang::has('admin.reports.certificates.report_headers.'. $label) ? Lang::trans('admin.reports.certificates.report_headers.' . $label) : $label, 'fa ' .  $headerConfig['sort_fa_icon'], $order)</th>
-                                            @endif
-                                        @else
-                                            <th>@lang('admin.reports.certificates.report_headers.' . $label)</th>
-                                        @endif
-                                    @endforeach
-                                </tr>
-                            </thead>
-                            <tbody>
-                            @foreach ($certificates as $certificate)
-                                <tr>
-                                    <td>{{ $certificate->portalName }}<br/><span class="portal-url">{{'(/' . $certificate->portalURL . ')'}}</span></td>
-                                    <td>{{ $certificate->vendorClient }}</td>
-                                    <td>{{ $certificate->lotDate }}</td>
-                                    <td>{{ $certificate->lotNumber }}</td>
-                                    <td>{{ $certificate->auditCompletedDate }}</td>
-                                    <td class="{{($certificate->hasCertificateOfDataWipe == 'Yes') ? 'has-cert-file' : 'no-cert-file'}}">
-                                        {{ $certificate->hasCertificateOfDataWipe }}
-                                        @if ($certificate->hasCertificateOfDataWipe == 'Yes')
-                                            &#160;(<a href="{{ $certificate->fileDataWipeURL }}" target="_blank">{{ $certificate->fileDataWipeName }}</a>)
-                                        @endif
-                                    </td>
-                                    <td class="{{($certificate->hasCertificateOfRecycling == 'Yes') ? 'has-cert-file' : 'no-cert-file'}}">
-                                        {{ $certificate->hasCertificateOfRecycling }}
-                                        @if ($certificate->hasCertificateOfRecycling == 'Yes')
-                                            &#160;(<a href="{{ $certificate->fileRecyclingURL }}" target="_blank">{{ $certificate->fileRecyclingName }}</a>)
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
+                            <div class="text-center">
+                                {{ $certificates->appends(\Input::except('page'))->links() }}
+                            </div>
 
-                        <div class="text-center">
-                            {{ $certificates->appends(\Input::except('page'))->links() }}
-                        </div>
+                            <table class="table-certificates-report table table-striped table-bordered withHover">
+                                <thead>
+                                    <tr>
+                                        @foreach ($certReportColumns as $label => $headerConfig)
+                                            @if (is_array($headerConfig))
+                                                @if ($headerConfig['sortable'])
+                                                    <th>@sortablelink($headerConfig['sort_column'], Lang::has('admin.reports.certificates.report_headers.'. $label) ? Lang::trans('admin.reports.certificates.report_headers.' . $label) : $label, 'fa ' .  $headerConfig['sort_fa_icon'], $order)</th>
+                                                @endif
+                                            @else
+                                                <th>@lang('admin.reports.certificates.report_headers.' . $label)</th>
+                                            @endif
+                                        @endforeach
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                @foreach ($certificates as $certificate)
+                                    <tr>
+                                        <td>{{ $certificate->portalName }}<br/><span class="portal-url">{{'(/' . $certificate->portalURL . ')'}}</span></td>
+                                        <td>{{ $certificate->vendorClient }}</td>
+                                        <td>{{ $certificate->lotDate }}</td>
+                                        <td>{{ $certificate->lotNumber }}</td>
+                                        <td>{{ $certificate->auditCompletedDate }}</td>
+                                        <td class="{{($certificate->hasCertificateOfDataWipe == 'Yes') ? 'has-cert-file' : 'no-cert-file'}}">
+                                            {{ $certificate->hasCertificateOfDataWipe }}
+                                            @if ($certificate->hasCertificateOfDataWipe == 'Yes')
+                                                &#160;(<a href="{{ $certificate->fileDataWipeURL }}" target="_blank">{{ $certificate->fileDataWipeName }}</a>)
+                                            @endif
+                                        </td>
+                                        <td class="{{($certificate->hasCertificateOfRecycling == 'Yes') ? 'has-cert-file' : 'no-cert-file'}}">
+                                            {{ $certificate->hasCertificateOfRecycling }}
+                                            @if ($certificate->hasCertificateOfRecycling == 'Yes')
+                                                &#160;(<a href="{{ $certificate->fileRecyclingURL }}" target="_blank">{{ $certificate->fileRecyclingName }}</a>)
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+
+                            <div class="text-center">
+                                {{ $certificates->appends(\Input::except('page'))->links() }}
+                            </div>
 
                         @else
                             @if (Input::get('generate-report'))
