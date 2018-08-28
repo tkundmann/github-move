@@ -31,11 +31,11 @@
                                             <small>({{ Constants::DATE_FORMAT_LABEL }})</small>
                                         </label>
                                         <div class="input-group">
-                                            <input id="audit_completed_from" name="audit_completed_from" data-provide="datepicker" data-date-clear-btn="true" data-date-today-btn="linked" data-date-autoclose="true" data-date-format="{{ Constants::DATE_FORMAT_JS }}"
-                                                   type="text" class="form-control" placeholder="@lang('common.from')" value="{{ Input::get('audit_completed_from') }}"/>
+                                            <input id="audit_completed_from" name="audit_completed_from" data-provide="datepicker"
+                                                   type="text" class="form-control" placeholder="@lang('common.from')" value=""/>
                                             <span class="input-group-addon">-</span>
-                                            <input id="audit_completed_to" name="audit_completed_to" data-provide="datepicker" data-date-clear-btn="true" data-date-today-btn="linked" data-date-autoclose="true" data-date-format="{{ Constants::DATE_FORMAT_JS }}"
-                                                   type="text" class="form-control" placeholder="@lang('common.to')" value="{{ Input::get('audit_completed_to') }}"/>
+                                            <input id="audit_completed_to" name="audit_completed_to" data-provide="datepicker"
+                                                   type="text" class="form-control" placeholder="@lang('common.to')" value=""/>
                                         </div>
                                         <small
                                             @if ($errors->has('audit_completed_from') or $errors->has('audit_completed_to')) class="text-danger" @endif
@@ -116,7 +116,7 @@
                                 {{ $certificates->appends(\Input::except('page'))->links() }}
                             </div>
 
-                            <table class="table-certificates-report table table-striped table-bordered withHover">
+                            <table id="reportsCertificatesTable" class="table-certificates-report table table-striped table-bordered withHover">
                                 <thead>
                                     <tr>
                                         @foreach ($certReportColumns as $label => $headerConfig)
@@ -179,6 +179,28 @@
     <script>
         $(document).ready(function () {
             $('#reportsCertificatesTable').stickyTableHeaders();
-        });
+
+            $("#audit_completed_from").datepicker({
+                format: 'mm/dd/yyyy',
+                autoclose: true,
+                todayHighlight: true,
+                startDate: '{{ $auditCompletedPickerStartDate }}'
+            }).on('changeDate', function (selected) {
+                var minDate = new Date(selected.date.valueOf());
+                $('#audit_completed_to').datepicker('setStartDate', minDate);
+                $("#audit_completed_to").val($("#audit_completed_from").val());
+                $(this).datepicker('hide');
+            });
+
+            $("#audit_completed_to").datepicker({
+                format: 'mm/dd/yyyy',
+                autoclose: true,
+                todayHighlight: true,
+                startDate: '{{ $auditCompletedPickerStartDate }}'
+            }).on('changeDate', function (selected) {
+                $(this).datepicker('hide');
+            });
+    });
+
     </script>
 @endsection

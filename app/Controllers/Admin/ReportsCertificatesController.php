@@ -97,10 +97,12 @@ class ReportsCertificatesController extends ContextController
       }
     }
 
+    $auditCompletedPickerStartDate = date("m/d/Y", strtotime("-2 year", time()));
     $viewData = [
       'certReportColumns' => $this->certReportColumns,
       'certificates' => $certificates,
-      'sites' => $filterSitesArray
+      'sites' => $filterSitesArray,
+      'auditCompletedPickerStartDate' => $auditCompletedPickerStartDate
     ];
 
     if (isset($query)) {
