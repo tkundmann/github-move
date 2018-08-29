@@ -183,22 +183,32 @@
             $("#audit_completed_from").datepicker({
                 format: 'mm/dd/yyyy',
                 autoclose: true,
+                clearBtn: true,
                 todayHighlight: true,
                 startDate: '{{ $auditCompletedPickerStartDate }}'
             }).on('changeDate', function (selected) {
-                var minDate = new Date(selected.date.valueOf());
-                $('#audit_completed_to').datepicker('setStartDate', minDate);
-                $("#audit_completed_to").val($("#audit_completed_from").val());
-                $(this).datepicker('hide');
+                if (selected.date !== undefined) {
+                    var minDate = new Date(selected.date.valueOf());
+                    $('#audit_completed_to').datepicker('setStartDate', minDate);
+                    if ($("#audit_completed_to").val() === '') {
+                        $('#audit_completed_to').datepicker('update', $("#audit_completed_from").val());
+                    }
+                    $(this).datepicker('hide');
+                }
             });
 
             $("#audit_completed_to").datepicker({
                 format: 'mm/dd/yyyy',
                 autoclose: true,
+                clearBtn: true,
                 todayHighlight: true,
                 startDate: '{{ $auditCompletedPickerStartDate }}'
             }).on('changeDate', function (selected) {
-                $(this).datepicker('hide');
+                if (selected.date !== undefined) {
+                    var maxDate = new Date(selected.date.valueOf());
+                    $('#audit_completed_from').datepicker('setEndDate', maxDate);
+                    $(this).datepicker('hide');
+                }
             });
     });
 
