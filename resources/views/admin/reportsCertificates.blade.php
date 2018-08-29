@@ -32,10 +32,10 @@
                                         </label>
                                         <div class="input-group">
                                             <input id="audit_completed_from" name="audit_completed_from" data-provide="datepicker"
-                                                   type="text" class="form-control" placeholder="@lang('common.from')" value=""/>
+                                                   type="text" class="form-control" placeholder="@lang('common.from')" value="{{ Input::get('audit_completed_from') }}"/>
                                             <span class="input-group-addon">-</span>
                                             <input id="audit_completed_to" name="audit_completed_to" data-provide="datepicker"
-                                                   type="text" class="form-control" placeholder="@lang('common.to')" value=""/>
+                                                   type="text" class="form-control" placeholder="@lang('common.to')" value="{{ Input::get('audit_completed_to') }}"/>
                                         </div>
                                         <small
                                             @if ($errors->has('audit_completed_from') or $errors->has('audit_completed_to')) class="text-danger" @endif
