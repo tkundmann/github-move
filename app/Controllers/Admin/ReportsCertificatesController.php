@@ -138,10 +138,10 @@ class ReportsCertificatesController extends ContextController
       ->join('vendor_client', 'site_vendor_client.vendor_client_id', '=', 'vendor_client.id')
       ->join('shipment', 'vendor_client.name', '=', 'shipment.vendor_client')
       ->leftJoin('file as file_dataWipe', function ($joinData) {
-        $joinData->on('shipment.id', '=', 'file_dataWipe.shipment_id')->where('file_dataWipe.filename', 'like', 'DATA%');
+        $joinData->on('shipment.id', '=', 'file_dataWipe.shipment_id')->where('file_dataWipe.filename', 'like', 'DATA%')->where(DB::raw('LOCATE(CONCAT(\'/\',site.code,\'/\'), file_dataWipe.url)'), '>', 0);
       })
       ->leftJoin('file as file_recycling', function ($joinDest) {
-        $joinDest->on('shipment.id', '=', 'file_recycling.shipment_id')->where('file_recycling.filename', 'like', 'DEST%');
+        $joinDest->on('shipment.id', '=', 'file_recycling.shipment_id')->where('file_recycling.filename', 'like', 'DEST%')->where(DB::raw('LOCATE(CONCAT(\'/\',site.code,\'/\'), file_recycling.url)'), '>', 0);
       })
       ->select(
         'site.code as portalURL',
