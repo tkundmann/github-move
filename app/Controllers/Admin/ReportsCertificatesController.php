@@ -150,10 +150,10 @@ class ReportsCertificatesController extends ContextController
         'shipment.lot_date as lotDate',
         'shipment.lot_number as lotNumber',
         'shipment.audit_completed as auditCompletedDate',
-        DB::raw('IF(file_dataWipe.filename IS NOT NULL,\'Yes\', \'No\') as hasCertificateOfDataWipe'),
+        DB::raw('IF(file_dataWipe.filename IS NOT NULL AND LOCATE(CONCAT(\'/\',site.code,\'/\'), file_dataWipe.url) > 0,\'Yes\', \'No\') as hasCertificateOfDataWipe'),
         'file_dataWipe.filename as fileDataWipeName',
         'file_dataWipe.url as fileDataWipeURL',
-        DB::raw('IF(file_recycling.filename IS NOT NULL,\'Yes\', \'No\') as hasCertificateOfRecycling'),
+        DB::raw('IF(file_recycling.filename IS NOT NULL AND LOCATE(CONCAT(\'/\',site.code,\'/\'), file_recycling.url) > 0,\'Yes\', \'No\') as hasCertificateOfRecycling'),
         'file_recycling.filename as fileRecyclingName',
         'file_recycling.url as fileRecyclingURL'
       )
