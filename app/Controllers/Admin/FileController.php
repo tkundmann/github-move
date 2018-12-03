@@ -253,7 +253,11 @@ class FileController extends ContextController
                 $file->url = $url;
                 $file->save();
 
-                $successfullyUploadedFiles[$fileName] = $fileName;
+                $successfullyUploadedFiles[] = array(
+                    'lotNumber' => $fileToUpload['shipment']->lot_number,
+                    'fileName'  => $fileName,
+                    'siteCode'  => $site->code
+                );
             }
         }
 
@@ -268,7 +272,11 @@ class FileController extends ContextController
             $successMessage = trans('admin.file.create.success_file_upload');
             $successMessage = str_replace(array_keys($messageReplacePairs),array_values($messageReplacePairs),$successMessage);
 
-            $messages['success'] = $successMessage . '<br><strong>' . implode(' - ', $successfullyUploadedFiles) . '</strong>';
+            $messages['success'] = $successMessage . '<br/><strong>';
+            foreach ($successfullyUploadedFiles as $index => $uploadedFile) {
+                $messages['success'] .= '<a class="margin-right-md" href="/' . $uploadedFile['siteCode'] . '/shipment/search/result?lot_number_select=equals&lot_number=' . $uploadedFile['lotNumber'] . '" target="_blank">' . $uploadedFile['fileName'] . '</a>';
+            }
+            $messages['success'] .= '</strong>';
         }
 
         if (count($filesNotValidForUpload) > 0) {
@@ -276,7 +284,11 @@ class FileController extends ContextController
             $failMessage = trans('admin.file.create.not_valid_for_file_upload');
             $failMessage = str_replace(array_keys($messageReplacePairs),array_values($messageReplacePairs),$failMessage);
 
-            $messages['fail'] = $failMessage . '<br><strong>' . implode(' - ', $filesNotValidForUpload) . '</strong><br><br>' . trans('admin.file.create.shipment_not_found_for_file');
+            $messages['fail'] = $failMessage . '<br/><strong>';
+            foreach ($filesNotValidForUpload as $index => $notValidFile) {
+                $messages['fail'] .= '<span class="margin-right-md">' . $notValidFile . '</span>';
+            }
+            $messages['fail'] .= '</strong><br><br>' . trans('admin.file.create.shipment_not_found_for_file');
         }
 
         return redirect()->route('admin.file.list', ['site' => $site->id])->with($messages);
