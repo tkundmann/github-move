@@ -78,7 +78,11 @@
 
     # SipiDemo Pickup Request Form Redirects
     RewriteCond %{REQUEST_URI} ^/sipidemo/pickuprequest$   [NC]
-    RewriteRule ^.*$  "/sipidemo/pickup-request"            [R,NE,L]
+    RewriteRule ^.*$  "/sipidemo/pickup-request"           [R,NE,L]
+
+    # Switch Pickup Request Form Redirects
+    RewriteCond %{REQUEST_URI} ^/switch/pickuprequest$     [NC]
+    RewriteRule ^.*$  "/switch/pickup-request"             [R,NE,L]
 
     # Trinity Health Pickup Request Form Redirects
     RewriteCond %{REQUEST_URI} ^/trinity/pickuprequest$    [NC]
@@ -89,10 +93,10 @@
     RewriteRule ^.*$  "/workday/pickup-request"            [R,NE,L]
 
     # Redirect hits to Yahoo to Oath
-    RewriteCond %{REQUEST_URI} ^/yahoo$                   [OR,NC]
-    RewriteCond %{REQUEST_URI} ^/yahoo/home$              [OR,NC]
-    RewriteCond %{REQUEST_URI} ^/yahoo/login$             [NC]
-    RewriteRule ^.*$  "/oath"                             [R,NE,L]
+    RewriteCond %{REQUEST_URI} ^/yahoo$                    [OR,NC]
+    RewriteCond %{REQUEST_URI} ^/yahoo/home$               [OR,NC]
+    RewriteCond %{REQUEST_URI} ^/yahoo/login$              [NC]
+    RewriteRule ^.*$  "/oath"                              [R,NE,L]
 
     # Oath (previously Yahoo) Pickup Request Form Redirects
     RewriteCond %{REQUEST_URI} ^/yahoo/page/pickuprequest$ [OR,NC]
