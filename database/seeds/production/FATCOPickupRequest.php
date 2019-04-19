@@ -9,7 +9,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class FATCPickupRequest extends Seeder
+class FATCOPickupRequest extends Seeder
 {
 		/**
      * Run the database seeds.
@@ -25,7 +25,7 @@ class FATCPickupRequest extends Seeder
 		$site->features()->attach([$featureHasPickupRequest->id]);
 
 		$pickupRequestConfiguration = array (
-			'password' => Hash::make(fatc04192019sar!'),
+			'password' => Hash::make('ftc04192019sar!'),
 			'title' => 'Sipi Asset Recovery/First American Title Company Pickup Request',
 			'use_company_division' => false,
 			'use_contact_section_title' => false,
