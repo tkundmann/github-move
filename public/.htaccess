@@ -48,6 +48,10 @@
     RewriteCond %{REQUEST_URI} ^/ebay/pickuprequest$       [NC]
     RewriteRule ^.*$  "/ebay/pickup-request"               [R,NE,L]
 
+    # First American Title Company Pickup Request Form Redirects
+    RewriteCond %{REQUEST_URI} ^/firstamericantitlecompany/pickuprequest$     [NC]
+    RewriteRule ^.*$  "/firstamericantitlecompany/pickup-request"             [R,NE,L]
+
     # GoDaddy Pickup Request Form Redirects
     RewriteCond %{REQUEST_URI} ^/godaddy/pickuprequest$    [NC]
     RewriteRule ^.*$  "/godaddy/pickup-request"            [R,NE,L]
