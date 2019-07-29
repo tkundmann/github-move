@@ -29,6 +29,7 @@ class CenteneCorporationPickupRequest extends Seeder
 			'title' => 'Sipi Asset Recovery/Centene Corporation Pickup Request',
 			'use_company_division' => false,
 			'use_contact_section_title' => true,
+			'contact_section_title' => 'Site Location Pick-up Information',
 			'use_state_as_select' => false,
 			'use_country' => false,
 			'use_reference_number' => true,

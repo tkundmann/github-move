@@ -37,8 +37,12 @@
     RewriteRule ^.*$  "/amobee/pickup-request"             [R,NE,L]
 
     # Anaplan Pickup Request Form Redirects
-    RewriteCond %{REQUEST_URI} ^/anaplan/pickuprequest$     [NC]
-    RewriteRule ^.*$  "/anaplan/pickup-request"             [R,NE,L]
+    RewriteCond %{REQUEST_URI} ^/anaplan/pickuprequest$    [NC]
+    RewriteRule ^.*$  "/anaplan/pickup-request"            [R,NE,L]
+
+    # Centene Pickup Request Form Redirects
+    RewriteCond %{REQUEST_URI} ^/centene/pickuprequest$    [NC]
+    RewriteRule ^.*$  "/centene/pickup-request"            [R,NE,L]
 
     # Cerner Pickup Request Form Redirects
     RewriteCond %{REQUEST_URI} ^/cerner/pickuprequest$     [NC]
