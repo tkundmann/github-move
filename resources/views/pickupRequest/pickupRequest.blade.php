@@ -170,7 +170,7 @@
                                             </div>
                                             <div class="col-md-1"></div>
                                             <div class="col-md-5">
-                                                <p>{!! $site->getFeature(Feature::PICKUP_REQUEST_ADDRESS_BOOK)->pivot->data['change_text'] !!}</p>
+                                                <p class="text-danger">{!! $site->getFeature(Feature::PICKUP_REQUEST_ADDRESS_BOOK)->pivot->data['change_text'] !!}</p>
                                                 @if($site->getFeature(Feature::PICKUP_REQUEST_ADDRESS_BOOK)->pivot->data['allow_change'])
                                                     <div class="checkbox @if($errors->has('allow_change')) has-error @endif">
                                                         <label><input type="checkbox" name="allow_change"
