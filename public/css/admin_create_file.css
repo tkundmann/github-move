@@ -1,0 +1,25 @@
+.container-admin-create-file .form-control.multi-file-upload {
+  padding: 7px 12px;
+  font-size: 13px;
+  line-height: 1em;
+  height: unset;
+}
+.container-admin-create-file .file-upload-preview {
+  border: solid 1px #ddd;
+  border-radius: 3px;
+  padding: 10px 15px;
+  margin: 10px 0;
+  width: 100%;
+}
+.container-admin-create-file .file-upload-preview h1 {
+  font-size: 14px;
+  margin: 0 0 10px 0;
+  font-weight: bold;
+}
+.container-admin-create-file .file-upload-preview .file-upload-listing div {
+  width: 49%;
+  margin: 0 1% 0 0;
+  font-size: 13px;
+  float: left;
+  line-height: 1.7em;
+}
