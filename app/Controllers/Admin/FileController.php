@@ -23,12 +23,12 @@ class FileController extends ContextController
     const RESULTS_PER_PAGE = 50;
     const STRING_LIMIT = 50;
 
-	const NUM_FILE_UPLOADS = 10;
-	/**
-	 * FileController constructor.
-	 * @param Request $request
-	 */
-	public function __construct(Request $request)
+    const NUM_FILE_UPLOADS = 50;
+    /**
+     * FileController constructor.
+     * @param Request $request
+     */
+    public function __construct(Request $request)
     {
         parent::__construct($request);
         $this->middleware('auth');
@@ -111,12 +111,12 @@ class FileController extends ContextController
 
         if ($site) {
             if ($site->hasFeature(Feature::HAS_CERTIFICATES)) {
-                $types['Certificates of Data Wipe'] = 'Certificates of Data Wipe';
-                $types['Certificates of Recycling'] = 'Certificates of Recycling';
+                $types['Certificates of Data Wipe'] = 'Certificates of Data Wipe (.pdf)';
+                $types['Certificates of Recycling'] = 'Certificates of Recycling (.pdf)';
 
             }
             if ($site->hasFeature(Feature::HAS_SETTLEMENTS)) {
-                $types['Settlements'] = 'Settlements';
+                $types['Settlements'] = 'Settlements (.xls, .xlsx)';
             }
         }
 
@@ -134,7 +134,7 @@ class FileController extends ContextController
             'sites'             => $allSitesWithPagesArray,
             'types'             => $types,
             'limit'             => self::STRING_LIMIT,
-			'num_upload_fields' => self::NUM_FILE_UPLOADS
+            'num_upload_fields' => self::NUM_FILE_UPLOADS
         ]);
     }
 
@@ -148,30 +148,39 @@ class FileController extends ContextController
         $site = null;
         $site = Site::find(trim($fields['site']));
         if (Input::get('site_change')) {
-			if (!$site) {
-				throw new \Exception('Site does not exist.');
-			} else {
-				return $this->createView($site);
-			}
-		}
+            if (!$site) {
+                throw new \Exception('Site does not exist.');
+            } else {
+                return $this->createView($site);
+            }
+        }
 
-		$numFilesUploaded = 0;
-		for ($i=1; $i <= self::NUM_FILE_UPLOADS ; $i++) {
-			$uploadedFile = Input::file('file' . $i);
-        	if (isset($uploadedFile)) {
-				$numFilesUploaded++;
-				$fields['file' . $numFilesUploaded] = $uploadedFile;
-			}
-		}
+        $numFilesUploaded = 0;
+        $uploadedFiles = Input::file('files');
+        foreach ($uploadedFiles as $key => $uploadedFile) {
+            if (isset($uploadedFile)) {
+                $numFilesUploaded++;
+                $fields['file' . $numFilesUploaded] = $uploadedFile;
+            }
+        }
 
-		$rules = [
-			'site' => 'required|exists:site,id',
-			'type' => 'required',
-			'file1' => 'required'
-		];
+        // $numFilesUploaded = 0;
+        // for ($i=1; $i <= self::NUM_FILE_UPLOADS ; $i++) {
+        //     $uploadedFile = Input::file('file' . $i);
+        //     if (isset($uploadedFile)) {
+        //         $numFilesUploaded++;
+        //         $fields['file' . $numFilesUploaded] = $uploadedFile;
+        //     }
+        // }
+
+        $rules = [
+            'site' => 'required|exists:site,id',
+            'type' => 'required',
+            'file1' => 'required'
+        ];
 
 
-		$validator = Validator::make($fields, $rules);
+        $validator = Validator::make($fields, $rules);
         if ($validator->fails()) {
             return redirect()->route('admin.file.create')->withErrors($validator)->withInput();
         }
@@ -203,23 +212,23 @@ class FileController extends ContextController
         // Parse the file name of the uploaded file(s) to retrieve the Shipment Lot Number and then check to see if a shipment
         // record exists for the selected site per the parsed Lot Number.  This works because all 3 file types follow
         // agreed upon file naming conventions.
-		$shipmentNotFoundError = false;
+        $shipmentNotFoundError = false;
         $filesValidForUpload = array();
         $filesNotValidForUpload = array();
-		for ($i=1; $i <= $numFilesUploaded ; $i++) {
+        for ($i=1; $i <= $numFilesUploaded ; $i++) {
 
-			$currentFile = $fields['file' . $i];
-			$shipment = $this->getShipmentPerFile($currentFile, $fields['type'], $site);
+            $currentFile = $fields['file' . $i];
+            $shipment = $this->getShipmentPerFile($currentFile, $fields['type'], $site);
 
-			if ($shipment) {
-				$filesValidForUpload[$i]['upload'] = $currentFile;
-				$filesValidForUpload[$i]['shipment'] = $shipment;
-			}
-			else {
+            if ($shipment) {
+                $filesValidForUpload[$i]['upload'] = $currentFile;
+                $filesValidForUpload[$i]['shipment'] = $shipment;
+            }
+            else {
                 $fileName = $currentFile->getClientOriginalName();
-				$filesNotValidForUpload[$fileName] = $fileName;
-			}
-		}
+                $filesNotValidForUpload[$fileName] = $fileName;
+            }
+        }
 
         $successfullyUploadedFiles = array();
         foreach ($filesValidForUpload as $key => $fileToUpload) {
@@ -228,7 +237,7 @@ class FileController extends ContextController
             // If so, delete file record from DB and remove from S3.  File overwriting is allowed.
              $existingFile = $page->files->where('shipment_id', $fileToUpload['shipment']->id)->first();
             if ($existingFile) {
-            	FileUploadHelper::removeFile($existingFile);
+                FileUploadHelper::removeFile($existingFile);
             }
 
             $file = new File();
@@ -274,7 +283,7 @@ class FileController extends ContextController
 
             $messages['success'] = $successMessage . '<br/><strong>';
             foreach ($successfullyUploadedFiles as $index => $uploadedFile) {
-                $messages['success'] .= '<a class="margin-right-md" href="/' . $uploadedFile['siteCode'] . '/shipment/search/result?lot_number_select=equals&lot_number=' . $uploadedFile['lotNumber'] . '" target="_blank">' . $uploadedFile['fileName'] . '</a>';
+                $messages['success'] .= '<span class="font-size-md margin-top-md margin-right-lg inline-block"><a href="/' . $uploadedFile['siteCode'] . '/shipment/search/result?lot_number_select=equals&lot_number=' . $uploadedFile['lotNumber'] . '" target="_blank">' . $uploadedFile['fileName'] . '</a></span>';
             }
             $messages['success'] .= '</strong>';
         }
@@ -286,7 +295,7 @@ class FileController extends ContextController
 
             $messages['fail'] = $failMessage . '<br/><strong>';
             foreach ($filesNotValidForUpload as $index => $notValidFile) {
-                $messages['fail'] .= '<span class="margin-right-md">' . $notValidFile . '</span>';
+                $messages['fail'] .= '<span class="font-size-md margin-top-md margin-right-lg inline-block">' . $notValidFile . '</span>';
             }
             $messages['fail'] .= '</strong><br><br>' . trans('admin.file.create.shipment_not_found_for_file');
         }
@@ -394,7 +403,7 @@ class FileController extends ContextController
         if (!$file) {
             return redirect()->route('admin.file.list')->with('fail', trans('admin.file.remove.not_exist'));
         }
-				FileUploadHelper::removeFile($file);
+                FileUploadHelper::removeFile($file);
         return redirect()->route('admin.file.list',  ['site' => $file->page->site_id])->with('success', trans('admin.file.remove.file_removed'));
     }
 }

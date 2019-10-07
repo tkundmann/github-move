@@ -20,4 +20,5 @@ elixir(function(mix) {
   mix.less('menu.less', 'public/css');
   mix.less('pickup_request.less', 'public/css');
   mix.less('admin_reports.less', 'public/css');
+  mix.less('admin_create_file.less', 'public/css');
 });

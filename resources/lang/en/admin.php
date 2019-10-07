@@ -269,6 +269,7 @@ return [
         'create' => [
             'upload_file' => 'Upload file',
             'file' => 'File',
+            'files' => 'File(s)',
             'site' => 'Site',
             'type' => 'Type',
             'file_name' => 'Name',

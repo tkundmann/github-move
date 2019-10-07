@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('content')
-    <div class="container">
+    <div class="container container-admin-create-file">
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
@@ -10,7 +10,7 @@
                         <div class="btn-group pull-right">
                             <button onclick="goBack()" class="btn btn-primary btn-xs"><i class="fa fa-btn fa-arrow-left"></i>@lang('common.back')</button>
                         </div>
-                        <div>Use the fields below to upload up to 10 files to a site per a single form submission.</div>
+                        <div>Use the fields below to upload up to {{$num_upload_fields}} files to a site per a single form submission.</div>
                         <div class="text-danger"><strong>PLEASE NOTE:</strong> All files being uploaded at one time MUST conform with the selected file <strong>Type</strong>.  Those files that do not conform, are rejected and not uploaded.</div>
                     </div>
                     <div class="panel-body">
@@ -46,7 +46,25 @@
                             </div>
                         </div>
 
-                        @for ($i = 1; $i <= $num_upload_fields; $i++)
+                        <div class="form-group{{----}}@if($errors->has('files')) has-error @endif">
+                            <label for="{{'files'}}"
+                                   class="col-sm-3 control-label colon-after colon-after-required">{{ trans('admin.file.create.files') }}</label>
+
+                            <div class="col-sm-6">
+                                {{ Form::file('files[]', ['id' => 'js-multi-file-upload', 'class' => 'form-control multi-file-upload','multiple']) }}
+
+                                @if ($errors->has('files'))
+                                    {!! $errors->first('files', '<small class="text-danger">:message</small>') !!}
+                                @endif
+
+                                <div id="js-file-upload-preview" class="file-upload-preview row" style="display:none">
+                                    <h1>Files being uploaded:</h1>
+                                    <div class="js-file-upload-listing file-upload-listing"></div>
+                                </div>
+                            </div>
+                        </div>
+
+<!--                         @for ($i = 1; $i <= $num_upload_fields; $i++)
                             <div class="form-group{{----}}@if($errors->has('file' . $i)) has-error @endif">
                                 <label for="{{ 'file' . $i }}"
                                        class="col-sm-3 control-label colon-after @if($i == 1) colon-after-required @endif">{{ trans('admin.file.create.file') . ' #' . $i }}</label>
@@ -69,7 +87,7 @@
                                 </div>
                             </div>
                         @endfor
-
+ -->
                         <hr/>
 
                         <div class="text-center">
@@ -87,12 +105,60 @@
 
 @section('js')
 <script>
+
+    var fileURLObjects = [];
     $(document).ready(function() {
-        $('#site').on('change', function (event) {
+        $('#site').on('change', function () {
             $('#site').append('<input type="hidden" name="site_change" value="1"/>');
             $('#file_create_form').submit();
         });
 
+        $('#type').on('change', function () {
+            var $fileTypeSelect = $(this);
+            var fileTypeText = $fileTypeSelect.find('option:selected').text();
+            var fileTypeTextParsed = fileTypeText.slice(0, -1).split(" (");
+            var acceptedFileExt = fileTypeTextParsed[1];
+            $('#js-multi-file-upload').attr('accept',acceptedFileExt);
+        });
+
+        $('#js-multi-file-upload').on('change', function () {
+
+            var $multiFileInput = $(this);
+            var $fileUploadPreview = $multiFileInput.next('#js-file-upload-preview');
+            var $fileUploadPreviewListing = $fileUploadPreview.find('.js-file-upload-listing');
+            var filesToUpload = $multiFileInput[0].files;
+
+            $.each(fileURLObjects, function(urlObject) {
+                window.URL.revokeObjectURL(urlObject);
+            })
+            fileURLObjects = [];
+
+            $fileUploadPreviewListing.html('');
+
+            if (filesToUpload.length > 0) {
+                for (var i = 0; i < filesToUpload.length; i++) {
+                    url = window.URL.createObjectURL(filesToUpload[i]);
+                    filePreviewMarkup = '<div><a href="' + url.toString() + '" target="_blank">' + filesToUpload[i].name + '</a> (' + returnFileSize(filesToUpload[i].size) + ')</div>';
+                    $fileUploadPreviewListing.append(filePreviewMarkup);
+                    fileURLObjects.push(url);
+                }
+                $fileUploadPreview.show();
+            }
+            else {
+                $fileUploadPreview.hide('file-upload-preview');
+            }
+
+        });
+
+        function returnFileSize(number) {
+          if(number < 1024) {
+            return number + ' bytes';
+          } else if(number > 1024 && number < 1048576) {
+            return (number/1024).toFixed(1) + ' KB';
+          } else if(number > 1048576) {
+            return (number/1048576).toFixed(1) + ' MB';
+          }
+        }
     });
 </script>
 
