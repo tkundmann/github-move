@@ -66,10 +66,11 @@ class SiteController extends ContextController
     public function postCreate()
     {
         $rules = array(
-            'type' => 'required',
-            'title' => 'required',
-            'code' => 'required|regex:/^[A-Za-z0-9\-\_\']+$/|unique:site,code',
-            'logo' => 'required',
+            'type'                                => 'required',
+            'title'                               => 'required',
+            'code'                                => 'required|regex:/^[A-Za-z0-9\-\_\']+$/|unique:site,code',
+            'logo'                                => 'required',
+            'account-vendor-client-restriction-enabled' => 'required',
         );
 
         if (Input::get('logo') == 'custom') {
@@ -147,7 +148,7 @@ class SiteController extends ContextController
             $featureCustomProductFamilyForCertificateOfDataWipeNumber = Feature::where('name', '=', Feature::CUSTOM_PRODUCT_FAMILY_FOR_CERTIFICATE_OF_DATA_WIPE_NUMBER)->first();
             $featureCustomStatusForCertificateOfDestructionNumber = Feature::where('name', '=', Feature::CUSTOM_STATUS_FOR_CERTIFICATE_OF_DESTRUCTION_NUMBER)->first();
 
-            $site->features()->attach([
+            $siteFeatures = [
                 $featureHasPages->id,
                 $featureHasSettlements->id,
                 $featureHasCertificates->id,
@@ -156,7 +157,14 @@ class SiteController extends ContextController
                 $featureCertificateOfDestructionAsFile->id,
                 $featureCustomProductFamilyForCertificateOfDataWipeNumber->id,
                 $featureCustomStatusForCertificateOfDestructionNumber->id
-            ]);
+            ];
+
+            if (Input::get('account-vendor-client-restriction-enabled')) {
+                $featureVendorClientCodeAccessRestricted = Feature::where('name', '=', Feature::VENDOR_CLIENT_CODE_ACCESS_RESTRICTED)->first();
+                $siteFeatures[] = $featureVendorClientCodeAccessRestricted->id;
+            }
+
+            $site->features()->attach($siteFeatures);
 
             return redirect()->route('admin.site.list')->with('success', trans('admin.site.create.site_created'));
         }
@@ -169,6 +177,8 @@ class SiteController extends ContextController
         if (!$site) {
             return redirect()->route('admin.site.list')->with('fail', trans('admin.site.edit.not_exist'));
         }
+
+        $site->hasVendorClientCodeAccessFeature = $site->hasFeature(Feature::VENDOR_CLIENT_CODE_ACCESS_RESTRICTED);
 
         return view('admin.siteEdit')->with([
             'currentSite' => $site
@@ -184,9 +194,10 @@ class SiteController extends ContextController
         }
 
         $rules = array(
-            'type' => 'required',
-            'title' => 'required',
-            'code' => 'required|regex:/^[A-Za-z0-9\-\_\']+$/|unique:site,code,' . $site->id
+            'type'                                => 'required',
+            'title'                               => 'required',
+            'code'                                => 'required|regex:/^[A-Za-z0-9\-\_\']+$/|unique:site,code,' . $site->id,
+            'account-vendor-client-restriction-enabled' => 'required',
         );
 
         if (Input::get('logo_change')) {
@@ -295,6 +306,17 @@ class SiteController extends ContextController
             }
 
             $site->save();
+
+            $featureVendorClientCodeAccessRestricted = Feature::where('name', '=', Feature::VENDOR_CLIENT_CODE_ACCESS_RESTRICTED)->first();
+            $hasVendorClientCodeAccessFeature = $site->hasFeature(Feature::VENDOR_CLIENT_CODE_ACCESS_RESTRICTED);
+            if (Input::get('account-vendor-client-restriction-enabled') && !$hasVendorClientCodeAccessFeature) {
+                $site->features()->attach($featureVendorClientCodeAccessRestricted);
+            }
+            else {
+                if ($hasVendorClientCodeAccessFeature) {
+                    $site->features()->detach($featureVendorClientCodeAccessRestricted);
+                }
+            }
 
             return redirect()->route('admin.site.list')->with('success', trans('admin.site.edit.site_saved'));
         }

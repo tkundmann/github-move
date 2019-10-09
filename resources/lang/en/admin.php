@@ -123,6 +123,7 @@ return [
             'type' => 'Type',
             'logo' => 'Logo',
             'color' => 'Color',
+            'account_vendor_client_restriction' => 'Account Vendor Client Restriction Enabled',
         ],
         'edit' => [
             'editing_site' => 'Editing Site: :site',

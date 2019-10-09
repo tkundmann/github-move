@@ -102,6 +102,20 @@
                                 </div>
                             </div>
 
+                            <div class="form-group @if($errors->has('account-vendor-client-restriction-enabled')) has-error @endif">
+                                {{ Form::label('account-vendor-client-restriction-enabled', trans('admin.site.site.account_vendor_client_restriction'), ['class' => 'col-sm-3 control-label colon-after']) }}
+                                <div class="col-sm-6">
+                                    <label class="radio-inline">
+                                        {{ Form::radio('account-vendor-client-restriction-enabled', 1, Input::get('account-vendor-client-restriction-enabled') !== null ? !Input::get('account-vendor-client-restriction-enabled') : old('account-vendor-client-restriction-enabled') ? old('account-vendor-client-restriction-enabled') : $currentSite->hasVendorClientCodeAccessFeature) }}
+                                        @lang('common.true')
+                                    </label>
+                                    <label class="radio-inline">
+                                        {{ Form::radio('account-vendor-client-restriction-enabled', 0, Input::get('account-vendor-client-restriction-enabled') !== null ? Input::get('account-vendor-client-restriction-enabled') : old('account-vendor-client-restriction') ? old('account-vendor-client-restriction-enabled') : !$currentSite->hasVendorClientCodeAccessFeature) }}
+                                        @lang('common.false')
+                                    </label>
+                                </div>
+                            </div>
+
                             <hr>
 
                             <div class="text-center">
