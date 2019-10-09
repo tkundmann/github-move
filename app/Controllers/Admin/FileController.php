@@ -23,7 +23,7 @@ class FileController extends ContextController
     const RESULTS_PER_PAGE = 50;
     const STRING_LIMIT = 50;
 
-    const NUM_FILE_UPLOADS = 20;
+    const MAX_NUM_FILE_UPLOADS = 100;
     /**
      * FileController constructor.
      * @param Request $request
@@ -131,18 +131,24 @@ class FileController extends ContextController
         }
 
         return view('admin.fileCreate')->with([
-            'sites'             => $allSitesWithPagesArray,
-            'types'             => $types,
-            'limit'             => self::STRING_LIMIT,
-            'num_upload_fields' => self::NUM_FILE_UPLOADS
+            'sites'                => $allSitesWithPagesArray,
+            'types'                => $types,
+            'limit'                => self::STRING_LIMIT,
+            'max_num_file_uploads' => self::MAX_NUM_FILE_UPLOADS
         ]);
     }
 
     public function postCreate()
     {
+
+    	$filesBeingUploaded = Input::file('files');
+    	if (!isset($filesBeingUploaded[0])) {
+			$filesBeingUploaded = null;
+		}
         $fields = [
-            'site' => Input::get('site'),
-            'type' => Input::get('type')
+            'site'  => Input::get('site'),
+            'type'  => Input::get('type'),
+            'files' => $filesBeingUploaded,
         ];
 
         $site = null;
@@ -155,21 +161,11 @@ class FileController extends ContextController
             }
         }
 
-        $numFilesUploaded = 0;
-        $uploadedFiles = Input::file('files');
-        foreach ($uploadedFiles as $key => $uploadedFile) {
-            if (isset($uploadedFile)) {
-                $numFilesUploaded++;
-                $fields['file' . $numFilesUploaded] = $uploadedFile;
-            }
-        }
-
         $rules = [
-            'site' => 'required|exists:site,id',
-            'type' => 'required',
-            'file1' => 'required'
+            'site'  => 'required|exists:site,id',
+            'type'  => 'required',
+            'files' => 'required'
         ];
-
 
         $validator = Validator::make($fields, $rules);
         if ($validator->fails()) {
@@ -200,24 +196,31 @@ class FileController extends ContextController
             }
         }
 
+        // A maximum of 100 files may be uploaded for a given form submit.  If user selected more than 100 files,
+        // truncate the $fields['files'] array to 100 files.
+        if (count($fields['files']) > self::MAX_NUM_FILE_UPLOADS) {
+            $fields['files'] = array_slice($fields['files'], 0, self::MAX_NUM_FILE_UPLOADS);
+        }
+
         // Parse the file name of the uploaded file(s) to retrieve the Shipment Lot Number and then check to see if a shipment
         // record exists for the selected site per the parsed Lot Number.  This works because all 3 file types follow
         // agreed upon file naming conventions.
         $shipmentNotFoundError = false;
         $filesValidForUpload = array();
         $filesNotValidForUpload = array();
-        for ($i=1; $i <= $numFilesUploaded ; $i++) {
+        foreach ($fields['files'] as $key => $currentFile) {
 
-            $currentFile = $fields['file' . $i];
-            $shipment = $this->getShipmentPerFile($currentFile, $fields['type'], $site);
+            if (isset($currentFile)) {
+                $shipment = $this->getShipmentPerFile($currentFile, $fields['type'], $site);
 
-            if ($shipment) {
-                $filesValidForUpload[$i]['upload'] = $currentFile;
-                $filesValidForUpload[$i]['shipment'] = $shipment;
-            }
-            else {
-                $fileName = $currentFile->getClientOriginalName();
-                $filesNotValidForUpload[$fileName] = $fileName;
+                if ($shipment) {
+                    $filesValidForUpload[$key]['upload'] = $currentFile;
+                    $filesValidForUpload[$key]['shipment'] = $shipment;
+                }
+                else {
+                    $fileName = $currentFile->getClientOriginalName();
+                    $filesNotValidForUpload[$fileName] = $fileName;
+                }
             }
         }
 

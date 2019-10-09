@@ -10,7 +10,7 @@
                         <div class="btn-group pull-right">
                             <button onclick="goBack()" class="btn btn-primary btn-xs"><i class="fa fa-btn fa-arrow-left"></i>@lang('common.back')</button>
                         </div>
-                        <div>Use the form below to upload up to {{$num_upload_fields}} files to a site per a single form submission.</div>
+                        <div>Use the form below to upload a MAXIMUM of {{$max_num_file_uploads}} files to a site per a single form submission.</div>
                         <div class="text-danger"><strong>PLEASE NOTE:</strong> All files being uploaded at one time MUST conform with the selected file <strong>Type</strong>.  Those files that do not conform, are rejected and not uploaded.</div>
                     </div>
                     <div class="panel-body">
@@ -64,30 +64,6 @@
                             </div>
                         </div>
 
-<!--                         @for ($i = 1; $i <= $num_upload_fields; $i++)
-                            <div class="form-group{{----}}@if($errors->has('file' . $i)) has-error @endif">
-                                <label for="{{ 'file' . $i }}"
-                                       class="col-sm-3 control-label colon-after @if($i == 1) colon-after-required @endif">{{ trans('admin.file.create.file') . ' #' . $i }}</label>
-
-                                <div class="col-sm-6">
-                                    <div class="fileinput fileinput-new input-group margin-bottom-none" data-provides="fileinput">
-                                        <div class="form-control" data-trigger="fileinput">
-                                            <i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span>
-                                        </div>
-                                        <span class="input-group-addon btn btn-default btn-file">
-                                            <span class="fileinput-new">@lang('common.file.select_file')</span>
-                                            <span class="fileinput-exists">@lang('common.file.change')</span>
-                                            {{ Form::file('file' . $i) }}
-                                        </span>
-                                        <span class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">@lang('common.file.remove')</span>
-                                    </div>
-                                    @if ($errors->has('file' . $i))
-                                        {!! $errors->first('file' . $i, '<small class="text-danger">:message</small>') !!}
-                                    @endif
-                                </div>
-                            </div>
-                        @endfor
- -->
                         <hr/>
 
                         <div class="text-center">
@@ -124,7 +100,7 @@
         $('#js-multi-file-upload').on('change', function () {
 
             var $multiFileInput = $(this);
-            var $fileUploadPreview = $multiFileInput.next('#js-file-upload-preview');
+            var $fileUploadPreview = $multiFileInput.siblings('#js-file-upload-preview');
             var $fileUploadPreviewListing = $fileUploadPreview.find('.js-file-upload-listing');
             var filesToUpload = $multiFileInput[0].files;
 
@@ -136,11 +112,21 @@
             $fileUploadPreviewListing.html('');
 
             if (filesToUpload.length > 0) {
+
+                maxNumFileUploads = {{$max_num_file_uploads}};
+
                 for (var i = 0; i < filesToUpload.length; i++) {
+
                     url = window.URL.createObjectURL(filesToUpload[i]);
                     filePreviewMarkup = '<div><a href="' + url.toString() + '" target="_blank">' + filesToUpload[i].name + '</a> (' + returnFileSize(filesToUpload[i].size) + ')</div>';
+
+                    if (i === maxNumFileUploads) {
+                        filePreviewMarkup = '<div class="alert alert-danger alert-upload-max-met-divider">{{$max_num_file_uploads}} File Maximum Met.  The below files will not be uploaded.</div>' + filePreviewMarkup;
+                    }
+
                     $fileUploadPreviewListing.append(filePreviewMarkup);
                     fileURLObjects.push(url);
+
                 }
                 $fileUploadPreview.show();
             }
