@@ -10,7 +10,7 @@
                         <div class="btn-group pull-right">
                             <button onclick="goBack()" class="btn btn-primary btn-xs"><i class="fa fa-btn fa-arrow-left"></i>@lang('common.back')</button>
                         </div>
-                        <div>Use the fields below to upload up to {{$num_upload_fields}} files to a site per a single form submission.</div>
+                        <div>Use the form below to upload up to {{$num_upload_fields}} files to a site per a single form submission.</div>
                         <div class="text-danger"><strong>PLEASE NOTE:</strong> All files being uploaded at one time MUST conform with the selected file <strong>Type</strong>.  Those files that do not conform, are rejected and not uploaded.</div>
                     </div>
                     <div class="panel-body">

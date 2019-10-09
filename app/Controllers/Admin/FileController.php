@@ -23,7 +23,7 @@ class FileController extends ContextController
     const RESULTS_PER_PAGE = 50;
     const STRING_LIMIT = 50;
 
-    const NUM_FILE_UPLOADS = 50;
+    const NUM_FILE_UPLOADS = 20;
     /**
      * FileController constructor.
      * @param Request $request
@@ -163,15 +163,6 @@ class FileController extends ContextController
                 $fields['file' . $numFilesUploaded] = $uploadedFile;
             }
         }
-
-        // $numFilesUploaded = 0;
-        // for ($i=1; $i <= self::NUM_FILE_UPLOADS ; $i++) {
-        //     $uploadedFile = Input::file('file' . $i);
-        //     if (isset($uploadedFile)) {
-        //         $numFilesUploaded++;
-        //         $fields['file' . $numFilesUploaded] = $uploadedFile;
-        //     }
-        // }
 
         $rules = [
             'site' => 'required|exists:site,id',
