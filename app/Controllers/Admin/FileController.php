@@ -476,7 +476,7 @@ class FileController extends ContextController
             $messages['fail'] .= '</strong></p><p>' . trans('admin.file.create.shipment_not_found_for_file') . '</p>';
         }
 
-        return redirect()->route('admin.file.list', ['site' => $site->id])->with($messages);
+        return redirect()->route('admin.file.list')->with($messages);
     }
 
     public function getShipmentDataPerFile($fileName, $fileNamePrefix)
