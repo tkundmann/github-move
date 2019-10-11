@@ -458,7 +458,7 @@ class FileController extends ContextController
                 $messages['success'] .= '<p class="site-uploaded-files"><strong>';
 
                 foreach ($siteDataAndFiles['files'] as $index => $uploadedFile) {
-                    $messages['success'] .= '<span class="uploaded-file"><a href="/' . $siteDataAndFiles['site-data']['code'] . '/shipment/search/result?lot_number_select=equals&lot_number=' . $uploadedFile['lotNumber'] . '" target="_blank">' . $uploadedFile['fileName'] . '</a></span>';
+                    $messages['success'] .= '<span class="file"><a href="/' . $siteDataAndFiles['site-data']['code'] . '/shipment/search/result?lot_number_select=equals&lot_number=' . $uploadedFile['lotNumber'] . '" target="_blank">' . $uploadedFile['fileName'] . '</a></span>';
                 }
 
                 $messages['success'] .= '</strong></p></div>';
@@ -471,7 +471,7 @@ class FileController extends ContextController
 
             $messages['fail'] = '<p>' . $failMessage . '</p><p><strong>';
             foreach ($filesNotValidForUpload as $index => $notValidFile) {
-                $messages['fail'] .= '<span class="uploaded-file">' . $notValidFile . '</span>';
+                $messages['fail'] .= '<span class="file">' . $notValidFile . '</span>';
             }
             $messages['fail'] .= '</strong></p><p>' . trans('admin.file.create.shipment_not_found_for_file') . '</p>';
         }
