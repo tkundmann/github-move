@@ -4,10 +4,13 @@ namespace App\Controllers\Helpers;
 
 use App\Data\Constants;
 use App\Data\Models\File;
+use Illuminate\Support\Str;
 use Storage;
 
 class FileUploadHelper
 {
+
+	const VALID_FILE_NAME_PREFIXES = 'DATA,DEST,settlement';
 
 	public function __construct() {
 	}
@@ -33,6 +36,54 @@ class FileUploadHelper
 				break;
 		}
 		return $pageTypeDir;
+	}
+
+	/**
+	 * @param string $type
+	 * @return string
+	 */
+	public static function getFileTypeDataPerFileName($fileName)
+	{
+
+		$prefix = '';
+		$fileTypeData = null;
+
+		$validFileNamePrefixes = explode(',', self::VALID_FILE_NAME_PREFIXES);
+
+		foreach ($validFileNamePrefixes as $key => $validPrefix) {
+			if (Str::startsWith($fileName, $validPrefix)) {
+				$prefix = $validPrefix;
+				break;
+			}
+		}
+
+		if ($prefix != '') {
+
+			switch ($prefix) {
+				case 'DATA':
+					$type    = 'Certificates of Data Wipe';
+					$typeDir = '/certificate_of_data_wipe';
+					break;
+
+				case 'DEST':
+					$type    = 'Certificates of Recycling';
+					$typeDir = '/certificate_of_destruction';
+					break;
+
+				case 'settlement':
+					$type    = 'Settlements';
+					$typeDir = '/settlement';
+					break;
+			}
+
+			$fileTypeData = array(
+				'prefix'  => $prefix,
+				'type'    => $type,
+				'typeDir' => $typeDir
+			);
+		}
+
+		return $fileTypeData;
 	}
 
 	/**

@@ -30,3 +30,27 @@
   margin: 7px 0;
   border-radius: 3px;
 }
+.alert .file-upload-success-messsage {
+  margin-bottom: 10px;
+}
+.alert .site-uploaded-files-container {
+  margin: 0;
+  padding: 10px 0 15px;
+  border-top: solid 1px #b2dba1;
+}
+.alert .site-uploaded-files-container:last-of-type {
+  padding-bottom: 0;
+}
+.alert .site-uploaded-files-container .site-title {
+  margin: 0;
+  font-weight: bold;
+  font-size: 15px;
+}
+.alert .site-uploaded-files-container .site-uploaded-files {
+  margin: 0;
+}
+.alert .site-uploaded-files-container .site-uploaded-files .uploaded-file {
+  display: inline-block !important;
+  font-size: 13px;
+  margin: 10px 20px 0 0;
+}

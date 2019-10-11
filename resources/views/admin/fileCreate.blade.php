@@ -10,13 +10,13 @@
                         <div class="btn-group pull-right">
                             <button onclick="goBack()" class="btn btn-primary btn-xs"><i class="fa fa-btn fa-arrow-left"></i>@lang('common.back')</button>
                         </div>
-                        <div>Use the form below to upload a MAXIMUM of {{$max_num_file_uploads}} files to a site per a single form submission.</div>
-                        <div class="text-danger"><strong>PLEASE NOTE:</strong> All files being uploaded at one time MUST conform with the selected file <strong>Type</strong>.  Those files that do not conform, are rejected and not uploaded.</div>
+                        <div>Use the form below to upload a MAXIMUM of {{$max_num_file_uploads}} files per a single form submission.<br/><strong>The files can be any combination of the 3 valid file types (Certificates of Data Wipe, Certificates of Recycling, and/or Settlements) across multiple portals.</strong></div>
+                        <div class="text-danger"><strong>PLEASE NOTE:</strong> All files being uploaded at one time MUST conform with the agreed upon naming conventions.  Those files that do not conform, are rejected and not uploaded.</div>
                     </div>
                     <div class="panel-body">
                         {{ Form::open(['route' => ['admin.file.create'], 'method' => 'POST', 'class' => 'form-horizontal', 'files' => true, 'id' => 'file_create_form']) }}
                         {{ csrf_field() }}
-
+<!--
                         <div class="form-group @if($errors->has('site')) has-error @endif">
                             {{ Form::label('site', trans('admin.file.create.site'), ['class' => 'col-sm-3 control-label colon-after-required']) }}
                             <div class="col-sm-6">
@@ -45,7 +45,7 @@
                                 @endif
                             </div>
                         </div>
-
+ -->
                         <div class="form-group{{----}}@if($errors->has('files')) has-error @endif">
                             <label for="{{'files'}}"
                                    class="col-sm-3 control-label colon-after colon-after-required">{{ trans('admin.file.create.files') }}</label>
