@@ -14,7 +14,7 @@
                         <form method="GET" action="{{ route('admin.file.list') }}" class="form-inline">
                             <div class="row">
                                 <div class="col-md-2">
-                                    <a href="{{ Input::get('site') ? route('admin.file.create', ['site' => Input::get('site')]) : route('admin.file.create') }}" class="btn btn-success">
+                                    <a href="{{ route('admin.file.create') }}" class="btn btn-success">
                                         <i class="fa fa-btn fa-plus"></i>@lang('common.upload')
                                     </a>
                                 </div>

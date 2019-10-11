@@ -10,48 +10,24 @@
                         <div class="btn-group pull-right">
                             <button onclick="goBack()" class="btn btn-primary btn-xs"><i class="fa fa-btn fa-arrow-left"></i>@lang('common.back')</button>
                         </div>
-                        <div>Use the form below to upload a MAXIMUM of {{$max_num_file_uploads}} files per a single form submission.<br/><strong>The files can be any combination of the 3 valid file types (Certificates of Data Wipe, Certificates of Recycling, and/or Settlements) across multiple portals.</strong></div>
-                        <div class="text-danger"><strong>PLEASE NOTE:</strong> All files being uploaded at one time MUST conform with the agreed upon naming conventions.  Those files that do not conform, are rejected and not uploaded.</div>
                     </div>
                     <div class="panel-body">
-                        {{ Form::open(['route' => ['admin.file.create'], 'method' => 'POST', 'class' => 'form-horizontal', 'files' => true, 'id' => 'file_create_form']) }}
-                        {{ csrf_field() }}
-<!--
-                        <div class="form-group @if($errors->has('site')) has-error @endif">
-                            {{ Form::label('site', trans('admin.file.create.site'), ['class' => 'col-sm-3 control-label colon-after-required']) }}
-                            <div class="col-sm-6">
-                                {{ Form::select('site', $sites, Input::get('site') ? Input::get('site') : old('site'), ['class' => 'selectpicker form-control', 'title' => trans('common.select')]) }}
-                                @if ($errors->has('site'))
-                                    {!! $errors->first('site', '<small class="text-danger">:message</small>') !!}
-                                @endif
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="alert alert-field alert-info text-center">
-                                    @lang('admin.file.create.site_reload_warning')
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="form-group{{----}}@if($errors->has('type')) has-error @endif">
-                            {{ Form::label('type', trans('admin.file.create.type'), ['class' => 'col-sm-3 control-label colon-after-required']) }}
-                            <div class="col-sm-6">
-                                @if (!Input::get('site') && !old('site'))
-                                    {{ Form::select('type', $types, Input::get('type') ? Input::get('type') : old('type'), ['class' => 'selectpicker form-control', 'title' => trans('common.select'), 'disabled' => 'disabled' ]) }}
-                                @else
-                                    {{ Form::select('type', $types, Input::get('type') ? Input::get('type') : old('type'), ['class' => 'selectpicker form-control', 'title' => trans('common.select')]) }}
-                                @endif
-                                @if ($errors->has('type'))
-                                    {!! $errors->first('type', '<small class="text-danger">:message</small>') !!}
-                                @endif
-                            </div>
-                        </div>
- -->
+                        <p class="margin-top-md">Use the form below to upload a MAXIMUM of {{$max_num_file_uploads}} files per a single form submission.</p>
+                        <p><strong>The files can be any combination of the 3 valid file types (Certificates of Data Wipe, Certificates of Recycling, and/or Settlements) across multiple portals.</strong></p>
+                        <p class="text-danger"><strong>PLEASE NOTE:</strong> All files being uploaded at one time MUST conform with the agreed upon naming conventions.  Those files that do not conform, are rejected and not uploaded.</p>
+
+                        <hr/>
+
+                        {{ Form::open(['route' => ['admin.file.create'], 'method' => 'POST', 'class' => 'form-horizontal margin-top-lg', 'files' => true, 'id' => 'file_create_form']) }}
+                        {{ csrf_field() }}
+
                         <div class="form-group{{----}}@if($errors->has('files')) has-error @endif">
                             <label for="{{'files'}}"
                                    class="col-sm-3 control-label colon-after colon-after-required">{{ trans('admin.file.create.files') }}</label>
 
                             <div class="col-sm-6">
-                                {{ Form::file('files[]', ['id' => 'js-multi-file-upload', 'class' => 'form-control multi-file-upload','multiple']) }}
+                                {{ Form::file('files[]', ['id' => 'js-multi-file-upload', 'class' => 'form-control multi-file-upload','multiple', 'accept' => '.pdf,.xls,.xlsx']) }}
 
                                 @if ($errors->has('files'))
                                     {!! $errors->first('files', '<small class="text-danger">:message</small>') !!}
@@ -84,18 +60,6 @@
 
     var fileURLObjects = [];
     $(document).ready(function() {
-        $('#site').on('change', function () {
-            $('#site').append('<input type="hidden" name="site_change" value="1"/>');
-            $('#file_create_form').submit();
-        });
-
-        $('#type').on('change', function () {
-            var $fileTypeSelect = $(this);
-            var fileTypeText = $fileTypeSelect.find('option:selected').text();
-            var fileTypeTextParsed = fileTypeText.slice(0, -1).split(" (");
-            var acceptedFileExt = fileTypeTextParsed[1];
-            $('#js-multi-file-upload').attr('accept',acceptedFileExt);
-        });
 
         $('#js-multi-file-upload').on('change', function () {
 
