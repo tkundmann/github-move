@@ -4,6 +4,7 @@ namespace App\Controllers\Helpers;
 
 use App\Data\Constants;
 use App\Data\Models\File;
+use App\Data\Models\Feature;
 use Illuminate\Support\Str;
 use Storage;
 
@@ -61,75 +62,33 @@ class FileUploadHelper
 
 			switch ($prefix) {
 				case 'DATA':
-					$type    = 'Certificates of Data Wipe';
-					$typeDir = '/certificate_of_data_wipe';
+					$type              = 'Certificates of Data Wipe';
+					$typeDir           = '/certificate_of_data_wipe';
+					$applicableFeature = Feature::HAS_CERTIFICATES;
 					break;
 
 				case 'DEST':
-					$type    = 'Certificates of Recycling';
-					$typeDir = '/certificate_of_destruction';
+					$type              = 'Certificates of Recycling';
+					$typeDir           = '/certificate_of_destruction';
+					$applicableFeature = Feature::HAS_CERTIFICATES;
 					break;
 
 				case 'settlement':
-					$type    = 'Settlements';
-					$typeDir = '/settlement';
+					$type              = 'Settlements';
+					$typeDir           = '/settlement';
+					$applicableFeature = Feature::HAS_SETTLEMENTS;
 					break;
 			}
 
 			$fileTypeData = array(
-				'prefix'  => $prefix,
-				'type'    => $type,
-				'typeDir' => $typeDir
+				'prefix'            => $prefix,
+				'type'              => $type,
+				'typeDir'           => $typeDir,
+				'applicableFeature' => $applicableFeature,
 			);
 		}
 
 		return $fileTypeData;
-	}
-
-	/**
-	 * @param string $type
-	 * @return string
-	 */
-	public static function getFilePrefixPerType($type)
-	{
-		$fileNamePrefix = '';
-		switch ($type) {
-			case 'Certificates of Data Wipe':
-				$fileNamePrefix = 'DATA';
-				break;
-
-			case 'Certificates of Recycling':
-				$fileNamePrefix = 'DEST';
-				break;
-
-			case 'Settlements':
-				$fileNamePrefix = 'settlement';
-				break;
-		}
-		return $fileNamePrefix;
-	}
-
-	/**
-	 * @param string $prefix
-	 * @return string
-	 */
-	public static function getFileTypePerPrefix($prefix)
-	{
-		$fileType= '';
-		switch ($prefix) {
-			case 'DATA':
-				$fileType = 'Certificates of Data Wipe';
-				break;
-
-			case 'DEST':
-				$fileType = 'Certificates of Recycling';
-				break;
-
-			case 'settlement':
-				$fileType = 'Settlements';
-				break;
-		}
-		return $fileType;
 	}
 
 	public static function removeFile(File $file)
