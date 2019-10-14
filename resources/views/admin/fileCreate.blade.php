@@ -15,7 +15,7 @@
 
                         <p class="margin-top-md">Use the form below to upload a MAXIMUM of {{$max_num_file_uploads}} files per a single form submission.</p>
                         <p><strong>The files can be any combination of the 3 valid file types (Certificates of Data Wipe, Certificates of Recycling, and/or Settlements) across multiple portals.</strong></p>
-                        <p class="text-danger"><strong>PLEASE NOTE:</strong> All files being uploaded at one time MUST conform with the agreed upon naming conventions.  Those files that do not conform, are rejected and not uploaded.</p>
+                        <p class="text-danger"><strong>PLEASE NOTE:</strong> All files being uploaded, MUST conform with the agreed upon naming conventions.  Those files that do not conform, are rejected and not uploaded.</p>
 
                         <hr/>
 

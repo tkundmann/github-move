@@ -280,7 +280,7 @@ return [
             'file_created' => 'File created.',
             'success_file_upload' => 'The following file(s) were successfully uploaded.<br/>Click on the file name to verify successful upload via the applicable portal.',
             'not_valid_for_file_upload' => 'The following file(s) were not uploaded per one of the reasons listed below: ',
-            'reasons_why_file_not_uploaded' => 'Either the file type is not supported by the applicable portal, or a Shipment record was not found in the database per the Lot Number specified in the file name. <br>A portal MUST support the upload of a given file type, or a Shipment record for the Lot Number specified in the file name MUST exist before any files can be uploaded for that shipment.<br><strong>PLEASE NOTE:</strong> All files being uploaded at one time MUST conform with the agreed upon naming conventions.  Those files that do not conform, are rejected and not uploaded.',
+            'reasons_why_file_not_uploaded' => 'Either the file type is not supported by the applicable portal, or a Shipment record was not found in the database per the Lot Number specified in the file name. <br>A portal MUST support the upload of a given file type, or a Shipment record for the Lot Number specified in the file name MUST exist before any files can be uploaded for that shipment.<br><strong>PLEASE NOTE:</strong> All files being uploaded MUST conform with the agreed upon naming conventions.  Those files that do not conform, are rejected and not uploaded.',
             'site_reload_warning' => 'Change will reload page!'
         ],
         'edit' => [
