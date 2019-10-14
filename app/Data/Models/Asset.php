@@ -29,6 +29,7 @@ use Sofa\Eloquence\Mappable;
  * @property string $manufacturerModelNum
  * @property string $manufacturerPartNum
  * @property string $manufacturerSerialNum
+ * @property string $biosManufacturerSerialNum
  * @property string $parentSerialNum
  * @property string $itemNumber
  * @property string $formFactor
@@ -104,6 +105,7 @@ class Asset extends Model
         'manufacturerModelNum' => 'manufacturer_model_num',
         'manufacturerPartNum' => 'manufacturer_part_num',
         'manufacturerSerialNum' => 'manufacturer_serial_num',
+        'biosManufacturerSerialNum' => 'bios_manufacturer_serial_num',
         'parentSerialNum' => 'parent_serial_num',
         'itemNumber' => 'item_number',
         'formFactor' => 'form_factor',
@@ -263,6 +265,12 @@ class Asset extends Model
             $asset->manufacturerSerialNum = null;
             if (strlen($xml->MFG_SERIAL_NUMBER) > 0) {
                 $asset->manufacturerSerialNum = $xml->MFG_SERIAL_NUMBER->__toString();
+            }
+        }
+        if (isset($xml->BIOS_MFG_SERIAL_NUMBER)) {
+            $asset->biosManufacturerSerialNum = null;
+            if (strlen($xml->BIOS_MFG_SERIAL_NUMBER) > 0) {
+                $asset->biosManufacturerSerialNum = $xml->BIOS_MFG_SERIAL_NUMBER->__toString();
             }
         }
         if (isset($xml->PARENT_SERIAL_NO)) {
@@ -604,6 +612,12 @@ class Asset extends Model
             $asset->manufacturerSerialNum = null;
             if (strlen($xml->MFG_SERIAL_NUMBER) > 0) {
                 $asset->manufacturerSerialNum = $xml->MFG_SERIAL_NUMBER->__toString();
+            }
+        }
+        if (isset($xml->BIOS_MFG_SERIAL_NUMBER)) {
+            $asset->biosManufacturerSerialNum = null;
+            if (strlen($xml->BIOS_MFG_SERIAL_NUMBER) > 0) {
+                $asset->biosManufacturerSerialNum = $xml->BIOS_MFG_SERIAL_NUMBER->__toString();
             }
         }
         if (isset($xml->PARENT_SERIAL_NO)) {
