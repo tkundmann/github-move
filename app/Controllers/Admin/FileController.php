@@ -177,29 +177,33 @@ class FileController extends ContextController
                 $uploadedFileName = $currentFile->getClientOriginalName();
                 $fileTypeData = FileUploadHelper::getFileTypeDataPerFileName($uploadedFileName);
 
-                $shipment = null;
+                $validShipments = array();
                 if (is_array($fileTypeData)) {
 
-                    $shipment = $this->getShipmentDataPerFile($uploadedFileName, $fileTypeData['prefix']);
+                    $applicableShipments = $this->getShipmentDataPerFile($uploadedFileName, $fileTypeData['prefix']);
 
-                    if ($shipment) {
+                    if (count($applicableShipments) > 0) {
 
-                        // We have a applicable shipment, but we need to make sure that the applicable
+                        // We found applicable shipment(s), but we need to make sure that the applicable
                         // site has the applicable "file type" feature enabled.  If not, file is not
-                        // valid for upload.  Nullify shipment variable so file is not uploaded.
-                        $site = Site::find($shipment->site_id);
-                        if (! $site->hasFeature($fileTypeData['applicableFeature'])) {
-                            $shipment = null;
+                        // valid for upload.  Nullify shipment so file is not uploaded.
+                        foreach ($applicableShipments as $key => $shipment) {
+                            $site = Site::find($shipment->site_id);
+                            if ($site->hasFeature($fileTypeData['applicableFeature'])) {
+                                $validShipments[] = $shipment;
+                            }
                         }
                     }
                 }
 
-                if ($shipment) {
-                    $filesValidForUpload[$shipment->site_id][] = array(
-                        'upload'       => $currentFile,
-                        'shipment'     => $shipment,
-                        'fileTypeData' => $fileTypeData
-                    );
+                if (count($validShipments) > 0) {
+                    foreach ($validShipments as $key => $validShipment) {
+                        $filesValidForUpload[$validShipment->site_id][] = array(
+                            'upload'       => $currentFile,
+                            'shipment'     => $validShipment,
+                            'fileTypeData' => $fileTypeData
+                        );
+                    }
                 }
                 else {
                     $filesNotValidForUpload[] = $uploadedFileName;
@@ -338,11 +342,11 @@ class FileController extends ContextController
         $withoutExtension = substr($fileName, 0, strrpos($fileName, '.'));
         $replacementLimit = 1;
 
-        $shipmentLotNumber = strtoupper(preg_replace($fileNamePrefixPattern, null, $withoutExtension, $replacementLimit));
+        $lotNumber = strtoupper(preg_replace($fileNamePrefixPattern, null, $withoutExtension, $replacementLimit));
 
-        $shipment = Shipment::forLotNumber($shipmentLotNumber);
+        $shipments = Shipment::allShipmentsPerLotNumber($lotNumber);
 
-        return $shipment;
+        return $shipments;
     }
 
     public function getEdit($context = null, $id)
