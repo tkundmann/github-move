@@ -13,7 +13,7 @@ class AddBiosManufacturerSerialNumToAssetArchiveTable extends Migration
     public function up()
     {
         Schema::table('asset_archive', function (Blueprint $table) {
-            $table->string('bios_manufacturer_serial_num', 50)->nullable()->default(null);
+            $table->string('bios_manufacturer_serial_num', 50)->after('manufacturer_serial_num')->nullable()->default(null);
         });
     }
 
