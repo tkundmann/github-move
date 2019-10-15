@@ -47,6 +47,12 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <label class="col-sm-6 control-label colon-after">{{ array_key_exists('bios_manufacturer_serial_num', $fields) ? (Lang::has('asset.'. $fields['bios_manufacturer_serial_num']) ? Lang::trans('asset.' .  $fields['bios_manufacturer_serial_num']) :  $fields['bios_manufacturer_serial_num']) : Lang::trans('asset.bios_manufacturer_serial_num') }}</label>
+                                            <div class="col-sm-6">
+                                                <p class="form-control-static">{{ isset($asset->biosManufacturerSerialNum) ? $asset->biosManufacturerSerialNum : '-' }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <label class="col-sm-6 control-label colon-after">{{ array_key_exists('parent_serial_num', $fields) ? (Lang::has('asset.'. $fields['parent_serial_num']) ? Lang::trans('asset.' .  $fields['parent_serial_num']) :  $fields['parent_serial_num']) : Lang::trans('asset.parent_serial_num') }}</label>
                                             <div class="col-sm-6">
                                                 <p class="form-control-static">{{ isset($asset->parentSerialNum) ? $asset->parentSerialNum : '-' }}</p>
