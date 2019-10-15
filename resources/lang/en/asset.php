@@ -26,6 +26,7 @@ return [
     'manufacturer_model_num' => 'Manufacturer Model Number',
     'manufacturer_part_num' => 'Manufacturer Part Number',
     'manufacturer_serial_num' => 'Manufacturer Serial Number',
+    'bios_manufacturer_serial_num' => 'BIOS Manufacturer Serial Number',
     'parent_serial_num' => 'Parent Serial Number',
     'item_number' => 'Item Number',
     'form_factor' => 'Form Factor',

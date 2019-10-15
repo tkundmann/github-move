@@ -235,7 +235,25 @@
                                         @endif
                                         <?php $j++ ?>
                                     @endforeach
+
+                                    <div class="col-md-12">
+                                        <hr>
+                                        <div class="text-center margin-bottom-sm">
+                                            <button id="form_search_button" type="submit"
+                                                    formaction="{{ route('asset.search.result') }}" class="btn btn-primary single-click">
+                                                <i class="fa fa-btn fa-search"></i> @lang('asset.search.search_assets')
+                                            </button>
+                                            <button id="form_export_button" type="submit"
+                                                    formaction="{{ route('asset.search.export') }}" class="btn btn-primary single-click">
+                                                <i class="fa fa-btn fa-table"></i> @lang('asset.search.export_assets')
+                                            </button>
+                                            <button type="button" class="btn btn-primary resetButton">
+                                                <i class="fa fa-btn fa-undo"></i> @lang('common.reset')
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
+
                             @endif
 
                             </div>

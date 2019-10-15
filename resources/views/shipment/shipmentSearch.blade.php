@@ -235,6 +235,27 @@
                                         @endif
                                         <?php $j++ ?>
                                     @endforeach
+
+
+                                    <div class="col-md-12">
+                                        <hr>
+                                        <div class="text-center">
+                                            <button id="form_search_button" type="submit"
+                                                    formaction="{{ route('shipment.search.result') }}"
+                                                    formmethod="GET" class="btn btn-primary single-click">
+                                                <i class="fa fa-btn fa-search"></i> @lang('shipment.search.search_shipments')
+                                            </button>
+                                            <button id="form_export_button" type="submit"
+                                                    formaction="{{ route('shipment.search.export') }}"
+                                                    formmethod="GET" class="btn btn-primary single-click">
+                                                <i class="fa fa-btn fa-table"></i> @lang('shipment.search.export_shipments')
+                                            </button>
+                                            <button type="button" class="btn btn-primary resetButton">
+                                                <i class="fa fa-btn fa-undo"></i> @lang('common.reset')
+                                            </button>
+                                        </div>
+                                    </div>
+
                                 </div>
                             @endif
 
