@@ -18,14 +18,14 @@
 
                         <form id="form" class="form-horizontal">
                             <div class="text-center">
-                                <button class="js-form_search_button" type="submit"
+                                <button type="submit"
                                         formaction="{{ route('shipment.search.result') }}"
-                                        formmethod="GET" class="btn btn-primary single-click">
+                                        formmethod="GET" class="btn btn-primary single-click js-form_search_button">
                                     <i class="fa fa-btn fa-search"></i> @lang('shipment.search.search_shipments')
                                 </button>
-                                <button class="js-form_export_button" type="submit"
+                                <button type="submit"
                                         formaction="{{ route('shipment.search.export') }}"
-                                        formmethod="GET" class="btn btn-primary single-click">
+                                        formmethod="GET" class="btn btn-primary single-click js-form_export_button">
                                     <i class="fa fa-btn fa-table"></i> @lang('shipment.search.export_shipments')
                                 </button>
                                 <button type="button" class="btn btn-primary resetButton">
@@ -240,14 +240,14 @@
                                     <div class="col-md-12">
                                         <hr>
                                         <div class="text-center">
-                                            <button class="js-form_search_button" type="submit"
+                                            <button type="submit"
                                                     formaction="{{ route('shipment.search.result') }}"
-                                                    formmethod="GET" class="btn btn-primary single-click">
+                                                    formmethod="GET" class="btn btn-primary single-click js-form_search_button">
                                                 <i class="fa fa-btn fa-search"></i> @lang('shipment.search.search_shipments')
                                             </button>
-                                            <button class="js-form_export_button" type="submit"
+                                            <button type="submit"
                                                     formaction="{{ route('shipment.search.export') }}"
-                                                    formmethod="GET" class="btn btn-primary single-click">
+                                                    formmethod="GET" class="btn btn-primary single-click js-form_export_button">
                                                 <i class="fa fa-btn fa-table"></i> @lang('shipment.search.export_shipments')
                                             </button>
                                             <button type="button" class="btn btn-primary resetButton">

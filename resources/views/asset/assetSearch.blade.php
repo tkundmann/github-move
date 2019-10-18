@@ -18,12 +18,12 @@
 
                         <form id="form" class="form-horizontal" method="GET">
                             <div class="text-center">
-                                <button class="js-form_search_button" type="submit"
-                                        formaction="{{ route('asset.search.result') }}" class="btn btn-primary single-click">
+                                <button type="submit"
+                                        formaction="{{ route('asset.search.result') }}" class="btn btn-primary single-click js-form_search_button">
                                     <i class="fa fa-btn fa-search"></i> @lang('asset.search.search_assets')
                                 </button>
-                                <button class="js-form_export_button" type="submit"
-                                        formaction="{{ route('asset.search.export') }}" class="btn btn-primary single-click">
+                                <button type="submit"
+                                        formaction="{{ route('asset.search.export') }}" class="btn btn-primary single-click js-form_export_button">
                                     <i class="fa fa-btn fa-table"></i> @lang('asset.search.export_assets')
                                 </button>
                                 <button type="button" class="btn btn-primary resetButton">
@@ -239,12 +239,12 @@
                                     <div class="col-md-12">
                                         <hr>
                                         <div class="text-center margin-bottom-sm">
-                                            <button class="js-form_search_button" type="submit"
-                                                    formaction="{{ route('asset.search.result') }}" class="btn btn-primary single-click">
+                                            <button type="submit"
+                                                    formaction="{{ route('asset.search.result') }}" class="btn btn-primary single-click js-form_search_button">
                                                 <i class="fa fa-btn fa-search"></i> @lang('asset.search.search_assets')
                                             </button>
-                                            <button class="js-form_export_button" type="submit"
-                                                    formaction="{{ route('asset.search.export') }}" class="btn btn-primary single-click">
+                                            <button type="submit"
+                                                    formaction="{{ route('asset.search.export') }}" class="btn btn-primary single-click js-form_export_button">
                                                 <i class="fa fa-btn fa-table"></i> @lang('asset.search.export_assets')
                                             </button>
                                             <button type="button" class="btn btn-primary resetButton">
