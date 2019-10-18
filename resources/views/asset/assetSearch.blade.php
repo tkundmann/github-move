@@ -18,11 +18,11 @@
 
                         <form id="form" class="form-horizontal" method="GET">
                             <div class="text-center">
-                                <button id="form_search_button" type="submit"
+                                <button class="js-form_search_button" type="submit"
                                         formaction="{{ route('asset.search.result') }}" class="btn btn-primary single-click">
                                     <i class="fa fa-btn fa-search"></i> @lang('asset.search.search_assets')
                                 </button>
-                                <button id="form_export_button" type="submit"
+                                <button class="js-form_export_button" type="submit"
                                         formaction="{{ route('asset.search.export') }}" class="btn btn-primary single-click">
                                     <i class="fa fa-btn fa-table"></i> @lang('asset.search.export_assets')
                                 </button>
@@ -239,11 +239,11 @@
                                     <div class="col-md-12">
                                         <hr>
                                         <div class="text-center margin-bottom-sm">
-                                            <button id="form_search_button" type="submit"
+                                            <button class="js-form_search_button" type="submit"
                                                     formaction="{{ route('asset.search.result') }}" class="btn btn-primary single-click">
                                                 <i class="fa fa-btn fa-search"></i> @lang('asset.search.search_assets')
                                             </button>
-                                            <button id="form_export_button" type="submit"
+                                            <button class="js-form_export_button" type="submit"
                                                     formaction="{{ route('asset.search.export') }}" class="btn btn-primary single-click">
                                                 <i class="fa fa-btn fa-table"></i> @lang('asset.search.export_assets')
                                             </button>
@@ -271,7 +271,7 @@
             var startWithAdvancedSearch = Boolean('{{ old('advanced') }}');
             var advancedSearchButtonClicked = false;
 
-            $('#form_search_button').click(function (event) {
+            $('.js-form_search_button').click(function (event) {
                 if (advancedSearchButtonClicked) {
                     $('#form').append('<input type="hidden" name="advanced" value="1"/>');
                 }

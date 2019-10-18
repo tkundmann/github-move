@@ -18,12 +18,12 @@
 
                         <form id="form" class="form-horizontal">
                             <div class="text-center">
-                                <button id="form_search_button" type="submit"
+                                <button class="js-form_search_button" type="submit"
                                         formaction="{{ route('shipment.search.result') }}"
                                         formmethod="GET" class="btn btn-primary single-click">
                                     <i class="fa fa-btn fa-search"></i> @lang('shipment.search.search_shipments')
                                 </button>
-                                <button id="form_export_button" type="submit"
+                                <button class="js-form_export_button" type="submit"
                                         formaction="{{ route('shipment.search.export') }}"
                                         formmethod="GET" class="btn btn-primary single-click">
                                     <i class="fa fa-btn fa-table"></i> @lang('shipment.search.export_shipments')
@@ -240,12 +240,12 @@
                                     <div class="col-md-12">
                                         <hr>
                                         <div class="text-center">
-                                            <button id="form_search_button" type="submit"
+                                            <button class="js-form_search_button" type="submit"
                                                     formaction="{{ route('shipment.search.result') }}"
                                                     formmethod="GET" class="btn btn-primary single-click">
                                                 <i class="fa fa-btn fa-search"></i> @lang('shipment.search.search_shipments')
                                             </button>
-                                            <button id="form_export_button" type="submit"
+                                            <button class="js-form_export_button" type="submit"
                                                     formaction="{{ route('shipment.search.export') }}"
                                                     formmethod="GET" class="btn btn-primary single-click">
                                                 <i class="fa fa-btn fa-table"></i> @lang('shipment.search.export_shipments')
@@ -274,7 +274,7 @@
             var startWithAdvancedSearch = Boolean('{{ old('advanced') }}');
             var advancedSearchButtonClicked = false;
 
-            $('#form_search_button').click(function (event) {
+            $('.js-form_search_button').click(function (event) {
                 if (advancedSearchButtonClicked) {
                     $('#form').append('<input type="hidden" name="advanced" value="1"/>');
                 }
