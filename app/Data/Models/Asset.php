@@ -62,6 +62,8 @@ use Sofa\Eloquence\Mappable;
  * @property string $hardDriveSerialNum
  * @property string $assetTag
  * @property string $status
+ * @property string $securityLock
+ * @property string $securityLockResolved
  * @property string $hdsnConfiguration
  * @property float $settlementAmount
  * @property float $netSettlement
@@ -138,6 +140,8 @@ class Asset extends Model
         'hardDriveSerialNum' => 'hard_drive_serial_num',
         'assetTag' => 'asset_tag',
         // 'status' => 'status',
+        'securityLock' => 'security_lock',
+        'securityLockResolved' => 'security_lock_resolved',
         'settlementAmount' => 'settlement_amount',
         'netSettlement' => 'net_settlement',
         'certOfDataWipeNum' => 'cert_of_data_wipe_num',
@@ -463,6 +467,18 @@ class Asset extends Model
             $asset->status = null;
             if (strlen($xml->STATUS) > 0) {
                 $asset->status = $xml->STATUS->__toString();
+            }
+        }
+        if (isset($xml->SECURITY_LOCK)) {
+            $asset->securityLock = null;
+            if (strlen($xml->SECURITY_LOCK) > 0) {
+                $asset->securityLock = $xml->SECURITY_LOCK->__toString();
+            }
+        }
+        if (isset($xml->SECURITY_LOCK_RESOLVED)) {
+            $asset->securityLockResolved = null;
+            if (strlen($xml->SECURITY_LOCK_RESOLVED) > 0) {
+                $asset->securityLockResolved = $xml->SECURITY_LOCK_RESOLVED->__toString();
             }
         }
         if (isset($xml->SETTLEMENT_AMOUNT)) {
@@ -810,6 +826,18 @@ class Asset extends Model
             $asset->status = null;
             if (strlen($xml->STATUS) > 0) {
                 $asset->status = $xml->STATUS->__toString();
+            }
+        }
+        if (isset($xml->SECURITY_LOCK)) {
+            $asset->securityLock = null;
+            if (strlen($xml->SECURITY_LOCK) > 0) {
+                $asset->securityLock = $xml->SECURITY_LOCK->__toString();
+            }
+        }
+        if (isset($xml->SECURITY_LOCK_RESOLVED)) {
+            $asset->securityLockResolved = null;
+            if (strlen($xml->SECURITY_LOCK_RESOLVED) > 0) {
+                $asset->securityLockResolved = $xml->SECURITY_LOCK_RESOLVED->__toString();
             }
         }
         if (isset($xml->SETTLEMENT_AMOUNT)) {
