@@ -13,8 +13,8 @@ class AddSecurityLockFieldsToAssetTable extends Migration
     public function up()
     {
         Schema::table('asset', function (Blueprint $table) {
-            $table->boolean('security_lock')->after('status')->nullable()->default(false);
-            $table->boolean('security_lock_resolved')->after('security_lock')->nullable()->default(false);
+            $table->boolean('security_lock')->after('status')->nullable()->default(null);
+            $table->boolean('security_lock_resolved')->after('security_lock')->nullable()->default(null);
         });
     }
 
