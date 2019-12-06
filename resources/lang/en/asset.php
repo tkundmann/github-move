@@ -59,6 +59,8 @@ return [
     'hard_drive_serial_num' => 'Hard Drive Serial Number',
     'asset_tag' => 'Asset Tag',
     'status' => 'Status',
+    'security_lock' => 'Security Lock',
+    'security_lock_resolved' => 'Security Lock Resolved',
     'settlement_amount' => 'Settlement Amount',
     'net_settlement' => 'Net Settlement',
     'cert_of_data_wipe_num' => 'Certificate of Data Wipe Number',

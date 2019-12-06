@@ -71,6 +71,8 @@ class AssetController extends ContextController
         'hard_drive_serial_num'        => 'hard_drive_serial_num',
         'asset_tag'                    => 'asset_tag',
         'status'                       => 'status',
+        'security_lock'                => 'security_lock',
+        'security_lock_resolved'       => 'security_lock_resolved',
         'audit_completed'              => 'audit_completed',
         'cert_of_data_wipe_num'        => 'cert_of_data_wipe_num',
         'cert_of_destruction_num'      => 'cert_of_destruction_num'
@@ -133,6 +135,8 @@ class AssetController extends ContextController
         'hard_drive_serial_num'        => 'hard_drive_serial_num',
         'asset_tag'                    => 'asset_tag',
         'status'                       => 'status',
+        'security_lock'                => 'security_lock',
+        'security_lock_resolved'       => 'security_lock_resolved',
         'audit_completed'              => 'audit_completed',
         'cert_of_data_wipe_num'        => 'cert_of_data_wipe_num',
         'cert_of_destruction_num'      => 'cert_of_destruction_num'
@@ -186,6 +190,8 @@ class AssetController extends ContextController
         'hard_drive_serial_num'        => 'hard_drive_serial_num',
         'asset_tag'                    => 'asset_tag',
         'status'                       => 'status',
+        'security_lock'                => 'security_lock',
+        'security_lock_resolved'       => 'security_lock_resolved',
         'audit_completed'              => 'audit_completed',
         'cert_of_data_wipe_num'        => 'cert_of_data_wipe_num',
         'cert_of_destruction_num'      => 'cert_of_destruction_num'
@@ -212,7 +218,7 @@ class AssetController extends ContextController
 
         $this->fieldCategories =
         [
-            'exact' => [],
+            'exact' => ['security_lock', 'security_lock_resolved'],
             'string_like' => [ 'product_family', 'carrier', 'manufacturer', 'condition', 'date_code', 'status', 'bill_of_lading', 'vendor_order_number', 'vendor', 'barcode_number', 'manufacturer_model_num', 'manufacturer_part_num',
                 'parent_serial_num', 'item_number', 'form_factor', 'speed', 'memory', 'storage_capacity', 'dual', 'quad', 'optical_1', 'optical_2', 'nic', 'video', 'color',
                 'adapter', 'screen_size', 'battery', 'wifi', 'docking_station', 'stylus', 'firewire', 'keyboard', 'mouse', 'cartridge', 'coa', 'osx_description', 'po_number', 'comments', 'additional_comments', 'hard_drive_serial_num', 'asset_tag', 'cert_of_data_wipe_num', 'cert_of_destruction_num'],
