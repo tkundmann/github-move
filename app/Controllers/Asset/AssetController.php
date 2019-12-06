@@ -71,8 +71,6 @@ class AssetController extends ContextController
         'hard_drive_serial_num'        => 'hard_drive_serial_num',
         'asset_tag'                    => 'asset_tag',
         'status'                       => 'status',
-        'security_lock'                => 'security_lock',
-        'security_lock_resolved'       => 'security_lock_resolved',
         'audit_completed'              => 'audit_completed',
         'cert_of_data_wipe_num'        => 'cert_of_data_wipe_num',
         'cert_of_destruction_num'      => 'cert_of_destruction_num'
