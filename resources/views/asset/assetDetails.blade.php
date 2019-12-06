@@ -157,6 +157,18 @@
                                                 @endif
                                             </div>
                                         </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-6 control-label colon-after">{{ array_key_exists('security_lock', $fields) ? (Lang::has('asset.'. $fields['security_lock']) ? Lang::trans('asset.' .  $fields['security_lock']) :  $fields['security_lock']) : Lang::trans('asset.security_lock') }}</label>
+                                            <div class="col-sm-6">
+                                                <p class="form-control-static">{{ isset($asset->securityLock) ? $asset->securityLock : '-' }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-6 control-label colon-after">{{ array_key_exists('security_lock_resolved', $fields) ? (Lang::has('asset.'. $fields['security_lock_resolved']) ? Lang::trans('asset.' .  $fields['security_lock_resolved']) :  $fields['security_lock_resolved']) : Lang::trans('asset.security_lock_resolved') }}</label>
+                                            <div class="col-sm-6">
+                                                <p class="form-control-static">{{ isset($asset->securityLockResolved) ? $asset->securityLockResolved : '-' }}</p>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
