@@ -48,6 +48,10 @@
     RewriteCond %{REQUEST_URI} ^/cerner/pickuprequest$     [NC]
     RewriteRule ^.*$  "/cerner/pickup-request"             [R,NE,L]
 
+    # Chegg Pickup Request Form Redirects
+    RewriteCond %{REQUEST_URI} ^/chegg/pickuprequest$      [NC]
+    RewriteRule ^.*$  "/chegg/pickup-request"              [R,NE,L]
+
     # Ebay Pickup Request Form Redirects
     RewriteCond %{REQUEST_URI} ^/ebay/pickuprequest$       [NC]
     RewriteRule ^.*$  "/ebay/pickup-request"               [R,NE,L]
