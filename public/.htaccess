@@ -29,99 +29,119 @@
     RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1          [R=301,L]
 
     # Airgas Pickup Request Form Redirects
-    RewriteCond %{REQUEST_URI} ^/airgas/pickuprequest$     [NC]
-    RewriteRule ^.*$  "/airgas/pickup-request"             [R,NE,L]
+    RewriteCond %{REQUEST_URI} ^/airgas/pickuprequest$          [NC]
+    RewriteCond %{REQUEST_URI} ^/airgas/page/pickuprequest$     [OR,NC]
+    RewriteRule ^.*$  "/airgas/pickup-request"                  [R,NE,L]
 
     # Amobee Pickup Request Form Redirects
-    RewriteCond %{REQUEST_URI} ^/amobee/pickuprequest$     [NC]
-    RewriteRule ^.*$  "/amobee/pickup-request"             [R,NE,L]
+    RewriteCond %{REQUEST_URI} ^/amobee/pickuprequest$          [NC]
+    RewriteCond %{REQUEST_URI} ^/amobee/page/pickuprequest$     [OR,NC]
+    RewriteRule ^.*$  "/amobee/pickup-request"                  [R,NE,L]
 
     # Anaplan Pickup Request Form Redirects
-    RewriteCond %{REQUEST_URI} ^/anaplan/pickuprequest$    [NC]
-    RewriteRule ^.*$  "/anaplan/pickup-request"            [R,NE,L]
+    RewriteCond %{REQUEST_URI} ^/anaplan/pickuprequest$         [NC]
+    RewriteCond %{REQUEST_URI} ^/anaplan/page/pickuprequest$    [OR,NC]
+    RewriteRule ^.*$  "/anaplan/pickup-request"                 [R,NE,L]
 
     # Centene Pickup Request Form Redirects
-    RewriteCond %{REQUEST_URI} ^/centene/pickuprequest$    [NC]
-    RewriteRule ^.*$  "/centene/pickup-request"            [R,NE,L]
+    RewriteCond %{REQUEST_URI} ^/centene/pickuprequest$         [NC]
+    RewriteCond %{REQUEST_URI} ^/centene/page/pickuprequest$    [OR,NC]
+    RewriteRule ^.*$  "/centene/pickup-request"                 [R,NE,L]
 
     # Cerner Pickup Request Form Redirects
-    RewriteCond %{REQUEST_URI} ^/cerner/pickuprequest$     [NC]
-    RewriteRule ^.*$  "/cerner/pickup-request"             [R,NE,L]
+    RewriteCond %{REQUEST_URI} ^/cerner/pickuprequest$          [NC]
+    RewriteCond %{REQUEST_URI} ^/cerner/page/pickuprequest$     [OR,NC]
+    RewriteRule ^.*$  "/cerner/pickup-request"                  [R,NE,L]
 
     # Chegg Pickup Request Form Redirects
-    RewriteCond %{REQUEST_URI} ^/chegg/pickuprequest$      [NC]
-    RewriteRule ^.*$  "/chegg/pickup-request"              [R,NE,L]
+    RewriteCond %{REQUEST_URI} ^/chegg/pickuprequest$           [NC]
+    RewriteCond %{REQUEST_URI} ^/chegg/page/pickuprequest$      [OR,NC]
+    RewriteRule ^.*$  "/chegg/pickup-request"                   [R,NE,L]
 
     # Ebay Pickup Request Form Redirects
-    RewriteCond %{REQUEST_URI} ^/ebay/pickuprequest$       [NC]
-    RewriteRule ^.*$  "/ebay/pickup-request"               [R,NE,L]
+    RewriteCond %{REQUEST_URI} ^/ebay/pickuprequest$            [NC]
+    RewriteCond %{REQUEST_URI} ^/ebay/page/pickuprequest$       [OR,NC]
+    RewriteRule ^.*$  "/ebay/pickup-request"                    [R,NE,L]
 
     # First American Title Company Pickup Request Form Redirects
-    RewriteCond %{REQUEST_URI} ^/firstamericantitlecompany/pickuprequest$     [NC]
-    RewriteRule ^.*$  "/firstamericantitlecompany/pickup-request"             [R,NE,L]
+    RewriteCond %{REQUEST_URI} ^/firstamericantitlecompany/pickuprequest$      [NC]
+    RewriteCond %{REQUEST_URI} ^/firstamericantitlecompany/page/pickuprequest$ [OR,NC]
+    RewriteRule ^.*$  "/firstamericantitlecompany/pickup-request"              [R,NE,L]
 
     # GoDaddy Pickup Request Form Redirects
-    RewriteCond %{REQUEST_URI} ^/godaddy/pickuprequest$    [NC]
-    RewriteRule ^.*$  "/godaddy/pickup-request"            [R,NE,L]
+    RewriteCond %{REQUEST_URI} ^/godaddy/pickuprequest$         [NC]
+    RewriteCond %{REQUEST_URI} ^/godaddy/page/pickuprequest$    [OR,NC]
+    RewriteRule ^.*$  "/godaddy/pickup-request"                 [R,NE,L]
 
     # LinkedIn Pickup Request Form Redirects
-    RewriteCond %{REQUEST_URI} ^/linkedin/pickuprequest$   [NC]
-    RewriteRule ^.*$  "/linkedin/pickup-request"           [R,NE,L]
+    RewriteCond %{REQUEST_URI} ^/linkedin/pickuprequest$        [NC]
+    RewriteCond %{REQUEST_URI} ^/linkedin/page/pickuprequest$   [OR,NC]
+    RewriteRule ^.*$  "/linkedin/pickup-request"                [R,NE,L]
 
     # Magento Pickup Request Form Redirects
-    RewriteCond %{REQUEST_URI} ^/magento/pickuprequest$    [NC]
-    RewriteRule ^.*$  "/magento/pickup-request"            [R,NE,L]
+    RewriteCond %{REQUEST_URI} ^/magento/pickuprequest$         [NC]
+    RewriteCond %{REQUEST_URI} ^/magento/page/pickuprequest$    [OR,NC]
+    RewriteRule ^.*$  "/magento/pickup-request"                 [R,NE,L]
 
     # PayPal Pickup Request Form Redirects
-    RewriteCond %{REQUEST_URI} ^/paypal/pickuprequest$     [NC]
-    RewriteRule ^.*$  "/paypal/pickup-request"             [R,NE,L]
+    RewriteCond %{REQUEST_URI} ^/paypal/pickuprequest$          [NC]
+    RewriteCond %{REQUEST_URI} ^/paypal/page/pickuprequest$     [OR,NC]
+    RewriteRule ^.*$  "/paypal/pickup-request"                  [R,NE,L]
 
     # Pixar Pickup Request Form Redirects
-    RewriteCond %{REQUEST_URI} ^/pixar/pickuprequest$      [NC]
-    RewriteRule ^.*$  "/pixar/pickup-request"              [R,NE,L]
+    RewriteCond %{REQUEST_URI} ^/pixar/pickuprequest$           [NC]
+    RewriteCond %{REQUEST_URI} ^/pixar/page/pickuprequest$      [OR,NC]
+    RewriteRule ^.*$  "/pixar/pickup-request"                   [R,NE,L]
 
     # Principal Pickup Request Form Redirects
-    RewriteCond %{REQUEST_URI} ^/principal/pickuprequest$  [NC]
-    RewriteRule ^.*$  "/principal/pickup-request"          [R,NE,L]
+    RewriteCond %{REQUEST_URI} ^/principal/pickuprequest$       [NC]
+    RewriteCond %{REQUEST_URI} ^/principal/page/pickuprequest$  [OR,NC]
+    RewriteRule ^.*$  "/principal/pickup-request"               [R,NE,L]
 
     # Quadbridge Pickup Request Form Redirects
-    RewriteCond %{REQUEST_URI} ^/quadbridge/pickuprequest$ [NC]
-    RewriteRule ^.*$  "/quadbridge/pickup-request"         [R,NE,L]
+    RewriteCond %{REQUEST_URI} ^/quadbridge/pickuprequest$      [NC]
+    RewriteCond %{REQUEST_URI} ^/quadbridge/page/pickuprequest$ [OR,NC]
+    RewriteRule ^.*$  "/quadbridge/pickup-request"              [R,NE,L]
 
     # SipiDemo Pickup Request Form Redirects
-    RewriteCond %{REQUEST_URI} ^/sipidemo/pickuprequest$   [NC]
-    RewriteRule ^.*$  "/sipidemo/pickup-request"           [R,NE,L]
+    RewriteCond %{REQUEST_URI} ^/sipidemo/pickuprequest$        [NC]
+    RewriteCond %{REQUEST_URI} ^/sipidemo/page/pickuprequest$   [OR,NC]
+    RewriteRule ^.*$  "/sipidemo/pickup-request"                [R,NE,L]
 
     # Switch Pickup Request Form Redirects
-    RewriteCond %{REQUEST_URI} ^/switch/pickuprequest$     [NC]
-    RewriteRule ^.*$  "/switch/pickup-request"             [R,NE,L]
+    RewriteCond %{REQUEST_URI} ^/switch/pickuprequest$          [NC]
+    RewriteCond %{REQUEST_URI} ^/switch/page/pickuprequest$     [OR,NC]
+    RewriteRule ^.*$  "/switch/pickup-request"                  [R,NE,L]
 
     # Trinity Health Pickup Request Form Redirects
-    RewriteCond %{REQUEST_URI} ^/trinity/pickuprequest$    [NC]
-    RewriteRule ^.*$  "/trinity/pickup-request"            [R,NE,L]
+    RewriteCond %{REQUEST_URI} ^/trinity/pickuprequest$         [NC]
+    RewriteCond %{REQUEST_URI} ^/trinity/page/pickuprequest$    [OR,NC]
+    RewriteRule ^.*$  "/trinity/pickup-request"                 [R,NE,L]
 
     # Workday Pickup Request Form Redirects
-    RewriteCond %{REQUEST_URI} ^/workday/pickuprequest$    [NC]
-    RewriteRule ^.*$  "/workday/pickup-request"            [R,NE,L]
+    RewriteCond %{REQUEST_URI} ^/workday/pickuprequest$         [NC]
+    RewriteCond %{REQUEST_URI} ^/workday/page/pickuprequest$    [OR,NC]
+    RewriteRule ^.*$  "/workday/pickup-request"                 [R,NE,L]
 
     # Redirect hits to Yahoo to Oath
-    RewriteCond %{REQUEST_URI} ^/yahoo$                    [OR,NC]
-    RewriteCond %{REQUEST_URI} ^/yahoo/home$               [OR,NC]
-    RewriteCond %{REQUEST_URI} ^/yahoo/login$              [NC]
-    RewriteRule ^.*$  "/oath"                              [R,NE,L]
+    RewriteCond %{REQUEST_URI} ^/yahoo$                         [OR,NC]
+    RewriteCond %{REQUEST_URI} ^/yahoo/home$                    [OR,NC]
+    RewriteCond %{REQUEST_URI} ^/yahoo/login$                   [NC]
+    RewriteRule ^.*$  "/oath"                                   [R,NE,L]
 
     # Oath (previously Yahoo) Pickup Request Form Redirects
-    RewriteCond %{REQUEST_URI} ^/yahoo/page/pickuprequest$ [OR,NC]
-    RewriteCond %{REQUEST_URI} ^/yahoo/pickuprequest$      [OR,NC]
-    RewriteCond %{REQUEST_URI} ^/yahoo/pickup-request$        [OR,NC]
-    RewriteCond %{REQUEST_URI} ^/yahoo/pickup-request/login$   [OR,NC]
-    RewriteCond %{REQUEST_URI} ^/oath/page/pickuprequest$  [OR,NC]
-    RewriteCond %{REQUEST_URI} ^/oath/pickuprequest$       [NC]
-    RewriteRule ^.*$  "/oath/pickup-request"               [R,NE,L]
+    RewriteCond %{REQUEST_URI} ^/yahoo/page/pickuprequest$      [OR,NC]
+    RewriteCond %{REQUEST_URI} ^/yahoo/pickuprequest$           [OR,NC]
+    RewriteCond %{REQUEST_URI} ^/yahoo/pickup-request$          [OR,NC]
+    RewriteCond %{REQUEST_URI} ^/yahoo/pickup-request/login$    [OR,NC]
+    RewriteCond %{REQUEST_URI} ^/oath/page/pickuprequest$       [OR,NC]
+    RewriteCond %{REQUEST_URI} ^/oath/pickuprequest$            [NC]
+    RewriteRule ^.*$  "/oath/pickup-request"                    [R,NE,L]
 
     # Zeta Interactive Pickup Request Form Redirects
-    RewriteCond %{REQUEST_URI} ^/zeta/pickuprequest$       [NC]
-    RewriteRule ^.*$  "/zeta/pickup-request"               [R,NE,L]
+    RewriteCond %{REQUEST_URI} ^/zeta/pickuprequest$            [NC]
+    RewriteCond %{REQUEST_URI} ^/zeta/page/pickuprequest$       [OR,NC]
+    RewriteRule ^.*$  "/zeta/pickup-request"                    [R,NE,L]
 
 
     # Redirect Trailing Slashes If Not A Folder...
