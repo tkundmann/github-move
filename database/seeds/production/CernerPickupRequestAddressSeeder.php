@@ -51,6 +51,7 @@ class CernerPickupRequestAddressSeeder extends Seeder
                 'contact_cell_number' => Crypt::encrypt(''),
                 'contact_email_address' => Crypt::encrypt(''),
                 'created_at' => Carbon::now()
+            ]
         ]);
 
     }
