@@ -42,17 +42,17 @@ class ImportController extends Controller
         Log::info('Content-Type: ' . $contentType);
 
         if (strpos($contentType,'text/plain') === false && strpos($contentType,'text/xml') === false && strpos($contentType,'application/xml') === false) {
-            return $this->returnError(ApiResponse::DESCRIPTION_FORMAT_INCORRECT);
+            return $this->returnError(string ApiResponse::DESCRIPTION_FORMAT_INCORRECT);
         }
         if (strlen($content) == 0) {
-            return $this->returnError(ApiResponse::DESCRIPTION_FORMAT_INCORRECT);
+            return $this->returnError(string ApiResponse::DESCRIPTION_FORMAT_INCORRECT);
         }
 
         libxml_use_internal_errors(true);
         $xml = simplexml_load_string($content);
 
         if ($xml == false) {
-            return $this->returnError(ApiResponse::DESCRIPTION_FORMAT_INCORRECT);
+            return $this->returnError(string ApiResponse::DESCRIPTION_FORMAT_INCORRECT);
         }
         else {
             $importSuccessful = false;
@@ -88,7 +88,7 @@ class ImportController extends Controller
                     }
                     break;
                 default:
-                    return $this->returnError(ApiResponse::DESCRIPTION_FORMAT_INCORRECT);
+                    return $this->returnError(string ApiResponse::DESCRIPTION_FORMAT_INCORRECT);
             }
 
             // Store raw XML content in _importing_archive S3 directory
@@ -103,7 +103,7 @@ class ImportController extends Controller
                 return $this->returnSuccess();
             }
             else {
-                return $this->returnError(ApiResponse::DESCRIPTION_IMPORT_UNSUCCESSFUL);
+                return $this->returnError(string ApiResponse::DESCRIPTION_IMPORT_UNSUCCESSFUL);
             }
         }
     }
@@ -220,7 +220,7 @@ class ImportController extends Controller
         return response()->json(new ApiResponse(ApiResponse::STATUS_OK, null, new DateTime()), 200);
     }
 
-    private function returnError(\string $description) {
+    private function returnError(string $description) {
         return response()->json(new ApiResponse(ApiResponse::STATUS_ERROR, $description, new DateTime()), 400);
     }
 
