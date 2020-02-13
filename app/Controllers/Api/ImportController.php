@@ -41,7 +41,7 @@ class ImportController extends Controller
 
         Log::info('Content-Type: ' . $contentType);
 
-        (string) $errorStr = ApiResponse::DESCRIPTION_FORMAT_INCORRECT;
+        $errorStr = ApiResponse::DESCRIPTION_FORMAT_INCORRECT;
 
         if (strpos($contentType,'text/plain') === false && strpos($contentType,'text/xml') === false && strpos($contentType,'application/xml') === false) {
 
@@ -223,7 +223,7 @@ class ImportController extends Controller
         return response()->json(new ApiResponse(ApiResponse::STATUS_OK, null, new DateTime()), 200);
     }
 
-    private function returnError(string $description) {
+    private function returnError($description) {
         return response()->json(new ApiResponse(ApiResponse::STATUS_ERROR, $description, new DateTime()), 400);
     }
 
