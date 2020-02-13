@@ -220,7 +220,7 @@ class ImportController extends Controller
         return response()->json(new ApiResponse(ApiResponse::STATUS_OK, null, new DateTime()), 200);
     }
 
-    private function returnError(string $description) {
+    private function returnError(\string $description) {
         return response()->json(new ApiResponse(ApiResponse::STATUS_ERROR, $description, new DateTime()), 400);
     }
 
