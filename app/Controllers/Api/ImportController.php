@@ -41,21 +41,19 @@ class ImportController extends Controller
 
         Log::info('Content-Type: ' . $contentType);
 
-        $errorStr = ApiResponse::DESCRIPTION_FORMAT_INCORRECT;
-
         if (strpos($contentType,'text/plain') === false && strpos($contentType,'text/xml') === false && strpos($contentType,'application/xml') === false) {
 
-            return $this->returnError($errorStr);
+            return $this->returnError(ApiResponse::DESCRIPTION_FORMAT_INCORRECT);
         }
         if (strlen($content) == 0) {
-            return $this->returnError($errorStr);
+            return $this->returnError(ApiResponse::DESCRIPTION_FORMAT_INCORRECT);
         }
 
         libxml_use_internal_errors(true);
         $xml = simplexml_load_string($content);
 
         if ($xml == false) {
-            return $this->returnError($errorStr);
+            return $this->returnError(ApiResponse::DESCRIPTION_FORMAT_INCORRECT);
         }
         else {
             $importSuccessful = false;
@@ -91,7 +89,7 @@ class ImportController extends Controller
                     }
                     break;
                 default:
-                    return $this->returnError($errorStr);
+                    return $this->returnError(ApiResponse::DESCRIPTION_FORMAT_INCORRECT);
             }
 
             // Store raw XML content in _importing_archive S3 directory
