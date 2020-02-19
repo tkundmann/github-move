@@ -25,11 +25,13 @@ class AirGasPickupRequestAddressSeeder extends Seeder
         $site->features()->attach([$featureHasPickupRequestAddressBook->id]);
 
         $pickupRequestAddressBookConfiguration = array (
-            'site_address_book_label' => 'Site Address Book',
-            'new_site_text' => 'Provide to a new Site Name to create a new record.',
+            'site_address_book_label'     => 'Site Address Book',
+            'new_site_text'               => 'Provide to a new Site Name to create a new record.',
             'new_site_address_book_label' => 'Site Name',
-            'change_text' => 'If you want to add this site to the address book, you must supply a new <b>Site Name</b>. Otherwise, the existing <b>Site Name</b> address record will be updated with the information submitted for this request.',
-            'allow_change' => true
+            'change_text'                 => 'If you want to add this site to the address book, you must supply a new <b>Site Name</b>. Otherwise, the existing <b>Site Name</b> address record will be updated with the information submitted for this request.',
+            'allow_change'                => true,
+            'address_readonly'            => false,
+            'save_dock_info'              => false
         );
 
         $site->features()->updateExistingPivot($featureHasPickupRequestAddressBook->id, ['data' => serialize($pickupRequestAddressBookConfiguration)]);
