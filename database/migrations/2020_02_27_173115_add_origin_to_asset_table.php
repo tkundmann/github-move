@@ -13,11 +13,11 @@ class AddOriginToAssetTable extends Migration
     public function up()
     {
         Schema::table('asset', function (Blueprint $table) {
-            $table->string('origin', 10)->before('status')->nullable()->default(null);
+            $table->string('origin', 10)->after('asset_tag')->nullable()->default(null);
         });
 
         Schema::table('asset_archive', function (Blueprint $table) {
-            $table->string('origin', 10)->before('status')->nullable()->default(null);
+            $table->string('origin', 10)->after('asset_tag')->nullable()->default(null);
         });
     }
 
