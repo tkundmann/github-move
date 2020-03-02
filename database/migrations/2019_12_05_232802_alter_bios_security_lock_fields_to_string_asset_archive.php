@@ -18,16 +18,4 @@ class AlterBiosSecurityLockFieldsToStringAssetArchive extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('asset_archive', function (Blueprint $table) {
-            $table->boolean('security_lock')->nullable()->default(null)->change();
-            $table->boolean('security_lock_resolved')->nullable()->default(null)->change();
-        });
-    }
 }
