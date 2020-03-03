@@ -58,6 +58,7 @@ return [
     'additional_comments' => 'Additional Comments',
     'hard_drive_serial_num' => 'Hard Drive Serial Number',
     'asset_tag' => 'Asset Tag',
+    'origin' => 'Origin',
     'status' => 'Status',
     'security_lock' => 'Security Lock',
     'security_lock_resolved' => 'Security Lock Resolved',

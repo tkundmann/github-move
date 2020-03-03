@@ -61,6 +61,7 @@ use Sofa\Eloquence\Mappable;
  * @property string $additionalComments
  * @property string $hardDriveSerialNum
  * @property string $assetTag
+ * @property string $origin
  * @property string $status
  * @property string $securityLock
  * @property string $securityLockResolved
@@ -139,6 +140,7 @@ class Asset extends Model
         'additionalComments' => 'additional_comments',
         'hardDriveSerialNum' => 'hard_drive_serial_num',
         'assetTag' => 'asset_tag',
+        // 'origin' => 'origin',
         // 'status' => 'status',
         'securityLock' => 'security_lock',
         'securityLockResolved' => 'security_lock_resolved',
@@ -461,6 +463,12 @@ class Asset extends Model
             $asset->assetTag = null;
             if (strlen($xml->ASSET_TAG) > 0) {
                 $asset->assetTag = $xml->ASSET_TAG->__toString();
+            }
+        }
+        if (isset($xml->ORIGIN)) {
+            $asset->origin = null;
+            if (strlen($xml->ORIGIN) > 0) {
+                $asset->origin = $xml->ORIGIN->__toString();
             }
         }
         if (isset($xml->STATUS)) {
@@ -820,6 +828,12 @@ class Asset extends Model
             $asset->assetTag = null;
             if (strlen($xml->ASSET_TAG) > 0) {
                 $asset->assetTag = $xml->ASSET_TAG->__toString();
+            }
+        }
+        if (isset($xml->ORIGIN)) {
+            $asset->origin = null;
+            if (strlen($xml->ORIGIN) > 0) {
+                $asset->origin = $xml->ORIGIN->__toString();
             }
         }
         if (isset($xml->STATUS)) {

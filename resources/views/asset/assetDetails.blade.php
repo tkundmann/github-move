@@ -341,6 +341,12 @@
                                                 <p class="form-control-static">{{ isset($asset->assetTag) ? $asset->assetTag : '-' }}</p>
                                             </div>
                                         </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-6 control-label colon-after">{{ array_key_exists('origin', $fields) ? (Lang::has('asset.'. $fields['origin']) ? Lang::trans('asset.' .  $fields['origin']) :  $fields['origin']) : Lang::trans('asset.origin') }}</label>
+                                            <div class="col-sm-6">
+                                                <p class="form-control-static">{{ isset($asset->origin) ? $asset->origin : '-' }}</p>
+                                            </div>
+                                        </div>
                                         <hr />
 
                                         <div class="form-group">
