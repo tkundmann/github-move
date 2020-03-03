@@ -222,7 +222,7 @@ class AssetController extends ContextController
             'exact' => ['security_lock', 'security_lock_resolved'],
             'string_like' => [ 'product_family', 'carrier', 'manufacturer', 'condition', 'date_code', 'status', 'bill_of_lading', 'vendor_order_number', 'vendor', 'barcode_number', 'manufacturer_model_num', 'manufacturer_part_num',
                 'parent_serial_num', 'item_number', 'form_factor', 'speed', 'memory', 'storage_capacity', 'dual', 'quad', 'optical_1', 'optical_2', 'nic', 'video', 'color',
-                'adapter', 'screen_size', 'battery', 'wifi', 'docking_station', 'stylus', 'firewire', 'keyboard', 'mouse', 'cartridge', 'coa', 'osx_description', 'po_number', 'comments', 'additional_comments', 'hard_drive_serial_num', 'asset_tag', 'cert_of_data_wipe_num', 'cert_of_destruction_num'],
+                'adapter', 'screen_size', 'battery', 'wifi', 'docking_station', 'stylus', 'firewire', 'keyboard', 'mouse', 'cartridge', 'coa', 'osx_description', 'po_number', 'comments', 'additional_comments', 'hard_drive_serial_num', 'asset_tag', 'origin', 'cert_of_data_wipe_num', 'cert_of_destruction_num'],
             'string_multi' => ['lot_number', 'manufacturer_serial_num', 'bios_manufacturer_serial_num'],
             'date_from_to' => ['lot_date', 'date_arrived', 'shipment_date'],
             'int_less_greater' => [],
