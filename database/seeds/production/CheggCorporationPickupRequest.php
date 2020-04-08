@@ -26,7 +26,7 @@ class CheggPickupRequest extends Seeder
 
 		$pickupRequestConfiguration = array (
 			'password' => Hash::make('chegg12112019sar!'),
-			'title' => 'Sipi Asset Recovery/Centene Corporation Pickup Request',
+			'title' => 'Sipi Asset Recovery/Chegg, Inc. Pickup Request',
 			'use_company_division' => false,
 			'use_contact_section_title' => true,
 			'contact_section_title' => 'Site Location Pick-up Information',
