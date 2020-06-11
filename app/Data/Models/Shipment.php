@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Log;
  * @property \Carbon\Carbon $lotDate
  * @property \Carbon\Carbon $lotApprovedDate
  * @property string $lotNumber
+ * @property string $status
  * @property string $poNumber
  * @property string $vendorShipmentNumber
  * @property string $costCenter
@@ -84,6 +85,7 @@ class Shipment extends Model
         'lotDate' => 'lot_date',
         'lotApprovedDate' => 'lot_approved_date',
         'lotNumber' => 'lot_number',
+        // 'status' => 'status',
         'poNumber' => 'po_number',
         'vendorShipmentNumber' => 'vendor_shipment_number',
         'costCenter' => 'cost_center',
@@ -187,6 +189,13 @@ class Shipment extends Model
             $shipment->lotNumber = null;
             if (strlen($xml->attributes()['LOT_NUMBER']) > 0) {
                 $shipment->lotNumber = $xml->attributes()->LOT_NUMBER->__toString();
+            }
+        }
+
+        if (isset($xml->STATUS)) {
+            $shipment->status = null;
+            if (strlen($xml->STATUS) > 0) {
+                $shipment->status = $xml->STATUS->__toString();
             }
         }
 
@@ -513,6 +522,13 @@ class Shipment extends Model
             $shipment->lotNumber = null;
             if (strlen($xml->attributes()['LOT_NUMBER']) > 0) {
                 $shipment->lotNumber = $xml->attributes()->LOT_NUMBER->__toString();
+            }
+        }
+
+        if (isset($xml->STATUS)) {
+            $shipment->status = null;
+            if (strlen($xml->STATUS) > 0) {
+                $shipment->status = $xml->STATUS->__toString();
             }
         }
 

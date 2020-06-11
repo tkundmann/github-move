@@ -61,6 +61,7 @@ class ShipmentController extends ContextController
     protected $defaultSearchResultFields = [
         'lot_date'                => 'lot_date',
         'lot_number'              => 'lot_number',
+        'status'                  => 'status',
         'po_number'               => 'po_number',
         'vendor_shipment_number'  => 'vendor_shipment_number',
         'site_coordinator'        => 'site_coordinator',
@@ -87,6 +88,7 @@ class ShipmentController extends ContextController
     protected $defaultExportFields = [
         'lot_date'                => 'lot_date',
         'lot_number'              => 'lot_number',
+        'status'                  => 'status',
         'po_number'               => 'po_number',
         'vendor_shipment_number'  => 'vendor_shipment_number',
         'site_coordinator'        => 'site_coordinator',
@@ -133,7 +135,7 @@ class ShipmentController extends ContextController
 
         $this->fieldCategories = [
             'exact' => [],
-            'string_like' => ['freight_carrier', 'site_coordinator', 'city_of_origin', 'po_number', 'vendor_shipment_number', 'cost_center', 'vendor', 'bill_of_lading', 'freight_invoice_number',
+            'string_like' => ['status', 'freight_carrier', 'site_coordinator', 'city_of_origin', 'po_number', 'vendor_shipment_number', 'cost_center', 'vendor', 'bill_of_lading', 'freight_invoice_number',
                 'pickup_address', 'pickup_address_2', 'pickup_city', 'pickup_state', 'pickup_zip_code', 'nota_fiscal_transfer', 'nota_fiscal_transfer_2',
                 'nota_fiscal_transfer_3', 'nota_fiscal_transfer_4', 'nota_fiscal_transfer_5', 'equipment_summary', 'cert_of_data_wipe_num', 'cert_of_destruction_num'],
             'string_multi' => ['lot_number'],

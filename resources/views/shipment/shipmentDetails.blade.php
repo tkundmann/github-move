@@ -35,6 +35,13 @@
                                                 <p class="form-control-static">{{ isset($shipment->lotNumber) ? $shipment->lotNumber : '-' }}</p>
                                             </div>
                                         </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-6 control-label colon-after">{{ array_key_exists('status', $fields) ? (Lang::has('shipment.'. $fields['status']) ? Lang::trans('shipment.' .  $fields['status']) :  $fields['status']) : Lang::trans('shipment.status') }}</label>
+                                            <div class="col-sm-6">
+                                                <p class="form-control-static">{{ isset($shipment->status) ? $shipment->status : '-' }}</p>
+                                            </div>
+                                        </div>
+
                                         <hr/>
                                         <div class="form-group">
                                             <label class="col-sm-6 control-label colon-after">{{ array_key_exists('vendor', $fields) ? (Lang::has('shipment.'. $fields['vendor']) ? Lang::trans('shipment.' .  $fields['vendor']) :  $fields['vendor']) : Lang::trans('shipment.vendor') }}</label>

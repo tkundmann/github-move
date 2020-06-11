@@ -13,6 +13,7 @@ return [
     'lot_date'                => 'Lot Date',
     'lot_approved_date'       => 'Lot Approved Date',
     'lot_number'              => 'Lot Number',
+    'status'                  => 'Status',
     'po_number'               => 'PO Number',
     'vendor_shipment_number'  => 'Vendor Shipment Number',
     'cost_center'             => 'Cost Center',
