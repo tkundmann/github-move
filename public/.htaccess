@@ -73,6 +73,11 @@
     RewriteCond %{REQUEST_URI} ^/godaddy/page/pickuprequest$    [NC]
     RewriteRule ^.*$  "/godaddy/pickup-request"                 [R,NE,L]
 
+    # Kaplan Inc Pickup Request Form Redirects
+    RewriteCond %{REQUEST_URI} ^/kaplan/pickuprequest$          [OR,NC]
+    RewriteCond %{REQUEST_URI} ^/kaplan/page/pickuprequest$     [NC]
+    RewriteRule ^.*$  "/kaplan/pickup-request"                  [R,NE,L]
+
     # LinkedIn Pickup Request Form Redirects
     RewriteCond %{REQUEST_URI} ^/linkedin/pickuprequest$        [OR,NC]
     RewriteCond %{REQUEST_URI} ^/linkedin/page/pickuprequest$   [NC]
