@@ -13,7 +13,7 @@ class AddAdditionalRequestRecipientEmailAddressToPickuprequest extends Migration
     public function up()
     {
         Schema::table('pickup_request', function (Blueprint $table) {
-            $table->integer('additional_request_recipient_email_address', 75)->after('contact_email_address')->nullable()->default(null);
+            $table->string('additional_request_recipient_email_address', 75)->after('contact_email_address')->nullable()->default(null);
         });
     }
 
