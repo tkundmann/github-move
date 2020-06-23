@@ -63,6 +63,13 @@
 			<td>@if($pickupRequest->contact_email_address) <a href="mailto:{{ $pickupRequest->contact_email_address }}">{{ $pickupRequest->contact_email_address }}</a> @endif</td>
         </tr>
 
+        @if(isset($pickupRequestData['additional_request_email_address']) && $pickupRequestData['additional_request_email_address'] != '')
+            <tr>
+                <td>@lang('pickup_request.additional_request_email_address'):</td>
+                <td>@if($pickupRequest->additional_request_email_address) <a href="mailto:{{ $pickupRequest->additional_request_email_address }}">{{ $pickupRequest->additional_request_email_address }}</a> @endif</td>
+            </tr>
+        @endif
+
         @if($pickupRequestData['use_reference_number'])
         <tr>
             <td>{{ $pickupRequestData['reference_number_label'] }}:</td>

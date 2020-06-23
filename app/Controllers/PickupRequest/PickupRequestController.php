@@ -332,17 +332,17 @@ class PickupRequestController extends ContextController
         }
         $siteCode = $this->site->code;
 
-        Mail::queue('email.pickupRequest', ['title' => $title, 'pickupRequest' => $pickupRequest, 'pickupRequestData' => $pickupRequestData], function ($mail) use ($title, $siteCode, $fileName, $electronicsDispositionFileName, $pickupRequest, $emailFrom, $emailsBcc) {
+        Mail::queue('email.pickupRequest', ['title' => $title, 'pickupRequest' => $pickupRequest, 'pickupRequestData' => $pickupRequestData], function ($mail) use ($title, $siteCode, $fileName, $electronicsDispositionFileName, $pickupRequest, $emailFrom, $emailsBcc, $additionalEmailRecipient) {
             $mail->from($emailFrom, $emailFrom);
             $mail->to($pickupRequest->contact_email_address);
             $mail->bcc($emailsBcc);
             $mail->subject($title);
 
-            // if ($additionalEmailRecipient != '') {
-            //     // User providing an additional pickup request email recipient.
-            //     // CC that email address on the pickup request email.
-            //     $mail->cc($additionalEmailRecipient);
-            // }
+            if ($additionalEmailRecipient != '') {
+                // User providing an additional pickup request email recipient.
+                // CC that email address on the pickup request email.
+                $mail->cc($additionalEmailRecipient);
+            }
 
             if ($fileName) {
                 $mail->attachData(Storage::cloud()->get(Constants::UPLOAD_DIRECTORY . $siteCode . '/pickup_request/' . $pickupRequest->id . '/' . $fileName), $fileName);
