@@ -338,11 +338,11 @@ class PickupRequestController extends ContextController
             $mail->bcc($emailsBcc);
             $mail->subject($title);
 
-            if ($additionalEmailRecipient != '') {
-                // User providing an additional pickup request email recipient.
-                // CC that email address on the pickup request email.
-                $mail->cc($additionalEmailRecipient);
-            }
+            // if ($additionalEmailRecipient != '') {
+            //     // User providing an additional pickup request email recipient.
+            //     // CC that email address on the pickup request email.
+            //     $mail->cc($additionalEmailRecipient);
+            // }
 
             if ($fileName) {
                 $mail->attachData(Storage::cloud()->get(Constants::UPLOAD_DIRECTORY . $siteCode . '/pickup_request/' . $pickupRequest->id . '/' . $fileName), $fileName);
