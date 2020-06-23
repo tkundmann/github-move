@@ -153,6 +153,12 @@ class PickupRequestController extends ContextController
             }
         }
 
+        // If provided, the optional, Additional Request Recipient Email Address field must be a valid email address
+        $additionalEmailRecipient = trim(Input::get('additional_request_recipient_email_address'));
+        if ($additionalEmailRecipient != '') {
+            $rules['additional_request_recipient_email_address'] = 'email';
+        }
+
         $validator = Validator::make(Input::all(), $rules);
         if ($validator->fails()) {
             return redirect()->route('pickupRequest', ['token' => Input::get('token')])->withInput()->withErrors($validator);
@@ -332,6 +338,12 @@ class PickupRequestController extends ContextController
             $mail->bcc($emailsBcc);
             $mail->subject($title);
 
+            if ($additionalEmailRecipient != '') {
+                // User providing an additional pickup request email recipient.
+                // CC that email address on the pickup request email.
+                $mail->cc($additionalEmailRecipient);
+            }
+
             if ($fileName) {
                 $mail->attachData(Storage::cloud()->get(Constants::UPLOAD_DIRECTORY . $siteCode . '/pickup_request/' . $pickupRequest->id . '/' . $fileName), $fileName);
             }
@@ -363,6 +375,8 @@ class PickupRequestController extends ContextController
         $pickupRequest->contact_phone_number = trim(Input::get('contact_phone_number'));
         $pickupRequest->contact_cell_number = trim(Input::get('contact_cell_number'));
         $pickupRequest->contact_email_address = trim(Input::get('contact_email_address'));
+
+        $pickupRequest->additional_request_recipient_email_address = trim(Input::get('additional_request_recipient_email_address'));
 
         if ($this->pickupRequestData['use_preferred_pickup_date_information']) {
             $pickupRequest->preferred_pickup_date_information = trim(Input::get('preferred_pickup_date_information'));

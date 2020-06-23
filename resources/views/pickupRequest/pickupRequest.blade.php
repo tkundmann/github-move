@@ -342,6 +342,18 @@
                                                     {!! $errors->first('contact_email_address', '<small class="text-danger">:message</small>') !!}
                                                 @endif
                                             </div>
+
+                                            <div class="form-group @if($errors->has('additional_request_recipient_email_address')) has-error @endif">
+                                                <label for="additional_request_recipient_email_address"
+                                                       class="control-label colon-after">@lang('pickup_request.additional_request_email_address')</label>
+                                                <input id="additional_request_recipient_email_address" type="text" class="form-control"
+                                                       name="additional_request_recipient_email_address"
+                                                       value="{{ old('additional_request_recipient_email_address') }}">
+                                                @if ($errors->has('additional_request_recipient_email_address'))
+                                                    {!! $errors->first('additional_request_recipient_email_address', '<small class="text-danger">:message</small>') !!}
+                                                @endif
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>

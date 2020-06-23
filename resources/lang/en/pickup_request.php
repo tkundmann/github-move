@@ -59,6 +59,7 @@ return [
     'phone_number'                 => 'Phone Number',
     'cell_number'                  => 'Cell Number',
     'email_address'                => 'Email Address',
+    'additional_request_email_address' => 'Additional Request Recipient Email Address',
 
     'reference_number_note'        => 'If you do not have a :reference_number_label, please enter "N/A" in this field.',
 

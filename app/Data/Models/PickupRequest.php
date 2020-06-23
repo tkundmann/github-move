@@ -24,6 +24,7 @@ use Sofa\Eloquence\Mappable;
  * @property string $contactCountry
  * @property string $contactCellNumber
  * @property string $contactEmailAddress
+ * @property string $additionalRequestRecipientEmailAddress
  * @property string $referenceNumber
  * @property integer $numInternalHardDrives
  * @property integer $numDesktops
@@ -102,6 +103,7 @@ class PickupRequest extends Model
         'contactCountry' => 'contact_country',
         'contactCellNumber' => 'contact_cell_number',
         'contactEmailAddress' => 'contact_email_address',
+        'additionalRequestRecipientEmailAddress' => 'additional_request_recipient_email_address',
         'referenceNumber' => 'reference_number',
         'numInternalHardDrives' => 'num_internal_hard_drives',
         'numDesktops' => 'num_desktops',
