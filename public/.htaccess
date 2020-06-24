@@ -33,6 +33,11 @@
     RewriteCond %{REQUEST_URI} ^/airgas/page/pickuprequest$     [NC]
     RewriteRule ^.*$  "/airgas/pickup-request"                  [R,NE,L]
 
+    # American Cancer Society Pickup Request Form Redirects
+    RewriteCond %{REQUEST_URI} ^/americancancersociety/pickuprequest$          [OR,NC]
+    RewriteCond %{REQUEST_URI} ^/americancancersociety/page/pickuprequest$     [NC]
+    RewriteRule ^.*$  "/americancancersociety/pickup-request"                  [R,NE,L]
+
     # Amobee Pickup Request Form Redirects
     RewriteCond %{REQUEST_URI} ^/amobee/pickuprequest$          [OR,NC]
     RewriteCond %{REQUEST_URI} ^/amobee/page/pickuprequest$     [NC]
