@@ -60,12 +60,10 @@ class AmericanCancerSocietyPickupRequest extends Seeder
 				'assets_need_packaging'
 			),
 			'email_from' => 'saracs@sipiar.com',
-			'email_bcc' => 'saracs@sipiar.com;tony@lynch2.com',
+			'email_bcc' => 'saracs@sipiar.com;tony@lynch2.com;jodi.whitehead@cancer.org;chuck.young@cancer.org',
 			'email_additional_bcc' =>
-				array (
-					'jodi.whitehead@cancer.org',
-					'chuck.young@cancer.org'
-				),
+			array (
+			),
 		);
 
 		$site->features()->updateExistingPivot($featureHasPickupRequest->id, ['data' => serialize($pickupRequestConfiguration)]);
