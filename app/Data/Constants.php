@@ -11,6 +11,7 @@ class Constants
     const DATE_FORMAT = 'm/d/Y';
     const DATE_FORMAT_JS = 'mm/dd/yyyy';
     const DATE_FORMAT_LABEL = 'mm/dd/yyyy';
+    const TS_FORMAT = 'Y-m-d H:i:s';
 
     const CHECK_FILE_AVAILABILITY = true;
 

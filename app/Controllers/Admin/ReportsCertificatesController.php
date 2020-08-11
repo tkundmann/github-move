@@ -49,6 +49,7 @@ class ReportsCertificatesController extends ContextController
     'fileRecyclingName'         => 'certificate_of_recycling_file'
   ];
 
+  const ALL_RESULTS      = 10;
   const RESULTS_PER_PAGE = 40;
 
   /**
@@ -66,13 +67,49 @@ class ReportsCertificatesController extends ContextController
 
   public function getCertificates()
   {
+    $reportViewData = $this->assembleViewData();
+    return $this->certificatesView($reportViewData);
+  }
+
+  protected function certificatesView($reportViewData = null) {
+
+    $allSites = Site::orderBy('title', 'asc')->get();
+    $filterSitesArray[0] = 'All Sites';
+    foreach ($allSites as $site) {
+      if ($site->code != 'allsites') {
+        $filterSitesArray[$site->id] = ($site->title ? $site->title : '-') . ' (' . ($site->code ? $site->code : '-') . ')';
+      }
+    }
+    $auditCompletedPickerStartDate = date("m/d/Y", strtotime("-2 year", time()));
+
+    $viewData = [
+      'sites' => $filterSitesArray,
+      'auditCompletedPickerStartDate' => $auditCompletedPickerStartDate
+    ];
+
+    if (isset($reportViewData)) {
+      $viewData = array_merge($viewData,$reportViewData);
+    }
+
+    return view('admin.reportsCertificates', $viewData);
+  }
+
+  public function postCertificates()
+  {
+
+    $reportViewData = $this->assembleViewData();
+    return $this->certificatesView($reportViewData);
+  }
+
+  private function assembleViewData() {
+
+    $fields = null;
     $query = null;
     $certificates = null;
 
     if (Input::get('generate-report')) {
 
-      $fields = Input::all();
-      $this->validateReportFilters($fields);
+      $fields = $this->validatePrepareReportFilters();
       $query = $this->prepareQuery($fields);
 
       // Set Query order by defaults
@@ -86,49 +123,75 @@ class ReportsCertificatesController extends ContextController
         }
       }
       $query->orderBy($sortBy, $sortOrder);
+
       $certificates = $query->distinct()->paginate(self::RESULTS_PER_PAGE);
+
     }
 
-    $allSites = Site::orderBy('title', 'asc')->get();
-    $filterSitesArray[0] = 'All Sites';
-    foreach ($allSites as $site) {
-      if ($site->code != 'allsites') {
-        $filterSitesArray[$site->id] = ($site->title ? $site->title : '-') . ' (' . ($site->code ? $site->code : '-') . ')';
-      }
-    }
-
-    $auditCompletedPickerStartDate = date("m/d/Y", strtotime("-2 year", time()));
-    $viewData = [
+    $reportViewData = [
       'certReportColumns' => $this->certReportColumns,
-      'certificates' => $certificates,
-      'sites' => $filterSitesArray,
-      'auditCompletedPickerStartDate' => $auditCompletedPickerStartDate
+      'certificates'      => $certificates,
+      'paginationParams'  => $fields
     ];
 
     if (isset($query)) {
-      $viewData['order'] = $query->orders;
+      $reportViewData['order'] = $query->orders;
     }
-
-    return view('admin.reportsCertificates', $viewData);
+    return $reportViewData;
   }
 
-  private function validateReportFilters($fields)
+  private function validatePrepareReportFilters()
   {
-    $rules = [
-      'audit_completed_from' => 'required_with:audit_completed_to',
-      'audit_completed_to' => 'required_with:audit_completed_from'
-    ];
 
-    $validator = Validator::make($fields, $rules);
-    if ($validator->fails()) {
-      return redirect()->route('admin.reports.certificates')->withErrors($validator)->withInput();
+  	$certsReportFile = Input::file('certs_report_file');
+
+    if (isset($certsReportFile)) {
+
+      // We are generating the report via the data contained in the uploaded Certs Report CSV file.
+      // Prepare the data for the query and ignore all other submitted filtering fields.
+      $csv = file_get_contents($certsReportFile);
+      $fh = fopen($certsReportFile->path(), 'r+');
+      $lotNumbers = array();
+      $lineNumber = 0;
+      while( ($row = fgetcsv($fh, 50000)) !== FALSE ) {
+        if ($lineNumber != 0) {
+          $lotNumbers[] = $row[0];
+        }
+        $lineNumber++;
+      }
+      $fields = array(
+        'generate-report' => Input::get('generate-report'),
+        'lotNumbers'      => implode(",", $lotNumbers)
+      );
+
+      $this->request->request->add(['lotNumbers' => implode(",", $lotNumbers)]);
+      $this->request->request->remove('site');
+      $this->request->request->remove('audit_completed_from');
+      $this->request->request->remove('audit_completed_to');
     }
+    else {
+
+      $fields = Input::all();
+
+      $rules = [
+        'audit_completed_from' => 'required_with:audit_completed_to',
+        'audit_completed_to' => 'required_with:audit_completed_from'
+      ];
+
+      $validator = Validator::make($fields, $rules);
+      if ($validator->fails()) {
+        return redirect()->route('admin.reports.certificates')->withErrors($validator)->withInput();
+      }
+    }
+    return $fields;
   }
 
   private function prepareQuery($fields)
   {
     foreach($fields as $key => $value) {
-        $fields[$key] = trim($value);
+        if (is_string($value)) {
+          $fields[$key] = trim($value);
+        }
     }
 
     $minimumAuditCompletedDate = date("Y-m-d", strtotime("-2 year", time()));
@@ -159,24 +222,29 @@ class ReportsCertificatesController extends ContextController
       )
       ->whereNotNull('shipment.audit_completed')
       ->where('shipment.audit_completed', '>=', $minimumAuditCompletedDate)
-      ->groupBy('shipment.lot_number');
+      ->groupBy('shipment.lot_number')
+    ;
 
-    if (isset($fields['site'])) {
-      $id = $fields['site'];
-      if ($id != 0) {  // Id equals 0 for All Sites option.  Do not include site id in where clause
-        $query->where('site.id', '=', trim(Input::get('site')));
+    if (isset($fields['lotNumbers'])) {
+      $query->whereIn('shipment.lot_number', explode(",", $fields['lotNumbers']));
+    }
+    else {
+      if (isset($fields['site'])) {
+        $id = $fields['site'];
+        if ($id != 0) {  // Id equals 0 for All Sites option.  Do not include site id in where clause
+          $query->where('site.id', '=', trim(Input::get('site')));
+        }
+      }
+
+      if ($fields['audit_completed_from'] != '' && $fields['audit_completed_to'] != '') {
+        $query->where('shipment.audit_completed', '>=', Carbon::createFromFormat(Constants::DATE_FORMAT, $fields['audit_completed_from'])->startOfDay());
+        $query->where('shipment.audit_completed', '<=', Carbon::createFromFormat(Constants::DATE_FORMAT, $fields['audit_completed_to'])->endOfDay());
       }
     }
-
-    if ($fields['audit_completed_from'] != '' && $fields['audit_completed_to'] != '') {
-      $query->where('shipment.audit_completed', '>=', Carbon::createFromFormat(Constants::DATE_FORMAT, $fields['audit_completed_from'])->startOfDay());
-      $query->where('shipment.audit_completed', '<=', Carbon::createFromFormat(Constants::DATE_FORMAT, $fields['audit_completed_to'])->endOfDay());
-    }
-
     return $query;
   }
 
-  public function getCertificatesExport()
+  public function postCertificatesExport()
   {
     $csv = new CsvHelper();
 
@@ -188,12 +256,23 @@ class ReportsCertificatesController extends ContextController
 
     $csv->initialize($header);
 
-    $fields = Input::all();
+    $fields = $this->validatePrepareReportFilters();
     $query = $this->prepareQuery($fields);
 
     $resultCheck = $query->paginate(10000);
     $numberOfIterations = $resultCheck->lastPage();
     $currentIteration = 1;
+    $portalURL = '';
+
+    if ($resultCheck->total() == 0) {
+      $certificates = $query->distinct()->paginate(self::RESULTS_PER_PAGE);
+      $reportViewData = [
+        'certReportColumns' => $this->certReportColumns,
+        'certificates'      => $certificates,
+        'paginationParams'  => $fields
+      ];
+      return $this->certificatesView($reportViewData);
+    }
 
     for ($i = $currentIteration; $i <= $numberOfIterations; $i++) {
 
@@ -213,21 +292,32 @@ class ReportsCertificatesController extends ContextController
         }
         array_push($certificatesCsvArray, $row);
       }
+
+      if ($portalURL == '' && isset($fields['site']) && $fields['site'] != 0) {
+        $portalURL = $row['portalURL'];
+      }
+
       $csv->addRows($certificatesCsvArray);
     }
 
     $csv->finalize();
 
     $fileNamePrefix = 'certificate_file_status_';
-    if (isset($fields['site']) && $fields['site'] != 0) {
-      $fileNamePrefix .= $row['portalURL'] . '_';
-    }
-    if ($fields['audit_completed_from'] != '' && $fields['audit_completed_to'] != '') {
-      $fileNamePrefix .= Carbon::createFromFormat(Constants::DATE_FORMAT, $fields['audit_completed_from'])->format('Ymd') . '_';
-      $fileNamePrefix .= Carbon::createFromFormat(Constants::DATE_FORMAT, $fields['audit_completed_to'])->format('Ymd');
+
+    if (isset($fields['lotNumbers'])) {
+      $fileNamePrefix .= 'per_sipiar_cert_report';
     }
     else {
-      $fileNamePrefix .= 'as_of_' . Carbon::now()->format('mdY');
+      if ($portalURL != '') {
+        $fileNamePrefix .= $portalURL . '_';
+      }
+      if ($fields['audit_completed_from'] != '' && $fields['audit_completed_to'] != '') {
+        $fileNamePrefix .= Carbon::createFromFormat(Constants::DATE_FORMAT, $fields['audit_completed_from'])->format('Ymd') . '_';
+        $fileNamePrefix .= Carbon::createFromFormat(Constants::DATE_FORMAT, $fields['audit_completed_to'])->format('Ymd');
+      }
+      else {
+        $fileNamePrefix .= 'as_of_' . Carbon::now()->format('mdY');
+      }
     }
     $filename = $fileNamePrefix . '.csv';
 

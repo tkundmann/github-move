@@ -8,17 +8,55 @@
                     <div class="panel-heading">@lang('admin.reports.certificates.title')
                         @if (Input::get('generate-report'))
                             - {{ $certificates ? $certificates->total() : 0 }} {{ trans_choice('admin.reports.certificates.record', $certificates ? $certificates->total() : 0) }} @lang('common.found') @endif
+
+                        <div class="btn-group pull-right">
+                            <button onclick="goBack()" class="btn btn-primary btn-xs"><i class="fa fa-btn fa-arrow-left"></i>@lang('common.back')</button>
+                        </div>
                     </div>
                     <div class="panel-body">
-                        <form method="GET" action="{{ route('admin.reports.certificates') }}" class="form-horizontal form-certificates-report">
+                        {{ Form::open(['route' => ['admin.reports.certificates'], 'method' => 'POST', 'class' => 'form-horizontal form-certificates-report', 'files' => true, 'id' => 'certificates-report_form']) }}
                         <input type="hidden" name="generate-report" value="yes" />
+<!--
+                            <div class="row">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-6">
+                                    <div class="form-group @if($errors->has('certs_report_file')) has-error @endif">
+                                        <label for="certs_report_file" class="control-label colon-after">{{ trans('admin.reports.certificates.report_filter_form.generate_per_certs_report')}}
+                                        </label>
+                                        <div class="fileinput fileinput-new input-group margin-bottom-none" data-provides="fileinput">
+                                            <div class="form-control" data-trigger="fileinput">
+                                                <i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span>
+                                            </div>
+                                            <span class="input-group-addon btn btn-default btn-file">
+                                                <span class="fileinput-new">@lang('common.file.select_file')</span>
+                                                <span class="fileinput-exists">@lang('common.file.change')</span>
+                                                {{ Form::file('certs_report_file') }}
+                                            </span>
+                                            <span class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">@lang('common.file.remove')</span>
+                                        </div>
+                                        @if ($errors->has('certs_report_file'))
+                                            {!! $errors->first('certs_report_file', '<small class="text-danger">:message</small>') !!}
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-6">
+                                    <div class="margin-bottom-md" style="text-align: center"><strong>----- OR -----</strong></div>
+                                    <div class="formDetails">
+                                        <div class="form-group"><strong>Generate per the following filtering criteria:</strong></div>
+                                    </div>
+                                </div>
+                            </div>
+ -->
                             <div class="row">
                                 <div class="col-md-1"></div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="site" class="control-label colon-after">@lang('admin.reports.certificates.report_filter_form.site')</label>
                                         <div class="input-group">
-                                            {{ Form::select('site', $sites, Input::get('site'), ['class' => 'selectpicker form-control', 'title' => trans('common.select'), 'data-width' => 'auto']) }}
+                                            {{ Form::select('site', $sites, (isset($paginationParams['site']) ? $paginationParams['site'] : ''), ['class' => 'selectpicker form-control', 'title' => trans('common.select'), 'data-width' => 'auto']) }}
                                         </div>
                                     </div>
                                 </div>
@@ -32,10 +70,10 @@
                                         </label>
                                         <div class="input-group">
                                             <input id="audit_completed_from" name="audit_completed_from" data-provide="datepicker"
-                                                   type="text" class="form-control" placeholder="@lang('common.from')" value="{{ Input::get('audit_completed_from') }}"/>
+                                                   type="text" class="form-control" placeholder="@lang('common.from')" value="{{ (isset($paginationParams['audit_completed_from']) ? $paginationParams['audit_completed_from'] : '') }}"/>
                                             <span class="input-group-addon">-</span>
                                             <input id="audit_completed_to" name="audit_completed_to" data-provide="datepicker"
-                                                   type="text" class="form-control" placeholder="@lang('common.to')" value="{{ Input::get('audit_completed_to') }}"/>
+                                                   type="text" class="form-control" placeholder="@lang('common.to')" value="{{ (isset($paginationParams['audit_completed_to']) ? $paginationParams['audit_completed_to'] : '') }}"/>
                                         </div>
                                         <small
                                             @if ($errors->has('audit_completed_from') or $errors->has('audit_completed_to')) class="text-danger" @endif
@@ -43,56 +81,17 @@
                                     </div>
                                 </div>
                             </div>
-<!--
-                            <div class="row">
-                                <div class="col-md-1"></div>
-                                <div class="col-md-6">
-                                    <div class="form-group row">
-                                        <label class="control-label">@lang('admin.reports.certificates.report_filter_form.has_data_wipe_cert')
-                                        </label>
-                                        <div class="input-group-inline">
-                                            <label class="radio-inline">
-                                                {{ Form::radio('has-data-wipe-cert', 0, Input::get('has-data-wipe-cert') !== null ? !Input::get('has-data-wipe-cert') : !old('has-data-wipe-cert')) }}
-                                                @lang('common.true')
-                                            </label>
-                                            <label class="radio-inline">
-                                                {{ Form::radio('has-data-wipe-cert', 1, Input::get('has-data-wipe-cert') !== null ? Input::get('has-data-wipe-cert') : old('has-data-wipe-cert')) }}
-                                                @lang('common.false')
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-1"></div>
-                                <div class="col-md-6">
-                                    <div class="form-group row">
-                                        <label class="control-label">@lang('admin.reports.certificates.report_filter_form.has_recycling_cert')
-                                        </label>
-                                        <div class="input-group-inline">
-                                            <label class="radio-inline">
-                                                {{ Form::radio('has-recycling-cert', 0, Input::get('has-recycling-cert') !== null ? !Input::get('has-recycling-cert') : !old('has-recycling-cert')) }}
-                                                @lang('common.true')
-                                            </label>
-                                            <label class="radio-inline">
-                                                {{ Form::radio('has-recycling-cert', 1, Input::get('has-recycling-cert') !== null ? Input::get('has-recycling-cert') : old('has-recycling-cert')) }}
-                                                @lang('common.false')
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
--->
+
                             <div class="row margin-top-md">
                                 <div class="col-md-1"></div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-primary">
-                                            <i class="fa fa-btn fa-search"></i>@lang('admin.reports.certificates.report_filter_form.generate_report')
+                                            <i class="fa fa-btn fa-search"></i>@lang('admin.reports.certificates.report_filter_form.display_report_in_browser')
                                         </button>
                                         <button id="form_export_button" type="submit"
                                                 formaction="{{ route('admin.reports.certificates.export') }}"
-                                                formmethod="GET" class="btn btn-primary single-click">
+                                                formmethod="POST" class="btn btn-primary single-click">
                                             <i class="fa fa-btn fa-table"></i> @lang('admin.reports.certificates.report_filter_form.export_report')
                                         </button>
                                     </div>
@@ -111,9 +110,9 @@
                         @endif
 
 
-                        @if ($certificates && count($certificates) > 0)
+                        @if (isset($certificates) && count($certificates) > 0)
                             <div class="text-center">
-                                {{ $certificates->appends(\Input::except('page'))->links() }}
+                                {{ $certificates->appends($paginationParams)->links() }}
                             </div>
 
                             <table id="reportsCertificatesTable" class="table-certificates-report table table-striped table-bordered withHover">

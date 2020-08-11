@@ -99,11 +99,17 @@ Route::group(['prefix' => '{'.Constants::CONTEXT_PARAMETER.'}'], function() {
     Route::post('file/{id}/edit', 'Admin\FileController@postEdit')->name('admin.file.edit');
     Route::get('file/{id}/remove', 'Admin\FileController@getRemove')->name('admin.file.remove');
 
+
     Route::get('reports', 'Admin\ReportsController@home')->name('admin.reports.home');
     Route::get('reports/home', 'Admin\ReportsController@home')->name('admin.reports.home');
 
     Route::get('reports/certificates', 'Admin\ReportsCertificatesController@getCertificates')->name('admin.reports.certificates');
-    Route::get('reports/certificates/export', 'Admin\ReportsCertificatesController@getCertificatesExport')->name('admin.reports.certificates.export');
+    Route::post('reports/certificates', 'Admin\ReportsCertificatesController@postCertificates')->name('admin.reports.certificates');
+    Route::post('reports/certificates/export', 'Admin\ReportsCertificatesController@postCertificatesExport')->name('admin.reports.certificates.export');
+
+    Route::get('reports/pickuprequests', 'Admin\ReportsPickupRequestsController@getPickupRequests')->name('admin.reports.pickuprequests');
+    Route::post('reports/pickuprequests', 'Admin\ReportsPickupRequestsController@postPickupRequests')->name('admin.reports.pickuprequests');
+    Route::post('reports/pickuprequests/export', 'Admin\ReportsPickupRequestsController@postPickupRequestsExport')->name('admin.reports.pickuprequests.export');
 
     // Page
     Route::get('page/{page}', 'Page\PageController@getPage')->name('page');
