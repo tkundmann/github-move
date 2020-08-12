@@ -104,7 +104,8 @@
                 autoclose: true,
                 clearBtn: true,
                 todayHighlight: true,
-                startDate: '{{ $pickupRequestSubmissionPickerStartDate }}'
+                startDate: '{{ $pickupRequestSubmissionPickerStartDate }}',
+                endDate: '{{ $pickupRequestSubmissionPickerEndDate }}'
             }).on('changeDate', function (selected) {
                 if (selected.date !== undefined) {
                     var minDate = new Date(selected.date.valueOf());
@@ -121,7 +122,8 @@
                 autoclose: true,
                 clearBtn: true,
                 todayHighlight: true,
-                startDate: '{{ $pickupRequestSubmissionPickerStartDate }}'
+                startDate: '{{ $pickupRequestSubmissionPickerStartDate }}',
+                endDate: '{{ $pickupRequestSubmissionPickerEndDate }}'
             }).on('changeDate', function (selected) {
                 if (selected.date !== undefined) {
                     var maxDate = new Date(selected.date.valueOf());

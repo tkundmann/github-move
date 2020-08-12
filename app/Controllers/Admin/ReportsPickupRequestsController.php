@@ -125,8 +125,9 @@ class ReportsPickupRequestsController extends ContextController
     }
 
     $viewData = [
-      'pickupRequestSites' => $filterSitesArray,
-      'pickupRequestSubmissionPickerStartDate' => '01/01/2017'
+      'pickupRequestSites'                     => $filterSitesArray,
+      'pickupRequestSubmissionPickerStartDate' => '01/01/2017',
+      'pickupRequestSubmissionPickerEndDate'   => date("m/d/Y")
     ];
 
     if (isset($reportViewData)) {
