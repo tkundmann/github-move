@@ -286,7 +286,7 @@ class ReportsPickupRequestsController extends ContextController
 
     if ($fields['pickuprequest_submission_from'] != '' && $fields['pickuprequest_submission_to'] != '') {
       $query->where('pickup_request.created_at', '>=', Carbon::createFromFormat(Constants::DATE_FORMAT, $fields['pickuprequest_submission_from'], 'America/Chicago')->startOfDay()->setTimezone('UTC'));
-      $query->where('pickup_request.created_at', '<=', Carbon::createFromFormat(Constants::DATE_FORMAT, $fields['pickuprequest_submission_to'], 'America/Chicago')->startOfDay()->setTimezone('UTC'));
+      $query->where('pickup_request.created_at', '<=', Carbon::createFromFormat(Constants::DATE_FORMAT, $fields['pickuprequest_submission_to'], 'America/Chicago')->endOfDay()->setTimezone('UTC'));
     }
 
     return $query;
@@ -367,8 +367,11 @@ class ReportsPickupRequestsController extends ContextController
       $fileNamePrefix .= $portalURL . '_';
     }
     if ($fields['pickuprequest_submission_from'] != '' && $fields['pickuprequest_submission_to'] != '') {
-      $fileNamePrefix .= Carbon::createFromFormat(Constants::DATE_FORMAT, $fields['pickuprequest_submission_from'])->format('Ymd') . '_';
-      $fileNamePrefix .= Carbon::createFromFormat(Constants::DATE_FORMAT, $fields['pickuprequest_submission_to'])->format('Ymd');
+      $fileNamePrefix .= Carbon::createFromFormat(Constants::DATE_FORMAT, $fields['pickuprequest_submission_from'])->format('Ymd');
+
+      if ($fields['pickuprequest_submission_to'] != $fields['pickuprequest_submission_from']) {
+        $fileNamePrefix .= '_' . Carbon::createFromFormat(Constants::DATE_FORMAT, $fields['pickuprequest_submission_to'])->format('Ymd');
+      }
     }
     else {
       $fileNamePrefix .= 'as_of_' . Carbon::now()->format('mdY');
