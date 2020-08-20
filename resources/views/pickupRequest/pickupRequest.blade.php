@@ -21,7 +21,7 @@
                                                 <div class="js-accordion" id="js-accordion">
                                                     @for ($i = 1; $i <= 5; $i++)
                                                         <div class="accordion-item">
-                                                            <div class="accordion-title">
+                                                            <div class="accordion-title" title="Click to display answer">
                                                                 <h2 id="question">@lang('pickup_request.faqs.question' . $i)</h2>
                                                                 <div class="toggle"></div>
                                                             </div>
