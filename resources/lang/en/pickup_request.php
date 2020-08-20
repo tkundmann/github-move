@@ -104,5 +104,19 @@ return [
     'building_manager_info_email'  => 'Building Manager Contact Information',
 
     'success'                      => 'Pickup Request #:pickup_request_id submitted successfully.',
-    'error'                        => 'Pickup Request submit error! Please check for all the required fields.'
+    'error'                        => 'Pickup Request submit error! Please check for all the required fields.',
+
+    'faqs' => [
+        'title'                    => 'Box Program Pickup Request FAQs',
+        'question1'                => 'What happens after I submit my work order or box request?',
+        'answer1'                  => 'You will receive an automated response that your request was successfully submitted. Within one to two business days you will receive an email from the Sipi Customer Service Team providing SAR\'s LOT Number and logistics details.',
+        'question2'                => 'When will I receive my boxes?',
+        'answer2'                  => 'Shipping times vary, but the box will arrive at your location in approximately 3 to 4 days from the date the box shipment was requested. Boxes and return labels will be in the shipment that you receive with return instruction.',
+        'question3'                => 'What happens if I need to change or cancel my work order after it being submitted?',
+        'answer3'                  => 'Please respond back to the email you received from Sipi assigning the LOT Number that you would like to adjust and or cancel.',
+        'question4'                => 'What happens if I do not receive my boxes and or my return labels are missing?',
+        'answer4'                  => 'Please respond back to the email that you received from Sipi assigning the Lot Number with your inquiry.',
+        'question5'                => 'How do I send the boxes back?',
+        'answer5'                  => 'Please follow the instruction sheet that was in your box kit labeled “Do Not Throw away”.  If you are still unclear, please reply to the email Sipi sent you with the original work order request.',
+    ],
 ];

@@ -9,6 +9,33 @@
                     <div class="panel-body">
                         @if(Session::has('success'))
                             <div class="alert alert-success animate-slowly">{{ session('success') }}</div>
+
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="pickup-request-faqs contained-item" id="faqs">
+                                        <div class="faq-header">
+                                            <h2 class="section-header">@lang('pickup_request.faqs.title')</h2>
+                                        </div>
+                                        <div class="faq-items">
+                                            <div class="accordion faq-accordion">
+                                                <div class="js-accordion" id="js-accordion">
+                                                    @for ($i = 1; $i <= 5; $i++)
+                                                        <div class="accordion-item">
+                                                            <div class="accordion-title">
+                                                                <h2 id="question">@lang('pickup_request.faqs.question' . $i)</h2>
+                                                                <div class="toggle"></div>
+                                                            </div>
+                                                            <div class="accordion-content" style="display: none;">
+                                                                <p id="answer">@lang('pickup_request.faqs.answer' . $i)</p>
+                                                            </div>
+                                                        </div>
+                                                    @endfor
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         @endif
 
                         @if(!$errors->isEmpty())
@@ -1112,6 +1139,34 @@
                         $("input[name=dock_appointment_required][value=" + address.dock_appointment_required + "]").prop('checked', 'checked');
                         $("input[name=units_located_near_dock][value=" + address.units_located_near_dock + "]").prop('checked', 'checked');
                     }
+                });
+            });
+        });
+
+        // *******************************************************
+        // FUNCTION:    initAccordionToggles
+        // PARAMETERS:  none
+        // DESCRIPTION: Toggles (open and closed) accordion related content
+        // *******************************************************
+        jQuery(function initAccordionToggles($) {
+            $('.js-accordion').each(function(index, el) {
+
+                $('.accordion-item').each(function(index, el) {
+                    var $content = $(this).find('.accordion-content');
+                    var $toggle  = $(this).find('.accordion-title');
+                    var $arrow   = $(this).find('.toggle');
+
+                    $toggle.click(function() {
+                        if ($content.is(':visible')) {
+                            $content.slideUp( 500, function() {
+                                $arrow.removeClass('active');
+                            });
+                        }
+                        else {
+                            $arrow.addClass('active');
+                            $content.slideDown( 500 );
+                        }
+                    });
                 });
             });
         });
