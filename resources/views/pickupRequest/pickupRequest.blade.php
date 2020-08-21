@@ -9,10 +9,18 @@
                     <div class="panel-body">
                         @if(Session::has('success'))
                             <div class="alert alert-success animate-slowly">{{ session('success') }}</div>
+                        @endif
 
-                            <div class="container-fluid">
+                        @if(!$errors->isEmpty())
+                            <div class="alert alert-danger animate">
+                                <strong>@lang('pickup_request.error')</strong>
+                            </div>
+                        @endif
+
+                        <div class="container-fluid margin-bottom-lg">
                                 <div class="row">
-                                    <div class="pickup-request-faqs contained-item" id="faqs">
+                                <p class="pickup-request-faqs-link">Do you have questions about the Box Program Pickup Request process?  <a class="js-show-pickup-request-faqs show-pickup-request-faqs">Click here</a> to <span class="js-view-faqs">view</span> <span class="js-hide-faqs" style="display:none;">hide</span> the FAQs.</p>
+                                <div class="js-pickup-request-faqs pickup-request-faqs contained-item" id="faqs" style="display:none;">
                                         <div class="faq-header">
                                             <h2 class="section-header">@lang('pickup_request.faqs.title')</h2>
                                         </div>
@@ -36,13 +44,6 @@
                                     </div>
                                 </div>
                             </div>
-                        @endif
-
-                        @if(!$errors->isEmpty())
-                            <div class="alert alert-danger animate">
-                                <strong>@lang('pickup_request.error')</strong>
-                            </div>
-                        @endif
 
                         <form id="pickupRequest" class="form-horizontal" method="POST" enctype="multipart/form-data"
                               action="{{ route('pickupRequest', ['token' => Input::get('token')]) }}">
@@ -1091,6 +1092,22 @@
                     else {
                         $('.fileinput-filename').text(fileName);
                     }
+                }
+            });
+
+            $('.js-show-pickup-request-faqs').on('click', function(event) {
+                var $faqsContainer = $('.js-pickup-request-faqs');
+                if ($faqsContainer.is(':visible')) {
+                    $faqsContainer.slideUp( 600, function() {
+                        $('.js-hide-faqs').hide();
+                        $('.js-view-faqs').show();
+                    });
+                }
+                else {
+                    $faqsContainer.slideDown( 600, function() {
+                        $('.js-view-faqs').hide();
+                        $('.js-hide-faqs').show();
+                    });
                 }
             });
 
