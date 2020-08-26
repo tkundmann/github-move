@@ -153,13 +153,22 @@ class PickupRequestController extends ContextController
             }
         }
 
+        $allInputs = Input::all();
+
         // If provided, the optional, Additional Request Recipient Email Address field must be a valid email address
         $additionalEmailRecipient = trim(Input::get('additional_request_recipient_email_address'));
         if ($additionalEmailRecipient != '') {
             $rules['additional_request_recipient_email_address'] = 'email';
         }
 
-        $validator = Validator::make(Input::all(), $rules);
+        // $additionalEmailRecipients = trim(Input::get('additional_request_recipient_email_address'));
+        // if ($additionalEmailRecipients != '') {
+        //     $emails = preg_split('/[;,\r\n\f]+/', $additionalEmailRecipients, null, PREG_SPLIT_NO_EMPTY);
+        //     $allInputs['additional_request_recipient_emails'] = array_map('trim',$emails);
+        //     $rules['additional_request_recipient_emails'] = 'emails';
+        // }
+
+        $validator = Validator::make($allInputs, $rules);
         if ($validator->fails()) {
             return redirect()->route('pickupRequest', ['token' => Input::get('token')])->withInput()->withErrors($validator);
         }
@@ -332,15 +341,20 @@ class PickupRequestController extends ContextController
         }
         $siteCode = $this->site->code;
 
+        // Mail::queue('email.pickupRequest', ['title' => $title, 'pickupRequest' => $pickupRequest, 'pickupRequestData' => $pickupRequestData], function ($mail) use ($title, $siteCode, $fileName, $electronicsDispositionFileName, $pickupRequest, $emailFrom, $emailsBcc) {
+
         Mail::queue('email.pickupRequest', ['title' => $title, 'pickupRequest' => $pickupRequest, 'pickupRequestData' => $pickupRequestData], function ($mail) use ($title, $siteCode, $fileName, $electronicsDispositionFileName, $pickupRequest, $emailFrom, $emailsBcc, $additionalEmailRecipient) {
             $mail->from($emailFrom, $emailFrom);
             $mail->to($pickupRequest->contact_email_address);
             $mail->bcc($emailsBcc);
             $mail->subject($title);
 
+
+            // if (count($allInputs['additional_request_recipient_emails']) > 0) {
             if ($additionalEmailRecipient != '') {
                 // User providing an additional pickup request email recipient.
                 // CC that email address on the pickup request email.
+                //$additionalEmailRecipients = implode(',', $allInputs['additional_request_recipient_emails']);
                 $mail->cc($additionalEmailRecipient);
             }
 
