@@ -219,7 +219,7 @@ class ImportController extends Controller
     }
 
     private function processTrackingDetail(SimpleXMLElement $xml) {
-        foreach ($xml->TrackingNumbers as $trackingNumber) {
+        foreach ($xml->Tracking as $trackingNumber) {
             $trackingNumber = TrackingNumber::createFromTrackingDetail($trackingNumber);
             $existingTrackingNumber = TrackingNumber::where('entryNumber', $trackingNumber->entryNumber)->first();
 
