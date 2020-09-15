@@ -8,6 +8,7 @@ use App\Jobs\PruneAssetsJob;
 use App\Data\ApiResponse;
 use App\Data\Models\Asset;
 use App\Data\Models\Shipment;
+use App\Data\Models\TrackingNumber;
 
 use DateTime;
 use Exception;
