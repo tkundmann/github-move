@@ -23,7 +23,7 @@ use Sofa\Eloquence\Mappable;
  * @property string $scannedTime
  * @property string $trackingNumberURL
  */
-class Tracking extends Model
+class TrackingNumber extends Model
 {
     use Eloquence, Mappable, Sortable;
 
