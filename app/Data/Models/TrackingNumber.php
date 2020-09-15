@@ -36,14 +36,14 @@ class Tracking extends Model
         'scanned_date'
     ];
     protected $maps = [
-        'entryNumber'           => 'entry_number'
+        'entryNumber'           => 'entry_number',
         'lotNumber'             => 'lot_number',
-        'packageTrackingNumber' => 'package_tracking_number'
-        'packageTrackingType'   => 'package_tracking_type'
-        'shippingAgentCode'     => 'shipping_agent_code'
-        //'scanned'               => 'scanned'
-        'scannedDate'           => 'scanned_date'
-        'scannedTime'           => 'scanned_time'
+        'packageTrackingNumber' => 'package_tracking_number',
+        'packageTrackingType'   => 'package_tracking_type',
+        'shippingAgentCode'     => 'shipping_agent_code',
+        //'scanned'               => 'scanned',
+        'scannedDate'           => 'scanned_date',
+        'scannedTime'           => 'scanned_time',
         'trackingNumberURL'     => 'tracking_number_url'
     ];
 
