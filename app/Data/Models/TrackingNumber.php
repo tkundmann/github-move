@@ -22,6 +22,9 @@ use Sofa\Eloquence\Mappable;
  * @property \Carbon\Carbon $scannedDate
  * @property string $scannedTime
  * @property string $trackingNumberURL
+ * @property \Carbon\Carbon $importDateTime
+ * @property \Carbon\Carbon $updateDateTime
+ * @property-read \App\Data\Models\Shipment $shipment
  */
 class TrackingNumber extends Model
 {
@@ -30,10 +33,12 @@ class TrackingNumber extends Model
     const CREATED_AT = 'import_date_time';
     const UPDATED_AT = 'update_date_time';
 
-    protected $table = 'trackingnumber';
+    protected $table = 'tracking_number';
 
     protected $dates = [
-        'scanned_date'
+        'scanned_date',
+        'import_date_time',
+        'update_date_time'
     ];
     protected $maps = [
         'entryNumber'           => 'entry_number',
@@ -44,7 +49,9 @@ class TrackingNumber extends Model
         //'scanned'               => 'scanned',
         'scannedDate'           => 'scanned_date',
         'scannedTime'           => 'scanned_time',
-        'trackingNumberURL'     => 'tracking_number_url'
+        'trackingNumberURL'     => 'tracking_number_url',
+        'importDateTime'        => 'import_date_time',
+        'updateDateTime'        => 'update_date_time',
     ];
 
     public function shipment()
