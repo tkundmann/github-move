@@ -88,6 +88,15 @@ class ImportController extends Controller
                         $importSuccessful = false;
                     }
                     break;
+                case 'Tracking_Detail':
+                    try {
+                        $this->processTrackingDetail($xml);
+                        $importSuccessful = true;
+                    }
+                    catch (Exception $e) {
+                        $importSuccessful = false;
+                    }
+                    break;
                 default:
                     return $this->returnError(ApiResponse::DESCRIPTION_FORMAT_INCORRECT);
             }
@@ -209,12 +218,42 @@ class ImportController extends Controller
         }
     }
 
+    private function processTrackingDetail(SimpleXMLElement $xml) {
+        foreach ($xml->TrackingNumbers as $trackingNumber) {
+            $trackingNumber = TrackingNumber::createFromTrackingDetail($trackingNumber);
+            $existingTrackingNumber = TrackingNumber::where('entryNumber', $trackingNumber->entryNumber)->first();
+
+            if ($existingTrackingNumber) {
+                $attributes = $trackingNumber->getAttributes();
+                $attributesUpdated = false;
+
+                foreach ($attributes as $attribute => $value) {
+                    if ($value != $existingTrackingNumber[$attribute]) {
+                        $attributesUpdated = true;
+                    }
+                    $existingTrackingNumber[$attribute] = $value;
+                }
+
+                if ($attributesUpdated) {
+                    $existingTrackingNumber->save();
+                }
+            }
+            else {
+                $trackingNumber->save();
+            }
+        }
+    }
+
     private function pruneAssets() {
         $this->dispatch(new PruneAssetsJob());
     }
 
     private function archiveShipmentsAndAssets() {
         $this->dispatch(new ArchiveShipmentsAndAssetsJob());
+    }
+
+    private function archiveTrackingNumbers() {
+        $this->dispatch(new ArchiveTrackingNumbersJob());
     }
 
     private function returnSuccess() {
