@@ -89,7 +89,7 @@
                                                         @endforeach
                                                     </select>
                                                 @else
-                                                    {{ serialize($shipment->$field) }}
+                                                    {{ serialize($shipment->$field[0]) }}
 
                                                 @endif
                                             @endif
