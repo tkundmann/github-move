@@ -91,7 +91,7 @@
                                                         @endforeach
                                                     </select>
                                                 @else
-                                                    <a href="https://{{ $shipment->$field[0][1] }}" target="_blank">{{ $shipment->$field[0][0] }}</a>
+
                                                 @endif
  -->
                                             @endif
