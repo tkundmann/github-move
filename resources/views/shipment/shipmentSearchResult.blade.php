@@ -89,8 +89,8 @@
                                                         @endforeach
                                                     </select>
                                                 @else
-                                                    {{ serialize($shipment->$field) }}
-                                                    <a href="https://{{ $shipment->$field[0][1] }}" target="_blank">{{ $shipment->$field[0][0] }}</a>
+                                                    <?php $trackingNumber = $shipment->$field[0]; ?>
+                                                    <a href="https://{{ $trackingNumber[1] }}" target="_blank">{{ $trackingNumber[0] }}</a>
                                                 @endif
                                             @endif
                                         @elseif ($field === 'cert_of_data_wipe_num')
