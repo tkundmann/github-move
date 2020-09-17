@@ -82,6 +82,7 @@
                                         @elseif ($field === 'inbound_tracking' || $field === 'outbound_tracking')
                                             @if (isset($shipment->$field))
                                                 {{ serialize($shipment->$field) }}
+<!--
                                                 @if (count($shipment->$field) > 1)
                                                     <select class="selectpicker form-control js-tracking-number-select">
                                                         <option value="">@lang('shipment.search_result.select_number_for_tracking')</option>
@@ -92,6 +93,7 @@
                                                 @else
                                                     <a href="https://{{ $shipment->$field[0][1] }}" target="_blank">{{ $shipment->$field[0][0] }}</a>
                                                 @endif
+ -->
                                             @endif
                                         @elseif ($field === 'cert_of_data_wipe_num')
                                             @if (isset($shipment->certOfDataWipeNum))
