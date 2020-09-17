@@ -81,6 +81,7 @@
                                             <span @if($shipment->$field < 0)class="text-danger"@endif>{{ $shipment->$field ? Constants::CURRENCY_SYMBOL . $shipment->$field : ' ' }}</span>
                                         @elseif ($field === 'inbound_tracking' || $field === 'outbound_tracking')
                                             @if (isset($shipment->$field))
+                                                {{ serialize($shipment->$field) }}
                                                 @if (count($shipment->$field) > 1)
                                                     <select class="selectpicker form-control js-tracking-number-select">
                                                         <option value="">@lang('shipment.search_result.select_number_for_tracking')</option>
