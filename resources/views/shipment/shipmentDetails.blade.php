@@ -102,7 +102,7 @@
                                             <div class="form-group margin-top-md margin-bottom-md">
                                                 <label class="col-sm-6 control-label colon-after">{{ array_key_exists($field, $fields) ? (Lang::has('shipment.'. $fields[$field]) ? Lang::trans('shipment.' .  $fields[$field]) :  $fields[$field]) : Lang::trans('shipment.inbound_tracking') }}</label>
                                                 <div class="col-sm-6">
-                                                    @if (count($shipment->$field) > 1)
+                                                   @if (is_array($shipment->$field))
                                                         <select class="selectpicker form-control js-tracking-number-select">
                                                             <option value="">@lang('shipment.search_result.select_number_for_tracking')</option>
                                                             @foreach($shipment->$field as $key => $trackingNumber)
@@ -110,8 +110,9 @@
                                                             @endforeach
                                                         </select>
                                                     @else
-                                                        @if (isset($shipment->$field))
-                                                            <a href="https://{{ $shipment->$field[0][1] }}" target="_blank">{{ $shipment->$field[0][0] }}</a>
+                                                        @if ($shipment->$field != '')
+                                                            <?php $trackingNumber = explode('-COL-', $shipment->$field); ?>
+                                                            <a href="https://{{ $trackingNumber[1] }}" target="_blank">{{ $trackingNumber[0] }}</a>
                                                         @else
                                                             <p class="form-control-static">{{ '-' }}</p>
                                                         @endif

@@ -257,16 +257,26 @@ class ShipmentController extends ContextController
             if ($shipment->inbound_tracking != '') {
                 $tempTrackingInfo = null;
                 $inboundTrackingArr = explode(',', $shipment->inbound_tracking);
-                foreach ($inboundTrackingArr as $key => $inboundTrackingStr) {
-                    $tempTrackingInfo[] = explode('-COL-', $inboundTrackingStr);
+                if (count($inboundTrackingArr) > 1) {
+                    foreach ($inboundTrackingArr as $key => $inboundTrackingStr) {
+                        $tempTrackingInfo[] = explode('-COL-', $inboundTrackingStr);
+                    }
+                }
+                else {
+                    $tempTrackingInfo = $inboundTrackingArr[0];
                 }
                 $shipment->inbound_tracking = $tempTrackingInfo;
             }
             if ($shipment->outbound_tracking != '') {
                 $tempTrackingInfo = null;
                 $outboundTrackingArr = explode(',', $shipment->outbound_tracking);
-                foreach ($outboundTrackingArr as $key => $outboundTrackingStr) {
-                    $tempTrackingInfo[] = explode('-COL-', $outboundTrackingStr);
+                if (count($outboundTrackingArr) > 1) {
+                    foreach ($outboundTrackingArr as $key => $outboundTrackingStr) {
+                        $tempTrackingInfo[] = explode('-COL-', $outboundTrackingStr);
+                    }
+                }
+                else {
+                    $tempTrackingInfo = $outboundTrackingArr[0];
                 }
                 $shipment->outbound_tracking = $tempTrackingInfo;
             }
@@ -580,18 +590,31 @@ class ShipmentController extends ContextController
         }
 
         if ($shipment->inbound_tracking != '') {
+            $tempTrackingInfo = null;
             $inboundTrackingArr = explode(',', $shipment->inbound_tracking);
-            foreach ($inboundTrackingArr as $key => $inboundTrackingStr) {
-                $tempInboundTracking[] = explode('-COL-', $inboundTrackingStr);
+            if (count($inboundTrackingArr) > 1) {
+                foreach ($inboundTrackingArr as $key => $inboundTrackingStr) {
+                    $tempTrackingInfo[] = explode('-COL-', $inboundTrackingStr);
+                }
             }
-            $shipment->inbound_tracking = $tempInboundTracking;
+            else {
+                $tempTrackingInfo = $inboundTrackingArr[0];
+            }
+            $shipment->inbound_tracking = $tempTrackingInfo;
         }
+
         if ($shipment->outbound_tracking != '') {
+            $tempTrackingInfo = null;
             $outboundTrackingArr = explode(',', $shipment->outbound_tracking);
-            foreach ($outboundTrackingArr as $key => $outboundTrackingStr) {
-                $tempOutboundTracking[] = explode('-COL-', $outboundTrackingStr);
+            if (count($outboundTrackingArr) > 1) {
+                foreach ($outboundTrackingArr as $key => $outboundTrackingStr) {
+                    $tempTrackingInfo[] = explode('-COL-', $outboundTrackingStr);
+                }
             }
-            $shipment->outbound_tracking = $tempOutboundTracking;
+            else {
+                $tempTrackingInfo = $outboundTrackingArr[0];
+            }
+            $shipment->outbound_tracking = $tempTrackingInfo;
         }
 
         return view('shipment.shipmentDetails', [

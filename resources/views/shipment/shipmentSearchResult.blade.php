@@ -81,7 +81,7 @@
                                             <span @if($shipment->$field < 0)class="text-danger"@endif>{{ $shipment->$field ? Constants::CURRENCY_SYMBOL . $shipment->$field : ' ' }}</span>
                                         @elseif ($field === 'inbound_tracking' || $field === 'outbound_tracking')
                                             @if (isset($shipment->$field))
-                                                @if (count($shipment->$field) > 1)
+                                                @if (is_array($shipment->$field))
                                                     <select class="selectpicker form-control js-tracking-number-select">
                                                         <option value="">@lang('shipment.search_result.select_number_for_tracking')</option>
                                                         @foreach($shipment->$field as $key => $trackingNumber)
@@ -89,8 +89,10 @@
                                                         @endforeach
                                                     </select>
                                                 @else
-                                                    <?php $trackingNumber = $shipment->$field[0]; ?>
-                                                    <a href="https://{{ $trackingNumber[1] }}" target="_blank">{{ $trackingNumber[0] }}</a>
+                                                    @if ($shipment->$field != '')
+                                                        <?php $trackingNumber = explode('-COL-', $shipment->$field); ?>
+                                                        <a href="https://{{ $trackingNumber[1] }}" target="_blank">{{ $trackingNumber[0] }}</a>
+                                                    @endif
                                                 @endif
                                             @endif
                                         @elseif ($field === 'cert_of_data_wipe_num')
