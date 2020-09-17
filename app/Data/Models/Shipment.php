@@ -96,6 +96,8 @@ class Shipment extends Model
         'cityOfOrigin' => 'city_of_origin',
         'schedulePickupDate' => 'schedule_pickup_date',
         'freightCarrier' => 'freight_carrier',
+        'inboundTracking' => 'inbound_tracking',
+        'outboundTracking' => 'outbound_tracking',
         'freightInvoiceNumber' => 'freight_invoice_number',
         'freightCharge' => 'freight_charge',
         'pickupRequestDate' => 'pickup_request_date',

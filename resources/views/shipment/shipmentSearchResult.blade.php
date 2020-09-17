@@ -33,7 +33,7 @@
 
     @if ($shipments->count() > 0)
         <div class="tableScrollableContainer">
-            <table id="shipmentSearchTable" class="table table-striped table-bordered withHover">
+            <table id="shipmentSearchTable" class="table table-striped table-bordered withHover js-search-results-table">
                 <thead>
                 <tr>
                     @foreach($fields as $field => $label)
@@ -47,6 +47,9 @@
 
                         @if(in_array($field, $fieldCategories['date_from_to'], true))
                             <th>@sortablelink($field, Lang::has('shipment.'. $label) ? Lang::trans('shipment.' . $label) : $label, 'fa fa-sort-numeric', $order)</th>
+                        @endif
+                        @if (in_array($field, $fieldCategories['not_sortable'], true))
+                            <th>{{ Lang::has('shipment.'. $label) ? Lang::trans('shipment.' . $label) : $label }}</th>
                         @endif
                         @if (starts_with($field, '!') || starts_with($field, 'hardcoded-'))
                             <th>{{ $label }}</th>
@@ -66,14 +69,29 @@
                                 <td class="pointer" title="{{ $shipment->$field }}" onclick="window.document.location='{{ route('shipment.details', ['id' => $shipment->id ]) }}';">
                                     {{ str_replace('_', ' ', str_replace('hardcoded-', '', $field)) }}
                                 </td>
-                            @elseif(in_array($field, array_merge($fieldCategories['exact'], $fieldCategories['string_like'], $fieldCategories['string_multi'], $fieldCategories['custom'], $fieldCategories['int_less_greater'], $fieldCategories['float_less_greater']), true))
+                            @elseif(in_array($field, array_merge($fieldCategories['exact'], $fieldCategories['string_like'], $fieldCategories['string_multi'], $fieldCategories['custom'], $fieldCategories['int_less_greater'], $fieldCategories['float_less_greater'], $fieldCategories['not_sortable']), true))
                                 @if(($field === 'cert_of_data_wipe_num') || ($field === 'cert_of_destruction_num'))
                                     <td title="{{ $shipment->$field }}">
+                                @elseif ($field === 'inbound_tracking' || $field === 'outbound_tracking')
+                                    <td title="@if(count($shipment->$field) > 1) @lang('shipment.search_result.select_number_to_view_tracking_details') @else @lang('shipment.search_result.click_to_view_tracking_details') @endif">
                                 @else
                                     <td class="pointer" onclick="window.document.location='{{ route('shipment.details', ['id' => $shipment->id ]) }}';" title="{{ $shipment->$field }}">
-                                        @endif
+                                @endif
                                         @if (in_array($field, ['freight_charge'], true))
                                             <span @if($shipment->$field < 0)class="text-danger"@endif>{{ $shipment->$field ? Constants::CURRENCY_SYMBOL . $shipment->$field : ' ' }}</span>
+                                        @elseif ($field === 'inbound_tracking' || $field === 'outbound_tracking')
+                                            @if (isset($shipment->$field))
+                                                @if (count($shipment->$field) > 1)
+                                                    <select class="selectpicker form-control js-tracking-number-select">
+                                                        <option value="">@lang('shipment.search_result.select_number_for_tracking')</option>
+                                                        @foreach($shipment->$field as $key => $trackingNumber)
+                                                            <option value="https://{{ $trackingNumber[1] }}">{{ $trackingNumber[0] }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                @else
+                                                    <a href="https://{{ $shipment->$field[0][1] }}" target="_blank">{{ $shipment->$field[0][0] }}</a>
+                                                @endif
+                                            @endif
                                         @elseif ($field === 'cert_of_data_wipe_num')
                                             @if (isset($shipment->certOfDataWipeNum))
                                                 @if ($site->hasFeature(Feature::HAS_CERTIFICATES))
@@ -168,7 +186,7 @@
 @section('js')
     <script>
         $(document).ready(function() {
-            $('#shipmentSearchTable').stickyTableHeaders();
+            $('.js-search-results-table').stickyTableHeaders();
 
             var tableWidth = $('.tableScrollableContainer table').width();
             var bodyWidth = $('body').width();
@@ -199,6 +217,13 @@
                 $('.tableScrollableContainer').css('margin-left', containerLeft + containerPaddingLeft);
                 $('.tableScrollableContainer').css('margin-right', containerLeft + containerPaddingLeft);
             }
+
+            $('.js-tracking-number-select').on('change', function (event) {
+                var $multiTrackNumSelect = $(this);
+                if ($multiTrackNumSelect.val() !== '') {
+                    window.open($multiTrackNumSelect.val());
+                }
+            });
         });
     </script>
 @endsection

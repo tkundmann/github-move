@@ -71,6 +71,8 @@ class ShipmentController extends ContextController
         'city_of_origin'          => 'city_of_origin',
         'schedule_pickup_date'    => 'schedule_pickup_date',
         'freight_carrier'         => 'freight_carrier',
+        'inbound_tracking'        => 'inbound_tracking',
+        'outbound_tracking'       => 'outbound_tracking',
         'pickup_address'          => 'pickup_address',
         'pickup_address_2'        => 'pickup_address_2',
         'pickup_city'             => 'pickup_city',
@@ -98,6 +100,8 @@ class ShipmentController extends ContextController
         'city_of_origin'          => 'city_of_origin',
         'schedule_pickup_date'    => 'schedule_pickup_date',
         'freight_carrier'         => 'freight_carrier',
+        'inbound_tracking'        => 'inbound_tracking',
+        'outbound_tracking'       => 'outbound_tracking',
         'pickup_address'          => 'pickup_address',
         'pickup_address_2'        => 'pickup_address_2',
         'pickup_city'             => 'pickup_city',
@@ -143,7 +147,8 @@ class ShipmentController extends ContextController
                 'pre_audit_approved', 'audit_completed'],
             'int_less_greater' => ['number_of_skids', 'number_of_pieces'],
             'float_less_greater' => ['freight_charge', 'total_weight_received'],
-            'custom' => ['vendor_client','has_cert_of_data_wipe','has_cert_of_destruction']
+            'custom' => ['vendor_client','has_cert_of_data_wipe','has_cert_of_destruction'],
+            'not_sortable' => ['inbound_tracking', 'outbound_tracking'],
         ];
 
         // Turn on USE SELECT EXACT VALUES on a per field basis.
@@ -203,19 +208,19 @@ class ShipmentController extends ContextController
             if (array_key_exists('freight_carrier', $this->modelSearchFields) && in_array('freight_carrier', $this->fieldCategories['exact'])) {
                 $uniqueFreightCarriersQuery = DB::table('shipment')->distinct()->select('freight_carrier')->whereNotNull('freight_carrier')->orderBy('freight_carrier','asc');
                 $this->applyVendorClientQueryRestrictions($uniqueFreightCarriersQuery);
-                $this->applyLotNumberPrefixRestrictions($uniqueFreightCarriersQuery);
+                $this->applyLotNumberPrefixRestrictions($uniqueFreightCarriersQuery, 'shipment');
                 $uniqueFreightCarriers = array_pluck($uniqueFreightCarriersQuery->get(), 'freight_carrier');
             }
             if (array_key_exists('site_coordinator', $this->modelSearchFields) && in_array('site_coordinator', $this->fieldCategories['exact'])) {
                 $uniqueSiteCoordinatorsQuery = DB::table('shipment')->distinct()->select('site_coordinator')->whereNotNull('site_coordinator')->orderBy('site_coordinator','asc');
                 $this->applyVendorClientQueryRestrictions($uniqueSiteCoordinatorsQuery);
-                $this->applyLotNumberPrefixRestrictions($uniqueSiteCoordinatorsQuery);
+                $this->applyLotNumberPrefixRestrictions($uniqueSiteCoordinatorsQuery, 'shipment');
                 $uniqueSiteCoordinators = array_pluck($uniqueSiteCoordinatorsQuery->get(), 'site_coordinator');
             }
             if (array_key_exists('city_of_origin', $this->modelSearchFields) && in_array('city_of_origin', $this->fieldCategories['exact'])) {
                 $uniqueCitiesOfOriginQuery = DB::table('shipment')->distinct()->select('city_of_origin')->whereNotNull('city_of_origin')->orderBy('city_of_origin','asc');
                 $this->applyVendorClientQueryRestrictions($uniqueCitiesOfOriginQuery);
-                $this->applyLotNumberPrefixRestrictions($uniqueCitiesOfOriginQuery);
+                $this->applyLotNumberPrefixRestrictions($uniqueCitiesOfOriginQuery, 'shipment');
                 $uniqueCitiesOfOrigin = array_pluck($uniqueCitiesOfOriginQuery->get(), 'city_of_origin');
             }
         }
@@ -248,6 +253,25 @@ class ShipmentController extends ContextController
 
         $shipments = $query->withCount('assets')->paginate(self::RESULTS_PER_PAGE);
 
+        foreach ($shipments as $key => $shipment) {
+            if ($shipment->inbound_tracking != '') {
+                $tempTrackingInfo = null;
+                $inboundTrackingArr = explode(',', $shipment->inbound_tracking);
+                foreach ($inboundTrackingArr as $key => $inboundTrackingStr) {
+                    $tempTrackingInfo[] = explode('-COL-', $inboundTrackingStr);
+                }
+                $shipment->inbound_tracking = $tempTrackingInfo;
+            }
+            if ($shipment->outbound_tracking != '') {
+                $tempTrackingInfo = null;
+                $outboundTrackingArr = explode(',', $shipment->outbound_tracking);
+                foreach ($outboundTrackingArr as $key => $outboundTrackingStr) {
+                    $tempTrackingInfo[] = explode('-COL-', $outboundTrackingStr);
+                }
+                $shipment->outbound_tracking = $tempTrackingInfo;
+            }
+        }
+
         return view('shipment.shipmentSearchResult', [
             'fields' => $this->modelSearchResultFields,
             'fieldCategories' => $this->fieldCategories,
@@ -260,79 +284,103 @@ class ShipmentController extends ContextController
     /**
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    private function prepareQuery()
+    private function prepareQuery($id=null)
     {
-        $query = Shipment::query();
 
-        $this->applyVendorClientQueryRestrictions($query);
-        $this->applyLotNumberPrefixRestrictions($query);
+        $query = Shipment::query()
+          ->leftJoin('tracking_number as tracking_number_inbound', function ($joinInbound) {
+            $joinInbound->on('shipment.lot_number', '=', 'tracking_number_inbound.lot_number')->where('tracking_number_inbound.package_tracking_type', '=', 'Return');
+          })
+          ->leftJoin('tracking_number as tracking_number_outbound', function ($joinOutbound) {
+            $joinOutbound->on('shipment.lot_number', '=', 'tracking_number_outbound.lot_number')->where('tracking_number_outbound.package_tracking_type', '=', 'Sent');
+          })
+          ->select(
+            'shipment.*',
+            DB::raw(
+                'GROUP_CONCAT(DISTINCT CONCAT(tracking_number_inbound.package_tracking_number, \'-COL-\', tracking_number_inbound.tracking_number_url) ORDER BY tracking_number_inbound.package_tracking_number SEPARATOR \',\') as inbound_tracking'
+            ),
+            DB::raw(
+                'GROUP_CONCAT(DISTINCT CONCAT(tracking_number_outbound.package_tracking_number, \'-COL-\', tracking_number_outbound.tracking_number_url) ORDER BY tracking_number_outbound.package_tracking_number SEPARATOR \',\') as outbound_tracking'
+            )
+          )
+        ;
 
-        $input = Input::all();
-
-        foreach($input as $key => $value) {
-            $input[$key] = trim($value);
+        if (isset($id)) {
+            $query->where('shipment.id', $id);
         }
+        else {
+            $this->applyVendorClientQueryRestrictions($query);
+            $this->applyLotNumberPrefixRestrictions($query, 'shipment');
 
-        foreach ($this->modelSearchFields as $field => $label) {
-            if (in_array($field, $this->fieldCategories['exact'], true) && array_key_exists($field, $input) && !empty($input[$field])) {
-                $query->where($field, StringHelper::addSlashes($input[$field]));
+            $input = Input::all();
+
+            foreach($input as $key => $value) {
+                $input[$key] = trim($value);
             }
 
-            if (in_array($field, $this->fieldCategories['string_like'], true) && array_key_exists($field, $input) && !empty($input[$field])) {
-                $query->where($field, 'like', '%' . StringHelper::addSlashes($input[$field]) . '%');
-            }
+            foreach ($this->modelSearchFields as $field => $label) {
+                if (in_array($field, $this->fieldCategories['exact'], true) && array_key_exists($field, $input) && !empty($input[$field])) {
+                    $query->where($field, StringHelper::addSlashes($input[$field]));
+                }
 
-            if (in_array($field, $this->fieldCategories['string_multi'], true) && array_key_exists($field, $input) && !empty($input[$field . '_select']) && !empty($input[$field])) {
-                switch ($input[$field . '_select']) {
-                    case 'equals':
-                        $phrase = StringHelper::addSlashes($input[$field]);
-                        break;
-                    case 'begins_with':
-                        $phrase = StringHelper::addSlashes($input[$field]) . '%';
-                        break;
-                    case 'contains':
-                        $phrase = '%' . StringHelper::addSlashes($input[$field]) . '%';
-                        break;
-                    case 'ends_in':
-                        $phrase = '%' . StringHelper::addSlashes($input[$field]);
-                        break;
-                    default:
-                        throw new \InvalidArgumentException('Invalid value');
-                        break;
+                if (in_array($field, $this->fieldCategories['string_like'], true) && array_key_exists($field, $input) && !empty($input[$field])) {
+                    $query->where($field, 'like', '%' . StringHelper::addSlashes($input[$field]) . '%');
                 }
-                $query->where($field, 'like', $phrase);
-            }
 
-            if (in_array($field, $this->fieldCategories['date_from_to'], true)) {
-                if (array_key_exists($field . '_from', $input) && !empty($input[$field . '_from'])) {
-                    $query->where($field, '>=', Carbon::createFromFormat(Constants::DATE_FORMAT, $input[$field . '_from'])->startOfDay());
+                if (in_array($field, $this->fieldCategories['string_multi'], true) && array_key_exists($field, $input) && !empty($input[$field . '_select']) && !empty($input[$field])) {
+                    switch ($input[$field . '_select']) {
+                        case 'equals':
+                            $phrase = StringHelper::addSlashes($input[$field]);
+                            break;
+                        case 'begins_with':
+                            $phrase = StringHelper::addSlashes($input[$field]) . '%';
+                            break;
+                        case 'contains':
+                            $phrase = '%' . StringHelper::addSlashes($input[$field]) . '%';
+                            break;
+                        case 'ends_in':
+                            $phrase = '%' . StringHelper::addSlashes($input[$field]);
+                            break;
+                        default:
+                            throw new \InvalidArgumentException('Invalid value');
+                            break;
+                    }
+                    $query->where('shipment'. '.' . $field, 'like', $phrase);
                 }
-                if (array_key_exists($field . '_to', $input) && !empty($input[$field . '_to'])) {
-                    $query->where($field, '<=', Carbon::createFromFormat(Constants::DATE_FORMAT, $input[$field . '_to'])->endOfDay());
-                }
-            }
 
-            if ((in_array($field, $this->fieldCategories['int_less_greater'], true) || in_array($field, $this->fieldCategories['float_less_greater'], true))) {
-                if (array_key_exists($field . '_greater_than', $input) && !empty($input[$field . '_greater_than'])) {
-                    $query->where($field, '>=', $input[$field . '_greater_than']);
+                if (in_array($field, $this->fieldCategories['date_from_to'], true)) {
+                    if (array_key_exists($field . '_from', $input) && !empty($input[$field . '_from'])) {
+                        $query->where($field, '>=', Carbon::createFromFormat(Constants::DATE_FORMAT, $input[$field . '_from'])->startOfDay());
+                    }
+                    if (array_key_exists($field . '_to', $input) && !empty($input[$field . '_to'])) {
+                        $query->where($field, '<=', Carbon::createFromFormat(Constants::DATE_FORMAT, $input[$field . '_to'])->endOfDay());
+                    }
                 }
-                if (array_key_exists($field . '_less_than', $input) && !empty($input[$field . '_less_than'])) {
-                    $query->where($field, '=<', $input[$field . '_less_than']);
-                }
-            }
 
-            if (in_array($field, $this->fieldCategories['custom'], true) && array_key_exists($field, $input)) {
-                if ($field === 'vendor_client') {
-                    if (!empty($input[$field])) {
-                        if ($input[$field] === 'all') {
-                            $query->whereIn($field, $this->vendorClients);
-                        }
-                        else {
-                            $query->where($field, StringHelper::addSlashes($input[$field]));
+                if ((in_array($field, $this->fieldCategories['int_less_greater'], true) || in_array($field, $this->fieldCategories['float_less_greater'], true))) {
+                    if (array_key_exists($field . '_greater_than', $input) && !empty($input[$field . '_greater_than'])) {
+                        $query->where($field, '>=', $input[$field . '_greater_than']);
+                    }
+                    if (array_key_exists($field . '_less_than', $input) && !empty($input[$field . '_less_than'])) {
+                        $query->where($field, '=<', $input[$field . '_less_than']);
+                    }
+                }
+
+                if (in_array($field, $this->fieldCategories['custom'], true) && array_key_exists($field, $input)) {
+                    if ($field === 'vendor_client') {
+                        if (!empty($input[$field])) {
+                            if ($input[$field] === 'all') {
+                                $query->whereIn($field, $this->vendorClients);
+                            }
+                            else {
+                                $query->where($field, StringHelper::addSlashes($input[$field]));
+                            }
                         }
                     }
                 }
             }
+
+            $query->groupBy('shipment.lot_number');
         }
 
         return $query;
@@ -393,13 +441,27 @@ class ShipmentController extends ContextController
                             in_array($field, $this->fieldCategories['string_multi'], true) ||
                             in_array($field, $this->fieldCategories['int_less_greater'], true) ||
                             in_array($field, $this->fieldCategories['float_less_greater'], true) ||
-                            in_array($field, $this->fieldCategories['custom'], true)
+                            in_array($field, $this->fieldCategories['custom'], true) ||
+                            in_array($field, $this->fieldCategories['not_sortable'], true)
                         ) {
                             if ($field === 'freight_charge') {
                                 $row[$field] = Constants::CURRENCY_SYMBOL . $shipmentElement[$field];
                             }
                             else {
                                 $row[$field] = $shipmentElement[$field];
+                            }
+
+                            if ($field === 'inbound_tracking' || $field === 'outbound_tracking') {
+                                $row[$field] = '';
+                                if ($shipmentElement[$field] != '') {
+                                    $tempTrackingNumbers = null;
+                                    $trackingInfoArr = explode(',', $shipmentElement[$field]);
+                                    foreach ($trackingInfoArr as $key => $trackingInfoStr) {
+                                        $trackingInfo = explode('-COL-', $trackingInfoStr);
+                                        $tempTrackingNumbers[] = $trackingInfo[0];
+                                    }
+                                    $row[$field] = implode(PHP_EOL, $tempTrackingNumbers);
+                                }
                             }
 
                             if ($field === 'has_cert_of_data_wipe') {
@@ -467,7 +529,29 @@ class ShipmentController extends ContextController
      */
     public function getDetails($context = null, $id)
     {
-        $shipment = Shipment::find($id);
+        //$shipment = Shipment::where('id', $id)->first();
+
+        // $shipment = Shipment::where('shipment.id', $id)
+        //   ->leftJoin('tracking_number as tracking_number_inbound', function ($joinInbound) {
+        //     $joinInbound->on('shipment.lot_number', '=', 'tracking_number_inbound.lot_number')->where('tracking_number_inbound.package_tracking_type', '=', 'Return');
+        //   })
+        //   ->leftJoin('tracking_number as tracking_number_outbound', function ($joinOutbound) {
+        //     $joinOutbound->on('shipment.lot_number', '=', 'tracking_number_outbound.lot_number')->where('tracking_number_outbound.package_tracking_type', '=', 'Sent');
+        //   })
+        //   ->select(
+        //     'shipment.*',
+        //     DB::raw(
+        //         'GROUP_CONCAT(DISTINCT CONCAT(tracking_number_inbound.package_tracking_number, \'-COL-\', tracking_number_inbound.tracking_number_url) ORDER BY tracking_number_inbound.package_tracking_number SEPARATOR \',\') as inbound_tracking'
+        //     ),
+        //     DB::raw(
+        //         'GROUP_CONCAT(DISTINCT CONCAT(tracking_number_outbound.package_tracking_number, \'-COL-\', tracking_number_outbound.tracking_number_url) ORDER BY tracking_number_outbound.package_tracking_number SEPARATOR \',\') as outbound_tracking'
+        //     )
+        //   )
+        //   ->first();
+        // ;
+
+        $query = $this->prepareQuery($id);
+        $shipment = $query->first();
 
         if (!$shipment) {
             throw new NotFoundHttpException();
@@ -493,6 +577,21 @@ class ShipmentController extends ContextController
                     throw new NotFoundHttpException();
                 }
             }
+        }
+
+        if ($shipment->inbound_tracking != '') {
+            $inboundTrackingArr = explode(',', $shipment->inbound_tracking);
+            foreach ($inboundTrackingArr as $key => $inboundTrackingStr) {
+                $tempInboundTracking[] = explode('-COL-', $inboundTrackingStr);
+            }
+            $shipment->inbound_tracking = $tempInboundTracking;
+        }
+        if ($shipment->outbound_tracking != '') {
+            $outboundTrackingArr = explode(',', $shipment->outbound_tracking);
+            foreach ($outboundTrackingArr as $key => $outboundTrackingStr) {
+                $tempOutboundTracking[] = explode('-COL-', $outboundTrackingStr);
+            }
+            $shipment->outbound_tracking = $tempOutboundTracking;
         }
 
         return view('shipment.shipmentDetails', [

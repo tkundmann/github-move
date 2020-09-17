@@ -70,7 +70,7 @@
                                         <div class="form-group">
                                             <label class="col-sm-6 control-label colon-after">{{ array_key_exists('cost_center', $fields) ? (Lang::has('shipment.'. $fields['cost_center']) ? Lang::trans('shipment.' .  $fields['cost_center']) :  $fields['cost_center']) : Lang::trans('shipment.cost_center') }}</label>
                                             <div class="col-sm-6">
-                                                <p class="form-control-static">{{ isset($shipment->b) ? $shipment->costCenter : '-' }}</p>
+                                                <p class="form-control-static">{{ isset($shipment->costCenter) ? $shipment->costCenter : '-' }}</p>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -97,6 +97,30 @@
                                                 <p class="form-control-static">{{ isset($shipment->freightCarrier) ? $shipment->freightCarrier : '-' }}</p>
                                             </div>
                                         </div>
+
+                                        @foreach(['inbound_tracking', 'outbound_tracking'] as $field)
+                                            <div class="form-group margin-top-md margin-bottom-md">
+                                                <label class="col-sm-6 control-label colon-after">{{ array_key_exists($field, $fields) ? (Lang::has('shipment.'. $fields[$field]) ? Lang::trans('shipment.' .  $fields[$field]) :  $fields[$field]) : Lang::trans('shipment.inbound_tracking') }}</label>
+                                                <div class="col-sm-6">
+                                                    @if (count($shipment->$field) > 1)
+                                                        <select class="selectpicker form-control js-tracking-number-select">
+                                                            <option value="">@lang('shipment.search_result.select_number_for_tracking')</option>
+                                                            @foreach($shipment->$field as $key => $trackingNumber)
+                                                                <option value="https://{{ $trackingNumber[1] }}">{{ $trackingNumber[0] }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    @else
+                                                        @if (isset($shipment->$field))
+                                                            <a href="https://{{ $shipment->$field[0][1] }}" target="_blank">{{ $shipment->$field[0][0] }}</a>
+                                                        @else
+                                                            <p class="form-control-static">{{ '-' }}</p>
+                                                        @endif
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        @endforeach
+
+
                                         <div class="form-group">
                                             <label class="col-sm-6 control-label colon-after">{{ array_key_exists('freight_invoice_number', $fields) ? (Lang::has('shipment.'. $fields['freight_invoice_number']) ? Lang::trans('shipment.' .  $fields['freight_invoice_number']) :  $fields['freight_invoice_number']) : Lang::trans('shipment.freight_invoice_number') }}</label>
                                             <div class="col-sm-6">
@@ -305,4 +329,18 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('js')
+    <script>
+        $(document).ready(function() {
+
+            $('.js-tracking-number-select').on('change', function (event) {
+                var $multiTrackNumSelect = $(this);
+                if ($multiTrackNumSelect.val() !== '') {
+                    window.open($multiTrackNumSelect.val());
+                }
+            });
+        });
+    </script>
 @endsection

@@ -24,6 +24,8 @@ return [
     'city_of_origin'          => 'City of Origin',
     'schedule_pickup_date'    => 'Schedule Pickup Date',
     'freight_carrier'         => 'Freight Carrier',
+    'inbound_tracking'        => 'Inbound Tracking Number(s)',
+    'outbound_tracking'       => 'Outbound Tracking Number(s)',
     'freight_invoice_number'  => 'Freight Invoice Number',
     'freight_charge'          => 'Freight Charge',
     'pickup_request_date'     => 'Pickup Request Date',
@@ -63,18 +65,22 @@ return [
     ],
 
     'search_result' => [
-        'listed_below'             => 'Listed below is the Shipment report that matches your search criteria.',
-        'data_can_be_stored_1'     => 'Data can be sorted by the columns listed by clicking on the corresponding column name.',
-        'data_can_be_stored_2'     => 'The sort will be performed on all of the data given in the report, but it will be done on a per vendor basis.',
-        'shipments_search_results' => 'Shipments Search Results',
-        'record'                   => '{0}records|{1}record|[2,Inf]records',
-        'modify_search'            => 'Modify Search',
-        'export_shipments'         => 'Export to CSV',
-        'settlement'               => 'Settlement',
-        'assets'                   => 'Assets',
-        'view_assets'              => 'View',
-        'export_assets'            => 'Export',
-        'no_assets_found'          => 'No Assets found'
+        'listed_below'                        => 'Listed below is the Shipment report that matches your search criteria.',
+        'data_can_be_stored_1'                => 'Data can be sorted by the columns listed by clicking on the corresponding column name.',
+        'data_can_be_stored_2'                => 'The sort will be performed on all of the data given in the report, but it will be done on a per vendor basis.',
+        'shipments_search_results'            => 'Shipments Search Results',
+        'record'                              => '{0}records|{1}record|[2,Inf]records',
+        'modify_search'                       => 'Modify Search',
+        'export_shipments'                    => 'Export to CSV',
+        'settlement'                          => 'Settlement',
+        'assets'                              => 'Assets',
+        'view_assets'                         => 'View',
+        'export_assets'                       => 'Export',
+        'no_assets_found'                     => 'No Assets found',
+        'select_number_for_tracking'          => 'Select Number for Tracking Info',
+        'select_number_to_view_tracking_details' => 'Select Number to View Shipment Tracking Details',
+        'click_to_view_tracking_details'      => 'Click to View Shipment Tracking Details'
+
     ],
 
     'details' => [
