@@ -106,13 +106,13 @@
                                                         <select class="selectpicker form-control js-tracking-number-select">
                                                             <option value="">@lang('shipment.search_result.select_number_for_tracking')</option>
                                                             @foreach($shipment->$field as $key => $trackingNumber)
-                                                                <option value="https://{{ $trackingNumber[1] }}">{{ $trackingNumber[0] }}</option>
+                                                                <option value="{{ $trackingNumber[1] }}">{{ $trackingNumber[0] }}</option>
                                                             @endforeach
                                                         </select>
                                                     @else
                                                         @if ($shipment->$field != '')
                                                             <?php $trackingNumber = explode('-COL-', $shipment->$field); ?>
-                                                            <a href="https://{{ $trackingNumber[1] }}" target="_blank">{{ $trackingNumber[0] }}</a>
+                                                            <a href="{{ $trackingNumber[1] }}" target="_blank">{{ $trackingNumber[0] }}</a>
                                                         @else
                                                             <p class="form-control-static">{{ '-' }}</p>
                                                         @endif
