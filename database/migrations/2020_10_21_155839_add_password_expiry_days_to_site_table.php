@@ -13,7 +13,7 @@ class AddPasswordExpiryDaysToSiteTable extends Migration
     public function up()
     {
         Schema::table('site', function (Blueprint $table) {
-            $table->integer('password_expiry_days')->after('type')->nullable()->default(90);
+            $table->tinyInteger('password_expiry_days')->after('type')->nullable()->default(90);
         });
     }
 
