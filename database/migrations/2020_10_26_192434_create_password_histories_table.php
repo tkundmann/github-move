@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePasswordSecuritiesTable extends Migration
+class CreatePasswordHistoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +12,10 @@ class CreatePasswordSecuritiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('password_securities', function (Blueprint $table) {
+        Schema::create('password_histories', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');
-            $table->tinyInteger('password_expiry_days');
-            $table->timestamp('password_updated_at')->nullable()->default(null);
+            $table->string('password');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ class CreatePasswordSecuritiesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('password_securities');
+        Schema::drop('password_histories');
     }
 }
