@@ -14,9 +14,9 @@ class CreatePasswordSecuritiesTable extends Migration
     {
         Schema::create('password_securities', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id');
+            $table->integer('user_id')->index();
             $table->tinyInteger('password_expiry_days');
-            $table->timestamp('password_updated_at')->nullable()->default(null);
+            $table->timestamp('password_updated_at')->index()->nullable()->default(null);
             $table->timestamps();
         });
     }
