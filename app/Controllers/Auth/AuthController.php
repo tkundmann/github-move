@@ -157,6 +157,9 @@ class AuthController extends ContextController
             ]);
         }
 
+        if ($this->context && ContextHelper::isSiteContext($this->context) && str_contains(redirect()->intended($this->redirectPath())->getTargetUrl(), 'admin')) {
+            return redirect('/');
+        }
         return redirect()->intended($this->redirectPath());
     }
 
