@@ -9,6 +9,10 @@
 
                 <div class="panel-body">
 
+                    <div class="valid-password-criteria {{ $applicablePasswordLengthClass }}">
+                         {!! $passwordCriteriaMsg !!}
+                    </div>
+
                     @if (session('status'))
                         <div class="alert alert-success animate">
                             {{ session('status') }}

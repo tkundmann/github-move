@@ -4,10 +4,16 @@ namespace App\Controllers\Auth;
 
 use App\Controllers\ContextController;
 use App\Extensions\Auth\PasswordBroker;
+use App\Data\Constants;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
+use App\Data\Models\User;
+use App\Data\Models\PasswordHistory;
+use Lang;
+use Validator;
 
 class PasswordController extends ContextController
 {
@@ -70,15 +76,36 @@ class PasswordController extends ContextController
             $prevalidateResult = Password::broker($broker)->prevalidateReset($credentials);
         }
 
+        $user = User::where('email', $credentials['email'])->where('site_id', $this->getSiteId())->first();
+        if (!$user) {
+            $user = User::where('email', $credentials['email'])->where('site_id', null)->first();
+        }
+
+        $applicablePasswordLengthClass = 'default-min-chars-apply';
+        if ($user->passwordRequiredLength() == User::ADMIN_SUPER_USER_PASSWORD_REQUIRED_LENGTH) {
+            $applicablePasswordLengthClass = 'admin-min-chars-apply';
+        }
+        $defaultMinNumChars = User::PASSWORD_DEFAULT_REQUIRED_LENGTH;
+        $adminMinNumChars   = User::ADMIN_SUPER_USER_PASSWORD_REQUIRED_LENGTH;
+
+        $passwordCriteriaMsgReplacePairs = [
+            'applicablePasswordLengthClass' => $applicablePasswordLengthClass,
+            'defaultMinNumChars'            => $defaultMinNumChars,
+            'adminMinNumChars'              => $adminMinNumChars
+        ];
+        $passwordCriteriaMsg = Lang::get('auth.password.valid_password_criteria', $passwordCriteriaMsgReplacePairs);
+
+        $viewData = compact('token', 'email', 'prevalidateResult', 'applicablePasswordLengthClass', 'passwordCriteriaMsg');
+
         if (property_exists($this, 'resetView')) {
-            return view($this->resetView)->with(compact('token', 'email', 'prevalidateResult'));
+            return view($this->resetView)->with($viewData);
         }
 
         if (view()->exists('auth.passwords.reset')) {
-            return view('auth.passwords.reset')->with(compact('token', 'email', 'prevalidateResult'));
+            return view('auth.passwords.reset')->with($viewData);
         }
 
-        return view('auth.reset')->with(compact('token', 'email', 'prevalidateResult'));
+        return view('auth.reset')->with($viewData);
     }
 
     /**
@@ -135,15 +162,39 @@ class PasswordController extends ContextController
      */
     public function reset(Request $request)
     {
-        $this->validate(
-            $request,
-            $this->getResetValidationRules(),
-            $this->getResetValidationMessages(),
-            $this->getResetValidationCustomAttributes()
-        );
+        $email = $request->input('email');
+        $user = User::where('email', $email)->where('site_id', $this->getSiteId())->first();
+        if (!$user) {
+            $user = User::where('email', $email)->where('site_id', null)->first();
+        }
+
+		$passwordRequiredLength = User::PASSWORD_DEFAULT_REQUIRED_LENGTH;
+		if ($user) {
+			$passwordRequiredLength = $user->passwordRequiredLength();
+		}
+        $rules = $this->getResetValidationRules($passwordRequiredLength);
 
         $credentials = $this->getResetCredentials($request);
         $credentials = array_merge($credentials, ['site_id' => $this->getSiteId()]);
+
+        $validator = Validator::make($credentials, $rules);
+
+        $validator->after(function ($validator) use ($credentials, $user) {
+        	if ($user) {
+				$passwordHistories = $user->passwordHistories()->take(Constants::PASSWORD_HISTORY_NUM)->get();
+				foreach ($passwordHistories as $passwordHistory) {
+					if (Hash::check($credentials['password'], $passwordHistory->password)) {
+						$validator->errors()->add('password', Lang::get('auth.password.new_password_matches_prev'));
+						break;
+					}
+				}
+			}
+        });
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)
+                ->withInput(['email', $credentials['email']]);
+        }
 
         $broker = $this->getBroker();
 
@@ -164,12 +215,12 @@ class PasswordController extends ContextController
      *
      * @return array
      */
-    protected function getResetValidationRules()
+    protected function getResetValidationRules( int $passwordRequiredLength)
     {
         return [
-            'token' => 'required',
-            'email' => 'required|email|exists:user,email,site_id,' . $this->getSiteId(true),
-            'password' => 'required|confirmed|min:8|symbols',
+            'token'    => 'required',
+            'email'    => 'required|email|exists:user,email,site_id,' . $this->getSiteId(true),
+            'password' => 'required|confirmed|min:' . $passwordRequiredLength . '|letters|numbers|symbols|case_diff'
         ];
     }
 
@@ -182,9 +233,16 @@ class PasswordController extends ContextController
      */
     protected function resetPassword($user, $password)
     {
+        $passwordHash = bcrypt($password);
+
         $user->forceFill([
-            'password' => bcrypt($password),
+            'password' => $passwordHash,
             'remember_token' => Str::random(60),
         ])->save();
+
+        $passwordHistory = PasswordHistory::create([
+            'user_id' => $user->id,
+            'password' => $passwordHash
+        ]);
     }
 }

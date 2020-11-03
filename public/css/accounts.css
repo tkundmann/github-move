@@ -1,0 +1,19 @@
+.valid-password-criteria .min-num-chars-criteria {
+  display: none;
+}
+.valid-password-criteria.default-min-chars-apply .min-num-chars-criteria,
+.valid-password-criteria.admin-min-chars-apply .min-num-chars-criteria {
+  display: list-item;
+}
+.valid-password-criteria.default-min-chars-apply .default-min-num-chars {
+  display: inline-block;
+}
+.valid-password-criteria.default-min-chars-apply .admin-min-num-chars {
+  display: none;
+}
+.valid-password-criteria.admin-min-chars-apply .default-min-num-chars {
+  display: none;
+}
+.valid-password-criteria.admin-min-chars-apply .admin-min-num-chars {
+  display: inline-block;
+}

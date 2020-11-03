@@ -32,6 +32,9 @@ class User extends Authenticatable
     use Eloquence, Mappable, Sortable;
     use LaratrustUserTrait;
 
+    const PASSWORD_DEFAULT_REQUIRED_LENGTH = 8;
+    const ADMIN_SUPER_USER_PASSWORD_REQUIRED_LENGTH = 12;
+
     protected $table = 'user';
 
     protected $dates = [
@@ -51,7 +54,7 @@ class User extends Authenticatable
         'createdAt' => 'created_at',
         'updatedAt' => 'updated_at',
     ];
-    
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -72,8 +75,28 @@ class User extends Authenticatable
     public function vendorClients() {
         return $this->belongsToMany('App\Data\Models\VendorClient', 'user_vendor_client', 'user_id', 'vendor_client_id');
     }
-    
+
     public function pages() {
         return $this->belongsToMany('App\Data\Models\Page', 'user_page', 'user_id', 'page_id');
+    }
+
+    public function passwordSecurity()
+    {
+        return $this->hasOne('App\Data\Models\PasswordSecurity');
+    }
+
+    public function passwordHistories()
+    {
+        return $this->hasMany('App\Data\Models\PasswordHistory');
+    }
+
+    public function passwordRequiredLength() {
+
+        $minNumChars = self::PASSWORD_DEFAULT_REQUIRED_LENGTH;
+        if (! $this->hasRole(Role::USER)) {
+            // SuperUsers, Super Admin and Admin users must create longer passwords that standard portal users.
+            $minNumChars = self::ADMIN_SUPER_USER_PASSWORD_REQUIRED_LENGTH;
+        }
+        return $minNumChars;
     }
 }

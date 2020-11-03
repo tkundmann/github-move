@@ -102,6 +102,17 @@
                                 </div>
                             </div>
 
+                            <div class="form-group @if($errors->has('password_expiry_days')) has-error @endif">
+                                {{ Form::label('code', trans('admin.site.site.account_password_expiry_days'), ['class' => 'col-sm-3 control-label colon-after']) }}
+                                <div class="col-sm-6">
+                                    {{ Form::text('password_expiry_days', Input::get('password_expiry_days') ? Input::get('password_expiry_days') : old('password_expiry_days') ?  old('password_expiry_days') : $currentSite->passwordExpiryDays, ['id' => 'password_expiry_days', 'class' => 'form-control']) }}
+                                    <p class="font-size-md margin-top-sm margin-bottom-sm">@lang('admin.site.site.account_password_expiry_days_tagline')</p>
+                                    @if ($errors->has('password_expiry_days'))
+                                        {!! $errors->first('password_expiry_days', '<small class="text-danger">:message</small>') !!}
+                                    @endif
+                                </div>
+                            </div>
+
                             <div class="form-group @if($errors->has('account-vendor-client-restriction-enabled')) has-error @endif">
                                 {{ Form::label('account-vendor-client-restriction-enabled', trans('admin.site.site.account_vendor_client_restriction'), ['class' => 'col-sm-3 control-label colon-after']) }}
                                 <div class="col-sm-6">

@@ -60,7 +60,9 @@ class SiteController extends ContextController
 
     public function getCreate()
     {
-        return view('admin.siteCreate');
+        return view('admin.siteCreate', [
+            'defaultPasswordExpiryDays' => Constants::DEFAULT_PASSWORD_EXPIRY_DAYS
+        ]);
     }
 
     public function postCreate()
@@ -70,6 +72,7 @@ class SiteController extends ContextController
             'title'                               => 'required',
             'code'                                => 'required|regex:/^[A-Za-z0-9\-\_\']+$/|unique:site,code',
             'logo'                                => 'required',
+            'password_expiry_days'                => 'required',
             'account-vendor-client-restriction-enabled' => 'required',
         );
 
@@ -112,6 +115,7 @@ class SiteController extends ContextController
             $site->type = trim(Input::get('type'));
             $site->title = trim(Input::get('title'));
             $site->code = strtolower(trim(Input::get('code')));
+            $site->passwordExpiryDays = trim(Input::get('password_expiry_days'));
 
             if (!Storage::cloud()->exists(Constants::UPLOAD_DIRECTORY . $site->code)) {
                 Storage::cloud()->makeDirectory(Constants::UPLOAD_DIRECTORY . $site->code);
@@ -304,6 +308,8 @@ class SiteController extends ContextController
             if (Input::get('color')) {
                 $site->color = trim(Input::get('color'));
             }
+
+            $site->passwordExpiryDays = trim(Input::get('password_expiry_days'));
 
             $site->save();
 

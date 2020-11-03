@@ -33,6 +33,10 @@ Route::group(['prefix' => '{'.Constants::CONTEXT_PARAMETER.'}'], function() {
     Route::get('password/change', 'Auth\ChangePasswordController@getChangePassword')->name('password.change');
     Route::post('password/change', 'Auth\ChangePasswordController@postChangePassword')->name('password.change');
 
+    // Password Expiration
+    Route::get('password/expiration','Auth\PwdExpirationController@showPasswordExpirationForm')->name('password.expiration');
+    Route::post('password/expiration','Auth\PwdExpirationController@postPasswordExpiration')->name('password.expiration');
+
     // Main
     Route::get('', function() {
         return redirect()->route('main.home');
@@ -56,6 +60,7 @@ Route::group(['prefix' => '{'.Constants::CONTEXT_PARAMETER.'}'], function() {
     Route::get('asset/{id}', 'Asset\AssetController@getDetails')->name('asset.details');
 
     // Admin
+    Route::get('account/expiration/create', 'Admin\AccountController@createPasswordExpirations')->name('account.expiration.create');
     Route::get('account/list', 'Admin\AccountController@getList')->name('admin.account.list');
     Route::get('account/create', 'Admin\AccountController@getCreate')->name('admin.account.create');
     Route::post('account/create', 'Admin\AccountController@postCreate')->name('admin.account.create');

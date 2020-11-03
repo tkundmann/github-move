@@ -3,6 +3,8 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\ContextController;
+use App\Data\ApiResponse;
+use App\Data\Constants;
 use App\Data\Models\Feature;
 use App\Data\Models\LotNumber;
 use App\Data\Models\Page;
@@ -10,11 +12,15 @@ use App\Data\Models\Role;
 use App\Data\Models\Site;
 use App\Data\Models\User;
 use App\Data\Models\VendorClient;
+use App\Data\Models\PasswordSecurity;
+use App\Data\Models\PasswordHistory;
 use App\Helpers\StringHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Lang;
+use Carbon\Carbon;
+use DateTime;
 use Input;
 use Mail;
 use Validator;
@@ -34,6 +40,28 @@ class AccountController extends ContextController
         $this->middleware('auth');
         $this->middleware('context.permissions:' . $this->context);
         $this->middleware('role:' . Role::ADMIN . '|' . Role::SUPERADMIN);
+    }
+
+    public function createPasswordExpirations(Request $request) {
+
+        $query = User::query()->leftJoin('site', 'user.site_id', '=', 'site.id');
+        $query->where('disabled', false);
+        $query->whereDoesntHave('passwordSecurity');
+        $query = $query->sortable(['user.id' => 'asc']);
+        $users = $query->select('user.id', 'name', 'site.password_expiry_days')->get();
+
+        foreach ($users as $key => $user) {
+
+            $passwordExpiryDays = ($user->password_expiry_days) ? $user->password_expiry_days : Constants::DEFAULT_PASSWORD_EXPIRY_DAYS;
+
+            $passwordSecurity = PasswordSecurity::create([
+                'user_id' => $user->id,
+                'password_expiry_days' => $passwordExpiryDays,
+                'password_updated_at' => Carbon::now()->subDays($passwordExpiryDays)
+            ]);
+        }
+
+        return response()->json(new ApiResponse(ApiResponse::STATUS_OK, $users->count() . ' Password Expiration Records Created.', new DateTime()), 200);
     }
 
     protected function getLotNumbers(Site $site)
@@ -164,26 +192,38 @@ class AccountController extends ContextController
         return $this->createView($lotNumbers, $vendorClients, $pages);
     }
 
-    protected function createView($lotNumbers = [], $vendorClients = [], $pages = [])
+    protected function createView($lotNumbers = [], $vendorClients = [], $pages = [], $applicablePasswordLengthClass = '')
     {
+
+        $user = Auth::user();
+
         $allSites = Site::orderBy('title', 'asc')->get();
         $allSitesArray = [];
         foreach ($allSites as $site) {
             $allSitesArray[$site->id] = ($site->title ? $site->title : '-') . ' (' . ($site->code ? $site->code : '-') . ')';
         }
 
-        if (Auth::user()->hasRole(Role::SUPERADMIN)) {
+        if ($user->hasRole(Role::SUPERADMIN)) {
             $rolesArray = Role::orderBy('id', 'asc')->pluck('name', 'name')->toArray();
         } else {
             $rolesArray = Role::whereNotIn('name', [Role::ADMIN, Role::SUPERADMIN])->orderBy('id', 'asc')->pluck('name', 'name')->toArray();
         }
 
+        $passwordCriteriaMsgReplacePairs = [
+            'applicablePasswordLengthClass' => $applicablePasswordLengthClass,
+            'defaultMinNumChars'            => User::PASSWORD_DEFAULT_REQUIRED_LENGTH,
+            'adminMinNumChars'              => User::ADMIN_SUPER_USER_PASSWORD_REQUIRED_LENGTH
+        ];
+        $passwordCriteriaMsg = Lang::get('auth.password.valid_password_criteria', $passwordCriteriaMsgReplacePairs);
+
         return view('admin.accountCreate')->with([
-            'sites' => $allSitesArray,
-            'roles' => $rolesArray,
-            'lotNumbers' => $lotNumbers,
-            'vendorClients' => $vendorClients,
-            'pages' => $pages
+            'sites'                         => $allSitesArray,
+            'roles'                         => $rolesArray,
+            'lotNumbers'                    => $lotNumbers,
+            'vendorClients'                 => $vendorClients,
+            'pages'                         => $pages,
+            'applicablePasswordLengthClass' => $applicablePasswordLengthClass,
+            'passwordCriteriaMsg'           => $passwordCriteriaMsg
         ]);
     }
 
@@ -193,14 +233,24 @@ class AccountController extends ContextController
             if (!$site = Site::find(trim(Input::get('site')))) {
                 throw new \Exception('Site does not exist.');
             } else {
-                return $this->createView($this->getLotNumbers($site), $this->getVendorClients($site), $this->getPages($site));
+
+                // This is being hit as part of the page reload that occurs after selecting
+                // the site when creating a new USER role account.  Set the applicable password
+                // length class, accordingly.
+                $applicablePasswordLengthClass = 'default-min-chars-apply';
+                return $this->createView($this->getLotNumbers($site), $this->getVendorClients($site), $this->getPages($site), $applicablePasswordLengthClass);
             }
+        }
+
+        $minNumChars = User::PASSWORD_DEFAULT_REQUIRED_LENGTH;
+        if (Input::get('roles') && in_array(Input::get('roles'), [Role::SUPERUSER, Role::ADMIN, Role::SUPERADMIN], true)) {
+            $minNumChars = User::ADMIN_SUPER_USER_PASSWORD_REQUIRED_LENGTH;
         }
 
         $rules = array(
             'name' => 'required',
             'email' => 'required|email|unique_email_context:site_id,' . trim(Input::get('site')),
-            'password' => 'required|min:8|symbols|confirmed',
+            'password' => 'required|confirmed|min:' . $minNumChars . '|letters|numbers|symbols|case_diff',
             'password_confirmation' => 'required',
             'disabled' => 'required',
         );
@@ -218,24 +268,33 @@ class AccountController extends ContextController
         $rules['roles'] = 'required|in:' . implode(',', $rolesArray);
         $validator = Validator::make(Input::all(), $rules);
 
-        $account = new User();
-
         if ($validator->fails()) {
             return redirect()->route('admin.account.create')->withInput(Input::except('password'))->withErrors($validator);
         } else {
-            $account->name = trim(Input::get('name'));
-            $account->email = trim(Input::get('email'));
-            $account->password = Hash::make(trim(Input::get('password')));
-            $account->disabled = trim(Input::get('disabled'));
-            $account->confirmed = false;
+
+            $account = new User();
+
+            $passwordHash = bcrypt(trim(Input::get('password')));
+
+            $account->name               = trim(Input::get('name'));
+            $account->email              = trim(Input::get('email'));
+            $account->password           = $passwordHash;
+            $account->disabled           = trim(Input::get('disabled'));
+            $account->confirmed          = false;
 
             $account->save();
+
+            $passwordExpiryDays = Constants::DEFAULT_PASSWORD_EXPIRY_DAYS;
 
             if (!in_array(Input::get('roles'), [Role::SUPERUSER, Role::ADMIN, Role::SUPERADMIN], true)) {
                 if (!$site = Site::find(trim(Input::get('site')))) {
                     throw new \Exception('Site does not exist.');
                 }
                 $account->site()->associate($site);
+
+                // This is an account being setup for a specific portal site, set the password
+                // expiry days per site setting.
+                $passwordExpiryDays = $site->passwordExpiryDays;
 
                 if (is_array(Input::get('lot_numbers'))) {
                     foreach (Input::get('lot_numbers') as $lotNumberId) {
@@ -289,6 +348,17 @@ class AccountController extends ContextController
             }
 
             $account->save();
+
+            $passwordSecurity = PasswordSecurity::create([
+                'user_id' => $account->id,
+                'password_expiry_days' => $passwordExpiryDays,
+                'password_updated_at' => Carbon::now()
+            ]);
+
+            $passwordHistory = PasswordHistory::create([
+                'user_id' => $account->id,
+                'password' => $passwordHash
+            ]);
 
             $title = trans('email.account_created.email_title');
 

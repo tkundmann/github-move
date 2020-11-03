@@ -30,8 +30,14 @@
                         @endif
 
                         @if ($errors->has('lockout'))
-                            <div class="alert alert-danger animate">
+                            <div class="alert alert-danger animate-slowly">
                                 <strong>{{ $errors->first('lockout') }}</strong>
+                            </div>
+                        @endif
+
+                        @if ($errors->has('nearlockout'))
+                            <div class="alert alert-danger animate-slowly">
+                                <strong>{{ $errors->first('nearlockout') }}</strong>
                             </div>
                         @endif
 

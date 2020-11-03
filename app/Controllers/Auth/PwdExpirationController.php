@@ -11,13 +11,17 @@ use App\Data\Models\User;
 use App\Data\Models\PasswordHistory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Input;
 use Lang;
 use Validator;
 
-class ChangePasswordController extends ContextController
+class PwdExpirationController extends ContextController
 {
+
+    use AuthenticatesAndRegistersUsers;
+
     /**
      * Create a new controller instance.
      * @param  \Illuminate\Http\Request $request
@@ -26,17 +30,21 @@ class ChangePasswordController extends ContextController
     public function __construct(Request $request)
     {
         parent::__construct($request);
-        $this->middleware('auth');
-        $this->middleware('context.permissions:' . $this->context);
+        $this->redirectPath = route('login');
+        $this->middleware($this->guestMiddleware());
+
+        $this->subject = trans('email.reset_password.email_title');
     }
 
-    /**
-     * @return \Illuminate\Http\Response
-     */
-    public function getChangePassword()
-    {
+    public function showPasswordExpirationForm(Request $request){
+        $password_expired_id = $request->session()->get('password_expired_id');
+        if(!isset($password_expired_id)){
+            return redirect()->route('login');
+        }
+
+        $user = User::find($password_expired_id);
         $applicablePasswordLengthClass = 'default-min-chars-apply';
-        if (Auth::user()->passwordRequiredLength() == User::ADMIN_SUPER_USER_PASSWORD_REQUIRED_LENGTH) {
+        if ($user->passwordRequiredLength() == User::ADMIN_SUPER_USER_PASSWORD_REQUIRED_LENGTH) {
             $applicablePasswordLengthClass = 'admin-min-chars-apply';
         }
 
@@ -47,15 +55,20 @@ class ChangePasswordController extends ContextController
         ];
         $passwordCriteriaMsg = Lang::get('auth.password.valid_password_criteria', $passwordCriteriaMsgReplacePairs);
 
-        return view('auth.changePassword', [
+        return view('auth.passwordExpiration', [
             'applicablePasswordLengthClass' => $applicablePasswordLengthClass,
             'passwordCriteriaMsg'           => $passwordCriteriaMsg
         ]);
     }
 
-    public function postChangePassword(Request $request)
-    {
-        $user = Auth::user();
+    public function postPasswordExpiration(Request $request) {
+
+        $password_expired_id = $request->session()->get('password_expired_id');
+        if(!isset($password_expired_id)){
+            return redirect()->route('login');
+        }
+
+        $user = User::find($password_expired_id);
 
         $credentials = $request->only(
             'current_password', 'new_password', 'new_password_confirmation'
@@ -90,13 +103,12 @@ class ChangePasswordController extends ContextController
         });
 
         if ($validator->fails()) {
-            return redirect()->route('password.change')->withErrors($validator)
+            return redirect()->route('password.expiration')->withErrors($validator)
                 ->withInput(['current_password', $credentials['current_password']]);
         }
 
         $passwordHash = bcrypt($credentials['new_password']);
         $user->password = $passwordHash;
-        $user->confirmed = true;
         $user->save();
 
         $user->passwordSecurity->password_updated_at = Carbon::now();
@@ -107,6 +119,6 @@ class ChangePasswordController extends ContextController
             'password' => $passwordHash
         ]);
 
-        return redirect()->route('main.home');
+        return redirect()->route('login')->with("status", Lang::get('auth.password.expired_password_changed'));
     }
 }

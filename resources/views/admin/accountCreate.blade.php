@@ -12,6 +12,11 @@
                         </div>
                     </div>
                     <div class="panel-body">
+
+                        <div class="js-valid-password-criteria valid-password-criteria {{ $applicablePasswordLengthClass }}">
+                            {!! $passwordCriteriaMsg !!}
+                        </div>
+
                         <div>
                             {{ Form::open(['route' => 'admin.account.create', 'method' => 'POST', 'class' => 'form-horizontal', 'id' => 'account_create_form']) }}
                             {{ csrf_field() }}
@@ -153,6 +158,15 @@
             roleSelect.on('change', function(event) {
                 var value = $(this).val();
                 roleSelectValueChanged = true;
+
+                var applicablePasswordLengthClass = 'default-min-chars-apply';
+                var applicablePasswordLengthClassToRemove = 'admin-min-chars-apply';
+                if (value != '{{ head(array_where($roles, function ($key, $value) { return ($value == \App\Data\Models\Role::USER); })) }}') {
+                    applicablePasswordLengthClass = 'admin-min-chars-apply';
+                    applicablePasswordLengthClassToRemove = 'default-min-chars-apply';
+                }
+                $('.js-valid-password-criteria').removeClass(applicablePasswordLengthClassToRemove).addClass(applicablePasswordLengthClass);
+
                 determineSiteSelectVisibility(value);
             });
 

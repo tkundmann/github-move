@@ -201,6 +201,9 @@ return [
             'type' => 'Type',
             'logo' => 'Logo',
             'color' => 'Color',
+            'account_password_expiry_days' => 'Account Password Expiry Days',
+            'account_password_expiry_days_tagline' => 'Value applied upon creation of all applicable user accounts.',
+            'prepopulated_with_portal_default' => 'Prepopulated with portal default.',
             'account_vendor_client_restriction' => 'Account Vendor Client Restriction Enabled',
         ],
         'edit' => [

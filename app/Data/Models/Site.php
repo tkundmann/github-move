@@ -16,6 +16,7 @@ use Sofa\Eloquence\Mappable;
  * @property string $logoUrl
  * @property string $color
  * @property string $type ('Insight','SAR','Other')
+ * @property integer $passwordExpiryDays
  * @property \Carbon\Carbon $createdAt
  * @property \Carbon\Carbon $updatedAt
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Data\Models\User[] $users
@@ -45,6 +46,7 @@ class Site extends Model
         'logoUrl' => 'logo_url',
         // 'color' => 'color',
         // 'type' => 'type',
+        'passwordExpiryDays' => 'password_expiry_days',
         'createdAt' => 'created_at',
         'updatedAt' => 'updated_at',
     ];
@@ -116,7 +118,7 @@ class Site extends Model
     public function hasPage($pageCode) {
         return $this->pages->contains('code', $pageCode);
     }
-    
+
     public function getPage($pageCode) {
         return $this->pages->where('code', $pageCode)->first();
     }

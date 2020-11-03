@@ -6,7 +6,13 @@ class Constants
 {
     const VERSION = '1.0.0.20161130';
 
-    const REMEMBER_ME_COOKIE_LONGEVITY = 365; // days
+    const REMEMBER_ME_COOKIE_LONGEVITY           = 365;  // days
+    const DEFAULT_PASSWORD_EXPIRY_DAYS           = 90;
+    const NUM_DAYS_NOTFIY_PASSWORD_EXPIRING_SOON = 10;
+    const DEFAULT_MAX_FAILED_LOGIN_ATTEMPTS      = 9;
+    const MAX_FAILED_LOGIN_ATTEMPTS_TIME_PERIOD  = 5;    // minutes
+    const DEFAULT_ACCOUNT_LOCKOUT_TIME           = 1800; // seconds
+    const PASSWORD_HISTORY_NUM                   = 20;
 
     const DATE_FORMAT = 'm/d/Y';
     const DATE_FORMAT_JS = 'mm/dd/yyyy';

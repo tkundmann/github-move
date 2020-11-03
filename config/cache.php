@@ -41,7 +41,7 @@ return [
         'database' => [
             'driver' => 'database',
             'table' => 'cache',
-            'connection' => null,
+            'connection' => 'mysql',
         ],
 
         'file' => [
@@ -78,6 +78,6 @@ return [
     |
     */
 
-    'prefix' => 'laravel',
+    'prefix' => 'sipiar|',
 
 ];

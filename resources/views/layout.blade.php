@@ -46,6 +46,7 @@
         <link href="{{ secure_asset("/css/header.css") }}" rel="stylesheet">
         <link href="{{ secure_asset("/css/menu.css") }}" rel="stylesheet">
         <link href="{{ secure_asset("/css/accordion.css") }}" rel="stylesheet">
+        <link href="{{ secure_asset("/css/accounts.css") }}" rel="stylesheet">
         <link href="{{ secure_asset("/css/pickup_request.css") }}" rel="stylesheet">
         <link href="{{ secure_asset("/css/admin_reports.css") }}" rel="stylesheet">
         <link href="{{ secure_asset("/css/admin_create_file.css") }}" rel="stylesheet">
