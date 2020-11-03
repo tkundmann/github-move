@@ -215,7 +215,7 @@ class PasswordController extends ContextController
      *
      * @return array
      */
-    protected function getResetValidationRules( int $passwordRequiredLength)
+    protected function getResetValidationRules($passwordRequiredLength)
     {
         return [
             'token'    => 'required',
