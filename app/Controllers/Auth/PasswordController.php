@@ -240,6 +240,11 @@ class PasswordController extends ContextController
             'remember_token' => Str::random(60),
         ])->save();
 
+        if ($user->passwordSecurity) {
+            $user->passwordSecurity->password_updated_at = Carbon::now();
+            $user->passwordSecurity->save();
+        }
+
         $passwordHistory = PasswordHistory::create([
             'user_id' => $user->id,
             'password' => $passwordHash
