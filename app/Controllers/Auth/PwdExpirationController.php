@@ -109,6 +109,7 @@ class PwdExpirationController extends ContextController
 
         $passwordHash = bcrypt($credentials['new_password']);
         $user->password = $passwordHash;
+        $user->confirmed = true;
         $user->save();
 
         $user->passwordSecurity->password_updated_at = Carbon::now();
