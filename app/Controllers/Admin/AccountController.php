@@ -189,7 +189,19 @@ class AccountController extends ContextController
         $vendorClients = $site ? $this->getVendorClients($site) : null;
         $pages = $site ? $this->getPages($site) : null;
 
-        return $this->createView($lotNumbers, $vendorClients, $pages);
+        $applicablePasswordLengthClass = '';
+        $role = old('roles');
+        if ($role) {
+            if (in_array($role, [Role::SUPERUSER, Role::ADMIN, Role::SUPERADMIN], true)) {
+                $applicablePasswordLengthClass = 'admin-min-chars-apply';
+            }
+            else {
+                $applicablePasswordLengthClass = 'default-min-chars-apply';
+            }
+        }
+
+
+        return $this->createView($lotNumbers, $vendorClients, $pages, $applicablePasswordLengthClass);
     }
 
     protected function createView($lotNumbers = [], $vendorClients = [], $pages = [], $applicablePasswordLengthClass = '')
