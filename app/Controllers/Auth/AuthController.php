@@ -129,7 +129,7 @@ class AuthController extends ContextController
             $now = Carbon::now();
             $daysTilExpiration = $password_expiry_at->diffInDays($now);
 
-            if($daysTilExpiration == 0){
+            if($daysTilExpiration <= 0){
                 $request->session()->put('password_expired_id',$user->id);
                 auth()->logout();
                 return redirect()->route('password.expiration')->with('message', Lang::get('auth.password.change_expired_password'));
