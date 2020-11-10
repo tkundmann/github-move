@@ -127,7 +127,7 @@ class AuthController extends ContextController
             $password_expiry_days = $user->passwordSecurity->password_expiry_days;
             $password_expiry_at = Carbon::parse($password_updated_at)->addDays($password_expiry_days);
             $now = Carbon::now();
-            $daysTilExpiration = $password_expiry_at->diffInDays($now);
+            $daysTilExpiration = $password_expiry_at->diffInDays($now, false);
 
             if($daysTilExpiration <= 0){
                 $request->session()->put('password_expired_id',$user->id);
