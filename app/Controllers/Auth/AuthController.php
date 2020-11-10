@@ -134,7 +134,7 @@ class AuthController extends ContextController
                 auth()->logout();
                 return redirect()->route('password.expiration')->with('message', Lang::get('auth.password.change_expired_password'));
             }
-            elseif ($daysTilExpiration <= Constants::NUM_DAYS_NOTFIY_PASSWORD_EXPIRING_SOON) {
+            elseif ($daysTilExpiration > 0 && $daysTilExpiration <= Constants::NUM_DAYS_NOTFIY_PASSWORD_EXPIRING_SOON) {
                 return redirect()->route('password.change')->with('message', Lang::get('auth.password.password_expiring_in_x_days', ['daysTilExpiration' => $daysTilExpiration]))->with('expiringSoon', 'yes');
             }
         }
