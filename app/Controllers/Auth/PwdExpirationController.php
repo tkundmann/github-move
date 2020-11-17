@@ -9,6 +9,7 @@ use App\Data\Constants;
 use App\Data\Models\Role;
 use App\Data\Models\User;
 use App\Data\Models\PasswordHistory;
+use App\Data\Models\Site;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;

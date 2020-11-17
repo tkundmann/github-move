@@ -7,6 +7,7 @@ use App\Data\Constants;
 use App\Data\Models\Role;
 use App\Data\Models\User;
 use App\Data\Models\PasswordSecurity;
+use App\Data\Models\Site;
 use Carbon\Carbon;
 use App\Helpers\ContextHelper;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;

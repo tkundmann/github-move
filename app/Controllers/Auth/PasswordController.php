@@ -5,6 +5,7 @@ namespace App\Controllers\Auth;
 use App\Controllers\ContextController;
 use App\Extensions\Auth\PasswordBroker;
 use App\Data\Constants;
+use App\Data\Models\Site;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
