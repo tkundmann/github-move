@@ -246,7 +246,7 @@ class PasswordController extends ContextController
         if ($user->passwordSecurity) {
             $user->passwordSecurity->password_updated_at = Carbon::now();
             if ($site = Site::find($user->siteId)) {
-                $user->password_expiry_days = $site->passwordExpiryDays;
+                $user->passwordSecurity->password_expiry_days = $site->passwordExpiryDays;
             }
             $user->passwordSecurity->save();
         }
