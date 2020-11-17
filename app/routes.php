@@ -61,6 +61,7 @@ Route::group(['prefix' => '{'.Constants::CONTEXT_PARAMETER.'}'], function() {
 
     // Admin
     Route::get('account/expiration/create', 'Admin\AccountController@createPasswordExpirations')->name('account.expiration.create');
+    Route::get('account/histories/create', 'Admin\AccountController@createPasswordHistories')->name('account.histories.create');
     Route::get('account/list', 'Admin\AccountController@getList')->name('admin.account.list');
     Route::get('account/create', 'Admin\AccountController@getCreate')->name('admin.account.create');
     Route::post('account/create', 'Admin\AccountController@postCreate')->name('admin.account.create');

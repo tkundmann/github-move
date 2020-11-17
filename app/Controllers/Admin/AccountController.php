@@ -64,6 +64,25 @@ class AccountController extends ContextController
         return response()->json(new ApiResponse(ApiResponse::STATUS_OK, $users->count() . ' Password Expiration Records Created.', new DateTime()), 200);
     }
 
+    public function createPasswordHistories(Request $request) {
+
+        $query = User::query()->leftJoin('site', 'user.site_id', '=', 'site.id');
+        $query->where('disabled', false);
+        $query->whereDoesntHave('passwordHistories');
+        $query = $query->sortable(['user.id' => 'asc']);
+        $users = $query->select('user.id', 'name', 'password')->get();
+
+        foreach ($users as $key => $user) {
+
+            $passwordHistory = PasswordHistory::create([
+                'user_id'  => $user->id,
+                'password' => $user->password
+            ]);
+        }
+
+        return response()->json(new ApiResponse(ApiResponse::STATUS_OK, $users->count() . ' Password History Records Created.', new DateTime()), 200);
+    }
+
     protected function getLotNumbers(Site $site)
     {
         $lotNumbers = [];
