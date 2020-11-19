@@ -8,6 +8,7 @@ use App\Data\Models\Role;
 use App\Data\Models\User;
 use App\Data\Models\PasswordSecurity;
 use App\Data\Models\Site;
+use App\Traits\Throttle;
 use Carbon\Carbon;
 use App\Helpers\ContextHelper;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
@@ -36,7 +37,9 @@ class AuthController extends ContextController
     protected $lockoutTime = Constants::DEFAULT_ACCOUNT_LOCKOUT_TIME;
     protected $decayMinutes = Constants::MAX_FAILED_LOGIN_ATTEMPTS_TIME_PERIOD;
 
-    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+    use AuthenticatesAndRegistersUsers, ThrottlesLogins, Throttle {
+        Throttle::getThrottleKey insteadof ThrottlesLogins;
+    }
 
     /**
      * Create a new controller instance.
@@ -162,29 +165,6 @@ class AuthController extends ContextController
             return redirect('/');
         }
         return redirect()->intended($this->redirectPath());
-    }
-
-    protected function getThrottleKey(Request $request)
-    {
-        $key = mb_strtolower($this->context . '|' . $request->input($this->loginUsername()));
-        $ipAddress = $this->getIp();
-        if ($ipAddress) {
-            $key .= '|' . $ipAddress;
-        }
-        return $key;
-    }
-
-    public static function getIp(){
-        foreach (array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR') as $key){
-            if (array_key_exists($key, $_SERVER) === true){
-                foreach (explode(',', $_SERVER[$key]) as $ip){
-                    $ip = trim($ip); // just to be safe
-                    if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false){
-                        return $ip;
-                    }
-                }
-            }
-        }
     }
 
     /**

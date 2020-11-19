@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Middleware\AddIpAddress;
 use App\Middleware\Authenticate;
 use App\Middleware\EncryptCookies;
 use App\Middleware\CheckUserContextPermissions;
@@ -40,6 +41,7 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'web' => [
+            AddIpAddress::class,
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
             StartSession::class,

@@ -6,8 +6,12 @@ use App\Controllers\ContextController;
 use App\Extensions\Auth\PasswordBroker;
 use App\Data\Constants;
 use App\Data\Models\Site;
+use App\Traits\Throttle;
+use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
@@ -31,7 +35,12 @@ class PasswordController extends ContextController
     |
     */
 
-    use ResetsPasswords;
+    use AuthenticatesAndRegistersUsers, Throttle, ThrottlesLogins, ResetsPasswords {
+        Throttle::getThrottleKey insteadof ThrottlesLogins;
+        ResetsPasswords::guestMiddleware insteadof AuthenticatesAndRegistersUsers;
+        ResetsPasswords::getGuard insteadof AuthenticatesAndRegistersUsers;
+        ResetsPasswords::redirectPath insteadof AuthenticatesAndRegistersUsers;
+    }
 
     protected $linkRequestView = 'auth.resetPasswordRequest';
     protected $resetView = 'auth.resetPassword';
@@ -119,6 +128,14 @@ class PasswordController extends ContextController
      */
     public function sendResetLinkEmail(Request $request)
     {
+        $throttles = $this->isUsingThrottlesLoginsTrait();
+        $throttleKey = $this->getThrottleKey($request);
+        $lockedOut = (Cache::has($throttleKey.':lockout')) ? true : false;
+        if ($throttles && $lockedOut) {
+            $this->fireLockoutEvent($request);
+            return $this->sendLockoutResponse($request);
+        }
+
         $this->validateSendResetLinkEmail($request);
 
         $broker = $this->getBroker();
@@ -256,4 +273,37 @@ class PasswordController extends ContextController
             'password' => $passwordHash
         ]);
     }
+
+    /**
+     * Redirect the user after determining they are locked out.
+     *
+     * @param  \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function sendLockoutResponse(Request $request)
+    {
+        $seconds = $this->secondsRemainingOnLockout($request);
+
+        $minutes = ceil($seconds / 60);
+
+        return redirect()->route('login')
+            ->withInput($request->only($this->loginUsername(), 'remember'))
+            ->withErrors([
+                'lockout' => $this->getLockoutErrorMessage($minutes),
+            ]);
+    }
+
+    /**
+     * Get the login lockout error message.
+     *
+     * @param  int $minutes
+     *
+     * @return string
+     */
+    protected function getLockoutErrorMessage($minutes)
+    {
+        return Lang::has('auth.password.reset_throttle_minutes') ? Lang::get('auth.password.reset_throttle_minutes', ['minutes' => $minutes]) : 'Your account has been locked out. Password resetting not allowed for locked accounts. Please try again in ' . $minutes . ' minutes.';
+    }
+
 }
