@@ -39,6 +39,7 @@ return [
         'reset'                       => 'Your password has been reset!',
         'reset_link_sent'             => 'We have e-mailed your password reset link!',
         'reset_password'              => 'Reset password',
+        'reset_throttle_minutes'      => 'Your account is locked due to too many failed login attempts.  Password resetting disabled. Please try again in :minutes minutes.',
         'email_address'               => 'E-mail address',
         'send_password_reset_link'    => 'Send password reset link',
         'password'                    => 'Password',

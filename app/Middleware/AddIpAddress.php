@@ -5,7 +5,6 @@ namespace App\Middleware;
 use App\Helpers\ContextHelper;
 use App\Traits\Throttle;
 use Closure;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AddIpAddress
 {
@@ -17,17 +16,16 @@ class AddIpAddress
 	 *
 	 * @param  \Illuminate\Http\Request $request
 	 * @param  \Closure                 $next
-	 * @param                           $context
 	 *
 	 * @return mixed
-	 * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
 	 */
-	public function handle($request, Closure $next, $context)
+	public function handle($request, Closure $next)
 	{
-
 		$request->ip = $this->getIp();
+		if (!isset($request->ip)) {
+			$request->ip = $request->ip();
+		}
 		return $next($request);
-
 	}
 
 	/**
