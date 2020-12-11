@@ -108,6 +108,11 @@
     RewriteCond %{REQUEST_URI} ^/principal/page/pickuprequest$  [NC]
     RewriteRule ^.*$  "/principal/pickup-request"               [R,NE,L]
 
+    # Providence St. Joseph Health Pickup Request Form Redirects
+    RewriteCond %{REQUEST_URI} ^/providencestjoseph/pickuprequest$       [OR,NC]
+    RewriteCond %{REQUEST_URI} ^/providencestjoseph/page/pickuprequest$  [NC]
+    RewriteRule ^.*$  "/providencestjoseph/pickup-request"               [R,NE,L]
+
     # Quadbridge Pickup Request Form Redirects
     RewriteCond %{REQUEST_URI} ^/quadbridge/pickuprequest$      [OR,NC]
     RewriteCond %{REQUEST_URI} ^/quadbridge/page/pickuprequest$ [NC]
