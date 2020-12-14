@@ -60,7 +60,7 @@ class ProvidenceStJosephPickupRequest extends Seeder
 				'assets_need_packaging'
 			),
 			'email_from' => 'sarprovidence@sipiar.com',
-			'email_bcc' => 'sarprovidence@sipiar.com;tony@lynch2.com;kathleen.finley@providence.org',
+			'email_bcc' => 'sarprovidence@sipiar.com;tony@lynch2.com;kathleen.finley@providence.org;sherie.drew@providence.org',
 			'email_additional_bcc' =>
 			array (
 			),
