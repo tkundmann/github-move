@@ -28,6 +28,11 @@
     RewriteCond %{HTTP:X-Forwarded-Proto} !https
     RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1          [R=301,L]
 
+    # Acxiom LLC Pickup Request Form Redirects
+    RewriteCond %{REQUEST_URI} ^/acxiomllc/pickuprequest$          [OR,NC]
+    RewriteCond %{REQUEST_URI} ^/acxiomllc/page/pickuprequest$     [NC]
+    RewriteRule ^.*$  "/acxiomllc/pickup-request"                  [R,NE,L]
+
     # Airgas Pickup Request Form Redirects
     RewriteCond %{REQUEST_URI} ^/airgas/pickuprequest$          [OR,NC]
     RewriteCond %{REQUEST_URI} ^/airgas/page/pickuprequest$     [NC]
@@ -47,6 +52,11 @@
     RewriteCond %{REQUEST_URI} ^/anaplan/pickuprequest$         [OR,NC]
     RewriteCond %{REQUEST_URI} ^/anaplan/page/pickuprequest$    [NC]
     RewriteRule ^.*$  "/anaplan/pickup-request"                 [R,NE,L]
+
+    # Arctic Wolf Networks Pickup Request Form Redirects
+    RewriteCond %{REQUEST_URI} ^/arcticwolf/pickuprequest$          [OR,NC]
+    RewriteCond %{REQUEST_URI} ^/arcticwolf/page/pickuprequest$     [NC]
+    RewriteRule ^.*$  "/arcticwolf/pickup-request"                  [R,NE,L]
 
     # Centene Pickup Request Form Redirects
     RewriteCond %{REQUEST_URI} ^/centene/pickuprequest$         [OR,NC]
