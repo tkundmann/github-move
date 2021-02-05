@@ -112,7 +112,7 @@ class FATCOPickupRequest extends Seeder
 				15 => 'assets_need_packaging',
 			),
 			'email_from' => 'SARfatco@sipiar.com',
-			'email_bcc' => 'SARfatco@sipiar.com;tony@lynch2.com',
+			'email_bcc' => 'FAHQ-DL-IT-OPS-DSAssetManagement@firstam.com,SARfatco@sipiar.com;tony@lynch2.com',
 			'email_additional_bcc' =>
 			array (
 			),
