@@ -328,7 +328,7 @@ class PickupRequestController extends ContextController
                     }
                 }
             }
-            if ($additionalBccMatch) {
+            if ($additionalBccMatch && $additionalBcc['emails'] != "") {
                 $emailsBcc = array_merge($emailsBcc, explode(';', $additionalBcc['emails']));
             }
         }
