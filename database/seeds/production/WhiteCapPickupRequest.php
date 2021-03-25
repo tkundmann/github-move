@@ -60,7 +60,7 @@ class WhiteCapPickupRequest extends Seeder
 				'assets_need_packaging'
 			),
 			'email_from' => 'sarwhitecap@sipiar.com',
-			'email_bcc' => 'sarwhitecap@sipiar.com;tony@lynch2.com',
+			'email_bcc' => 'sarwhitecap@sipiar.com;tony@lynch2.com;jamie.michalsen@insight.com;dana.smith@insight.com;luke.joyce@insight.com',
 			'email_additional_bcc' =>
 			array (
 			),
