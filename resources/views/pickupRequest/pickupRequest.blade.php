@@ -18,32 +18,32 @@
                         @endif
 
                         <div class="container-fluid margin-bottom-lg">
-                                <div class="row">
+                            <div class="row">
                                 <p class="pickup-request-faqs-link">Do you have questions about the Box Program Pickup Request process?  <a class="js-show-pickup-request-faqs show-pickup-request-faqs">Click here</a> to <span class="js-view-faqs">view</span> <span class="js-hide-faqs" style="display:none;">hide</span> the FAQs.</p>
                                 <div class="js-pickup-request-faqs pickup-request-faqs contained-item" id="faqs" style="display:none;">
-                                        <div class="faq-header">
-                                            <h2 class="section-header">@lang('pickup_request.faqs.title')</h2>
-                                        </div>
-                                        <div class="faq-items">
-                                            <div class="accordion faq-accordion">
-                                                <div class="js-accordion" id="js-accordion">
-                                                    @for ($i = 1; $i <= 5; $i++)
-                                                        <div class="accordion-item">
-                                                            <div class="accordion-title" title="Click to display answer">
-                                                                <h2 id="question">@lang('pickup_request.faqs.question' . $i)</h2>
-                                                                <div class="toggle"></div>
-                                                            </div>
-                                                            <div class="accordion-content" style="display: none;">
-                                                                <p id="answer">@lang('pickup_request.faqs.answer' . $i)</p>
-                                                            </div>
+                                    <div class="faq-header">
+                                        <h2 class="section-header">@lang('pickup_request.faqs.title')</h2>
+                                    </div>
+                                    <div class="faq-items">
+                                        <div class="accordion faq-accordion">
+                                            <div class="js-accordion" id="js-accordion">
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    <div class="accordion-item">
+                                                        <div class="accordion-title" title="Click to display answer">
+                                                            <h2 id="question">@lang('pickup_request.faqs.question' . $i)</h2>
+                                                            <div class="toggle"></div>
                                                         </div>
-                                                    @endfor
-                                                </div>
+                                                        <div class="accordion-content" style="display: none;">
+                                                            <p id="answer">@lang('pickup_request.faqs.answer' . $i)</p>
+                                                        </div>
+                                                    </div>
+                                                @endfor
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
                         <form id="pickupRequest" class="form-horizontal" method="POST" enctype="multipart/form-data"
                               action="{{ route('pickupRequest', ['token' => Input::get('token')]) }}">
@@ -1157,6 +1157,29 @@
                         $("input[name=units_located_near_dock][value=" + address.units_located_near_dock + "]").prop('checked', 'checked');
                     }
                 });
+            });
+
+            $('select[name="company_division"]').on('change', function (event) {
+                var companyDivision = $(this).val();
+
+                if (companyDivision !== 'SITE (EBAYOPS)') {
+                    // The reference_number (RITM Number) is not required in this case.
+                    // Update RITM Number field and label UI, accordingly.
+                    $applicableLabel = $('label[for="reference_number"]');
+                    $applicableLabel.removeClass('colon-after-required');
+
+                    $parentContainer = $applicableLabel.closest('.form-group');
+                    if ($parentContainer.hasClass('has-error')) {
+                        $parentContainer.removeClass('has-error');
+                        $parentContainer.find('small.text-danger').hide();
+                    }
+                }
+                else {
+                    if (! $('label[for="reference_number"]').hasClass('colon-after-required')) {
+                        $('label[for="reference_number"]').addClass('colon-after-required');
+                    }
+                }
+
             });
         });
 

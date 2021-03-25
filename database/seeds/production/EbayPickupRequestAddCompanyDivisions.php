@@ -49,6 +49,7 @@ class EbayPickupRequestAddCompanyDivisions extends Seeder
 				'contact_city',
 				'contact_state',
 				'contact_zip',
+				'company_division',
 				'contact_phone_number',
 				'contact_email_address',
 				'reference_number',

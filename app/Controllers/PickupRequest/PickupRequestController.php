@@ -41,6 +41,25 @@ class PickupRequestController extends ContextController
         }
 
         $this->pickupRequestData = $this->site->getFeature(Feature::HAS_PICKUP_REQUEST)->pivot->data;
+
+        $finalRequiredFields = array();
+        foreach ($this->pickupRequestData['required_fields'] as $index => $field) {
+
+            if ($this->site->code == 'ebay' && $field === 'reference_number') {
+                if (
+                    (!Input::get('company_division') && !old('company_division'))
+                    ||
+                    (Input::get('company_division') && Input::get('company_division') == 'SITE (EBAYOPS)')
+                    ||
+                    (old('company_division') && old('company_division') == 'SITE (EBAYOPS)')
+                ) {
+                    $finalRequiredFields[] = $field;
+                }
+            } else {
+                $finalRequiredFields[] = $field;
+            }
+        }
+        $this->pickupRequestData['required_fields'] = $finalRequiredFields;
     }
 
     public function getPickupRequestLogin()
@@ -87,6 +106,7 @@ class PickupRequestController extends ContextController
             natcasesort($addressBook);
             }
         }
+
         return view('pickupRequest.pickupRequest', [
             'data'          => $this->pickupRequestData,
             'addressBook'   => $addressBook,
