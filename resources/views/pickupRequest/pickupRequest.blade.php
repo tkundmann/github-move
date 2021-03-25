@@ -1159,28 +1159,30 @@
                 });
             });
 
-            $('select[name="company_division"]').on('change', function (event) {
-                var companyDivision = $(this).val();
+            @if($site->code == 'ebay')
+                $('select[name="company_division"]').on('change', function (event) {
+                    var companyDivision = $(this).val();
 
-                if (companyDivision !== 'SITE (EBAYOPS)') {
-                    // The reference_number (RITM Number) is not required in this case.
-                    // Update RITM Number field and label UI, accordingly.
-                    $applicableLabel = $('label[for="reference_number"]');
-                    $applicableLabel.removeClass('colon-after-required');
+                    if (companyDivision !== 'SITE (EBAYOPS)') {
+                        // The reference_number (RITM Number) is not required in this case.
+                        // Update RITM Number field and label UI, accordingly.
+                        $applicableLabel = $('label[for="reference_number"]');
+                        $applicableLabel.removeClass('colon-after-required');
 
-                    $parentContainer = $applicableLabel.closest('.form-group');
-                    if ($parentContainer.hasClass('has-error')) {
-                        $parentContainer.removeClass('has-error');
-                        $parentContainer.find('small.text-danger').hide();
+                        $parentContainer = $applicableLabel.closest('.form-group');
+                        if ($parentContainer.hasClass('has-error')) {
+                            $parentContainer.removeClass('has-error');
+                            $parentContainer.find('small.text-danger').hide();
+                        }
                     }
-                }
-                else {
-                    if (! $('label[for="reference_number"]').hasClass('colon-after-required')) {
-                        $('label[for="reference_number"]').addClass('colon-after-required');
+                    else {
+                        if (! $('label[for="reference_number"]').hasClass('colon-after-required')) {
+                            $('label[for="reference_number"]').addClass('colon-after-required');
+                        }
                     }
-                }
 
-            });
+                });
+            @endif
         });
 
         // *******************************************************
