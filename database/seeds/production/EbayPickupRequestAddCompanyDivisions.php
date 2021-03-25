@@ -20,6 +20,8 @@ class EbayPickupRequestAddCompanyDivisions extends Seeder
 
 		$site = Site::where('code', '=', 'ebay')->first();
 
+		$featureHasPickupRequest = Feature::where('name', '=', Feature::HAS_PICKUP_REQUEST)->first();
+
 		$pickupRequestConfiguration = array (
 			'password' => Hash::make('ebay04052014btr'),
 			'title' => 'Sipi Asset Recovery/Ebay Pickup Request',

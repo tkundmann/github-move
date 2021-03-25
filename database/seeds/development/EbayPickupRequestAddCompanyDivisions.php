@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeds\Production;
+namespace Database\Seeds\Development;
 
 use App\Data\Models\Feature;
 use App\Data\Models\Site;
@@ -19,6 +19,8 @@ class EbayPickupRequestAddCompanyDivisions extends Seeder
 	public function run() {
 
 		$site = Site::where('code', '=', 'ebay')->first();
+
+		$featureHasPickupRequest = Feature::where('name', '=', Feature::HAS_PICKUP_REQUEST)->first();
 
 		$pickupRequestConfiguration = array (
 			'password' => Hash::make('ebay04052014btr'),
