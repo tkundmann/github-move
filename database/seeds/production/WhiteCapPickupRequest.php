@@ -25,7 +25,7 @@ class WhiteCapPickupRequest extends Seeder
 		$site->features()->attach([$featureHasPickupRequest->id]);
 
 		$pickupRequestConfiguration = array (
-			'password' => Hash::make('whcp032221sar!'),
+			'password' => Hash::make('whcp032221ins!'),
 			'title' => 'Sipi Asset Recovery/White Cap Pickup Request',
 			'use_company_division' => false,
 			'use_contact_section_title' => true,
