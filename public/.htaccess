@@ -58,6 +58,11 @@
     RewriteCond %{REQUEST_URI} ^/arcticwolf/page/pickuprequest$     [NC]
     RewriteRule ^.*$  "/arcticwolf/pickup-request"                  [R,NE,L]
 
+    # Brookdale Senior Living Pickup Request Form Redirects
+    RewriteCond %{REQUEST_URI} ^/brookdale/pickuprequest$         [OR,NC]
+    RewriteCond %{REQUEST_URI} ^/brookdale/page/pickuprequest$    [NC]
+    RewriteRule ^.*$  "/brookdale/pickup-request"                 [R,NE,L]
+
     # Centene Pickup Request Form Redirects
     RewriteCond %{REQUEST_URI} ^/centene/pickuprequest$         [OR,NC]
     RewriteCond %{REQUEST_URI} ^/centene/page/pickuprequest$    [NC]
