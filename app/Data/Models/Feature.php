@@ -26,6 +26,7 @@ class Feature extends Model
     const LOT_NUMBER_PREFIX_ACCESS_RESTRICTED       = 'LOT_NUMBER_PREFIX_ACCESS_RESTRICTED';
 
     const HIDE_TITLE                                = 'HIDE_TITLE';
+    const CENTER_LOGO                               = 'CENTER_LOGO';
 
     const HAS_PAGES                                 = 'HAS_PAGES';
     const HAS_SETTLEMENTS                           = 'HAS_SETTLEMENTS';

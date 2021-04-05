@@ -2,7 +2,7 @@
 <div class="header">
     <div class="container">
     @if (isset($site))
-        <a class="logo" href="{{ route('main.home') }}">
+        <a class="logo{{ ($site->hasFeature(Feature::HIDE_TITLE) && $site->hasFeature(Feature::CENTER_LOGO)) ? ' centered' : ''  }}" href="{{ route('main.home') }}">
             <img class="img-responsive {{ $site->code }}" src="{{ secure_asset($site->logoUrl) }}">
         </a>
         @if (!$site->hasFeature(Feature::HIDE_TITLE))
