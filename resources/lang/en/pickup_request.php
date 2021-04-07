@@ -14,6 +14,7 @@ return [
         'title'                    => ':title Login',
         'info'                     => 'Please use the form below to gain access to the Pickup Request Form.',
         'password'                 => 'Password',
+        'access_code'              => 'Access Code',
         'login'                    => 'Login'
     ],
 

@@ -20,7 +20,14 @@
                         @endif
 
                         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label colon-after">@lang('pickup_request.login.password')</label>
+
+                            <label for="password" class="col-md-4 control-label colon-after">
+                                @if ($site->code == 'whitecap')
+                                    @lang('pickup_request.login.access_code')
+                                @else
+                                    @lang('pickup_request.login.password')
+                                @endif
+                            </label>
 
                             <div class="col-md-6">
                                 <input id="password" type="password" class="form-control" name="password">

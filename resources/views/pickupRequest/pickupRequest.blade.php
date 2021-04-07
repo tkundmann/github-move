@@ -41,6 +41,9 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @if ($site->code == 'whitecap')
+                                        <p class="margin-top-lg"><a href="https://belmont-sipi-assets.s3.amazonaws.com/whitecap/pickup_request/downloadable_files/White_Cap_Equipment_Return_FAQs.docx" target="_blank">Click here</a> to view additional White Cap Equipment Return Request FAQs.</p>
+                                    @endif
                                 </div>
                             </div>
                         </div>
