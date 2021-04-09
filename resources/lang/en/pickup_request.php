@@ -60,7 +60,8 @@ return [
     'phone_number'                 => 'Phone Number',
     'cell_number'                  => 'Cell Number',
     'email_address'                => 'Email Address',
-    'additional_request_recipient_email_address' => 'Additional Request Recipient Email Address',
+    'additional_request_recipient_email_address' => 'Additional Request Recipient Email Addresses',
+    'additional_request_recipient_emails_note' => 'If mulitple emails, separate by comma or carriage return',
 
     'reference_number_note'        => 'If you do not have a :reference_number_label, please enter "N/A" in this field.',
 

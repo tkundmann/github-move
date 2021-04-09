@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Data\Models\Page;
 use App\Data\Models\User;
+use App\Data\Models\Role;
 use Illuminate\Support\ServiceProvider;
 use Validator;
 
@@ -34,6 +35,11 @@ class AppServiceProvider extends ServiceProvider
                 $query = $query->where('id', '!=', $parameters[2]);
             }
 
+            $role = Role::SUPERUSER;
+            $query->orWhereHas('roles', function ($subquery) use ($role) {
+                $subquery->where('name', $role);
+            });
+
             // if no records found, it means that provided email is unique within given context (site = value or site = null)
             return $query->count() == 0;
         });
@@ -55,6 +61,23 @@ class AppServiceProvider extends ServiceProvider
 
             // if no records found, it means that provided code is unique within given context (site = value or site = null)
             return $query->count() == 0;
+        });
+
+        Validator::extend("emails", function($attribute, $value, $parameters) {
+            // $parameters[0] - email list string delimiter
+            $rules = [
+                'email' => 'email',
+            ];
+            foreach ($value as $email) {
+                $data = [
+                    'email' => trim($email)
+                ];
+                $validator = Validator::make($data, $rules);
+                if ($validator->fails()) {
+                    return false;
+                }
+            }
+            return true;
         });
     }
 

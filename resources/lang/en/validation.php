@@ -80,9 +80,10 @@ return [
     'timezone'             => 'The :attribute must be a valid zone.',
     'unique'               => 'The :attribute has already been taken.',
     'url'                  => 'The :attribute format is invalid.',
-    
+
     'unique_email_context' => 'Email has to be unique within context (assigned Site or Admin).',
-    'unique_page_code' => 'Page code has to be unique for Site.',
+    'unique_page_code'     => 'Page code has to be unique for Site.',
+    'emails'               => 'All emails provided must be in a valid format.',
 
     /*
     |--------------------------------------------------------------------------
