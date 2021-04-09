@@ -5,8 +5,8 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">@lang('asset.search_result.assets_search_results')
-                        - {{ $assets->total() }} {{ trans_choice('asset.search_result.record', 10) }} @lang('common.found')</div>
+                    <div class="panel-heading"><h1>@lang('asset.search_result.assets_search_results')
+                        - {{ $assets->total() }} {{ trans_choice('asset.search_result.record', 10) }} @lang('common.found')</h1></div>
                     <div class="panel-body">
                         <p>@lang('asset.search_result.listed_below')</p>
                         <p>@lang('asset.search_result.data_can_be_stored_1')
@@ -40,7 +40,7 @@
 
     @if ($assets->count() > 0)
     <div class="tableScrollableContainer">
-        <table id="assetSearchTable" class="table table-striped table-bordered withHover">
+        <table id="assetSearchTable" class="table table-striped table-bordered withHover js-search-results-table">
             <thead>
             <tr>
                 @foreach($fields as $field => $label)
@@ -71,21 +71,21 @@
             <tbody>
             <?php $isWinthrop = $site->hasFeature(Feature::IS_WINTHROP) ?>
             @foreach ($assets as $asset)
-                <tr>
+                <tr tabindex="0" class="pointer js-load-details" data-details-url="{{ route('asset.details', ['id' => $asset->id ]) }}">
                     @foreach($fields as $field => $label)
                         @if ($isWinthrop && strtoupper($asset->$field) === 'N/A')
-                            <td class="pointer" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">
+                            <td class="pointer">
                                 {{ ' ' }}
                             </td>
                         @elseif (starts_with($field, 'hardcoded-'))
-                            <td class="pointer" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">
+                            <td class="pointer">
                                 {{ str_replace('_', ' ', str_replace('hardcoded-', '', $field)) }}
                             </td>
                         @elseif(in_array($field, array_merge($fieldCategories['exact'], $fieldCategories['string_like'], $fieldCategories['string_multi'], $fieldCategories['custom'], $fieldCategories['int_less_greater'], $fieldCategories['float_less_greater']), true))
                             @if(($field === 'cert_of_data_wipe_num') || ($field === 'cert_of_destruction_num'))
                                 <td title="{{ $asset->$field }}">
                             @else
-                                <td class="pointer" title="{{ $asset->$field }}" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">
+                                <td class="pointer" title="{{ $asset->$field }}">
                                     @endif
                                     @if ($asset->$field)
                                         @if (in_array($field, ['net_settlement', 'settlement_amount'], true))
@@ -102,7 +102,7 @@
                                                             <?php $certOfDataWipe = ($certOfDataWipePage && isset($asset->shipment)) ? $asset->shipment->files->where('page_id', $certOfDataWipePage->id)->first() : null; ?>
                                                             @if ($certOfDataWipe)
                                                                 @if ($site->hasFeature(Feature::CERTIFICATE_OF_DATA_WIPE_NUMBER_AS_FILE))
-                                                                    <a href="{{ $certOfDataWipe->url }}" target="_blank">{{ str_limit($asset->certOfDataWipeNum, $limit) }} ({{ str_limit($certOfDataWipe->filename, $limit) }})</a>
+                                                                    <a class="js-dont-load-details" href="{{ $certOfDataWipe->url }}" target="_blank">{{ str_limit($asset->certOfDataWipeNum, $limit) }} ({{ str_limit($certOfDataWipe->filename, $limit) }})</a>
                                                                 @else
                                                                     <span>{{ str_limit($asset->certOfDataWipeNum, $limit) }} ({{ str_limit($certOfDataWipe->filename, $limit) }})</span>
                                                                 @endif
@@ -123,7 +123,7 @@
                                                         <?php $certOfDataWipe = ($certOfDataWipePage && isset($asset->shipment)) ? $asset->shipment->files->where('page_id', $certOfDataWipePage->id)->first() : null; ?>
                                                         @if ($certOfDataWipe)
                                                             @if ($site->hasFeature(Feature::CERTIFICATE_OF_DATA_WIPE_NUMBER_AS_FILE))
-                                                                <a href="{{ $certOfDataWipe->url }}" target="_blank">{{ str_limit($asset->certOfDataWipeNum, $limit) }} ({{ str_limit($certOfDataWipe->filename, $limit) }})</a>
+                                                                <a class="js-dont-load-details" href="{{ $certOfDataWipe->url }}" target="_blank">{{ str_limit($asset->certOfDataWipeNum, $limit) }} ({{ str_limit($certOfDataWipe->filename, $limit) }})</a>
                                                             @else
                                                                 <span>{{ str_limit($asset->certOfDataWipeNum, $limit) }} ({{ str_limit($certOfDataWipe->filename, $limit) }})</span>
                                                             @endif
@@ -147,7 +147,7 @@
                                                             <?php $certOfDestruction = ($certOfDestructionPage && isset($asset->shipment)) ? $asset->shipment->files->where('page_id', $certOfDestructionPage->id)->first() : null; ?>
                                                             @if ($certOfDestruction)
                                                                 @if ($site->hasFeature(Feature::CERTIFICATE_OF_DESTRUCTION_NUMBER_AS_FILE))
-                                                                    <a href="{{ $certOfDestruction->url }}" target="_blank">{{ str_limit($asset->certOfDestructionNum, $limit) }} ({{ str_limit($certOfDestruction->filename, $limit) }})</a>
+                                                                    <a class="js-dont-load-details" href="{{ $certOfDestruction->url }}" target="_blank">{{ str_limit($asset->certOfDestructionNum, $limit) }} ({{ str_limit($certOfDestruction->filename, $limit) }})</a>
                                                                 @else
                                                                     <span>{{ str_limit($asset->certOfDestructionNum, $limit) }} ({{ str_limit($certOfDestruction->filename, $limit) }})</span>
                                                                 @endif
@@ -168,7 +168,7 @@
                                                         <?php $certOfDestruction = ($certOfDestructionPage && isset($asset->shipment)) ? $asset->shipment->files->where('page_id', $certOfDestructionPage->id)->first() : null; ?>
                                                         @if ($certOfDestruction)
                                                             @if ($site->hasFeature(Feature::CERTIFICATE_OF_DESTRUCTION_NUMBER_AS_FILE))
-                                                                <a href="{{ $certOfDestruction->url }}" target="_blank">{{ str_limit($asset->certOfDestructionNum, $limit) }} ({{ str_limit($certOfDestruction->filename, $limit) }})</a>
+                                                                <a class="js-dont-load-details" href="{{ $certOfDestruction->url }}" target="_blank">{{ str_limit($asset->certOfDestructionNum, $limit) }} ({{ str_limit($certOfDestruction->filename, $limit) }})</a>
                                                             @else
                                                                 <span>{{ str_limit($asset->certOfDestructionNum, $limit) }} ({{ str_limit($certOfDestruction->filename, $limit) }})</span>
                                                             @endif
@@ -200,10 +200,10 @@
                                 </td>
                             @endif
                             @if(in_array($field, $fieldCategories['date_from_to'], true))
-                                <td class="pointer" title="{{ $asset->$field }}" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">{{ isset($asset->$field) ? $asset->$field->format(Constants::DATE_FORMAT) : ' ' }}</td>
+                                <td class="pointer" title="{{ $asset->$field }}">{{ isset($asset->$field) ? $asset->$field->format(Constants::DATE_FORMAT) : ' ' }}</td>
                             @endif
                             @if(in_array($field, array_merge($fieldCategories['shipment']['exact'], $fieldCategories['shipment']['string_like'], $fieldCategories['shipment']['string_multi'], $fieldCategories['shipment']['custom'], $fieldCategories['shipment']['int_less_greater'], $fieldCategories['shipment']['float_less_greater']), true))
-                                <td class="pointer" title="{{ isset($asset->shipment->$field) ? $asset->shipment->$field : '' }}" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">
+                                <td class="pointer" title="{{ isset($asset->shipment->$field) ? $asset->shipment->$field : '' }}">
                                     @if(isset($asset->shipment))
                                         @if (in_array($field, ['freight_charge'], true))
                                             <span @if($asset->shipment->$field < 0)class="text-danger"@endif>{{ $asset->shipment->$field ? Constants::CURRENCY_SYMBOL . $asset->shipment->$field : ' ' }}</span>
@@ -215,7 +215,7 @@
                                     @endif
                                 </td>
                             @elseif(in_array($field, $fieldCategories['shipment']['date_from_to'], true))
-                                <td class="pointer" title="{{ isset($asset->shipment->$field) ? $asset->shipment->$field : '' }}" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">
+                                <td class="pointer" title="{{ isset($asset->shipment->$field) ? $asset->shipment->$field : '' }}" >
                                     @if(isset($asset->shipment))
                                         {{ isset($asset->shipment->$field) ? $asset->shipment->$field->format(Constants::DATE_FORMAT) : ' ' }}
                                     @else
@@ -224,7 +224,7 @@
                                 </td>
                             @endif
                             @if (starts_with($field, '!'))
-                                <td class="pointer" onclick="window.document.location='{{ route('asset.details', ['id' => $asset->id ]) }}';">
+                                <td class="pointer">
                                     {{ ' ' }}
                                 </td>
                             @endif
@@ -249,7 +249,7 @@
 @section('js')
     <script>
         $(document).ready(function() {
-            $('#assetSearchTable').stickyTableHeaders();
+            $('.js-search-results-table').stickyTableHeaders();
 
             var tableWidth = $('.tableScrollableContainer table').width();
             var bodyWidth = $('body').width();
@@ -280,6 +280,22 @@
                 $('.tableScrollableContainer').css('margin-left', containerLeft + containerPaddingLeft);
                 $('.tableScrollableContainer').css('margin-right', containerLeft + containerPaddingLeft);
             }
+
+            $('.js-load-details').on('click', function(e) {
+                var $loadDetailsCell = $(this);
+                var detailsURL = $loadDetailsCell.data('details-url');
+                window.document.location = detailsURL;
+            });
+
+            $('.js-load-details').on('keyup', function(e) {
+                if(e.which == 13) {
+                    $('.js-load-details').click();
+                }
+            });
+
+            $('.js-dont-load-details').on('click keyup', function(e) {
+                e.stopPropagation();
+            });
         });
     </script>
 @endsection

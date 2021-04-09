@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">
+                    <div class="panel-heading panel-heading-go-back row">
                         @lang('shipment.details.shipment_details') {{ isset($shipment->lotNumber) ? ' - ' . ($shipment->lotNumber) : '' }}
                         <div class="btn-group pull-right">
                             <button onclick="goBack()" class="btn btn-primary btn-xs"><i class="fa fa-btn fa-arrow-left"></i>@lang('common.back')</button>

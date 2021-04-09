@@ -5,8 +5,8 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">
-                        @lang('asset.details.asset_details') {{ isset($asset->barcodeNumber) ? ' - ' . $asset->barcodeNumber : '' }}
+                    <div class="panel-heading panel-heading-go-back row">
+                        <h1>@lang('asset.details.asset_details') {{ isset($asset->barcodeNumber) ? ' - ' . $asset->barcodeNumber : '' }}</h1>
                         <div class="btn-group pull-right">
                             <button onclick="goBack()" class="btn btn-primary btn-xs"><i class="fa fa-btn fa-arrow-left"></i>@lang('common.back')</button>
                         </div>

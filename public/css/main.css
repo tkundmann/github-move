@@ -95,3 +95,15 @@ button.single-click.disabled {
 .datepicker.datepicker-dropdown.dropdown-menu {
   z-index: 1000 !important;
 }
+/* Accessibility Support Classes */
+.panel .panel-heading {
+  margin: 0;
+}
+.panel .panel-heading h1 {
+  font-size: 14px;
+  margin: 0;
+  line-height: 1.4em;
+}
+.panel .panel-heading.panel-heading-go-back h1 {
+  float: left;
+}

@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">@lang('main.layout.menu.search_assets')</div>
+                    <div class="panel-heading"><h1>@lang('main.layout.menu.search_assets')</h1></div>
                     <div class="panel-body">
                         <p>
                             @lang('asset.search.use_1')
@@ -48,7 +48,7 @@
                                                 @if(in_array($field, array_merge($fieldCategories['exact'], $fieldCategories['shipment']['exact']), true))
                                                     <div class="form-group">
                                                         <label for="{{ $field }}" class="control-label colon-after">{{ Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label }}</label>
-                                                        {{ Form::select($field, array_combine(${$field . '_values'}, ${$field . '_values'}), old($field), ['class' => 'selectpicker form-control', 'title' => trans('common.select'), 'data-live-search' => 'true', 'data-actions-box' => 'true']) }}
+                                                        {{ Form::select($field, array_combine(${$field . '_values'}, ${$field . '_values'}), old($field), ['id' => $field, 'class' => 'selectpicker form-control', 'title' => trans('common.select'), 'data-live-search' => 'true', 'data-actions-box' => 'true']) }}
 
                                                     </div>
                                                 @endif
@@ -62,14 +62,14 @@
 
                                                 @if(in_array($field, array_merge($fieldCategories['string_multi'], $fieldCategories['shipment']['string_multi']), true))
                                                     <div class="form-group">
-                                                        <label class="control-label colon-after">{{ Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label }}</label>
+                                                        <label for="{{ $field }}" class="control-label colon-after">{{ Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label }}</label>
                                                         <div class="input-group">
                                                             {{ Form::select($field . '_select',
                                                             ['equals' => Lang::get('common.equals'),
                                                             'begins_with' => Lang::get('common.begins_with'),
                                                             'contains' => Lang::get('common.contains'),
                                                             'ends_in' => Lang::get('common.ends_in')],
-                                                            old($field . '_select'), ['class' => 'selectpicker form-control no-float', 'data-width' => 'auto']) }}
+                                                            old($field . '_select'), ['id' => $field, 'class' => 'selectpicker form-control no-float', 'data-width' => 'auto', 'aria-label' => (Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label)]) }}
                                                             <span class="input-group-addon">-</span>
                                                             <input id="{{ $field }}" name="{{ $field }}" type="text" size="19" class="form-control" value="{{ old($field) }}">
                                                         </div>
@@ -78,41 +78,41 @@
 
                                                 @if(in_array($field, array_merge($fieldCategories['date_from_to'], $fieldCategories['shipment']['date_from_to']), true))
                                                     <div class="form-group">
-                                                        <label class="control-label colon-after">{{ Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label }}
+                                                        <label for="{{ $field }}_from" class="control-label colon-after">{{ Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label }}
                                                             <small>({{ Constants::DATE_FORMAT_LABEL }})</small>
                                                         </label>
                                                         <div class="input-group">
                                                             <input id="{{ $field }}_from" name="{{ $field }}_from" data-provide="datepicker" data-date-clear-btn="true" data-date-today-btn="linked" data-date-autoclose="true" data-date-format="{{ Constants::DATE_FORMAT_JS }}"
-                                                                   type="text" class="form-control" placeholder="@lang('common.from')" value="{{ old($field . '_from') }}"/>
+                                                                   type="text" class="form-control" placeholder="@lang('common.from')" value="{{ old($field . '_from') }}" aria-label="{{ Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label }}" />
                                                             <span class="input-group-addon">-</span>
                                                             <input id="{{ $field }}_to" name="{{ $field }}_to" data-provide="datepicker" data-date-clear-btn="true" data-date-today-btn="linked" data-date-autoclose="true" data-date-format="{{ Constants::DATE_FORMAT_JS }}"
-                                                                   type="text" class="form-control" placeholder="@lang('common.to')" value="{{ old($field . '_to') }}"/>
+                                                                   type="text" class="form-control" placeholder="@lang('common.to')" value="{{ old($field . '_to') }}" aria-label="{{ Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label }}" />
                                                         </div>
                                                     </div>
                                                 @endif
 
                                                 @if(in_array($field, array_merge($fieldCategories['int_less_greater'], $fieldCategories['shipment']['int_less_greater']), true))
                                                     <div class="form-group">
-                                                        <label for="{{ $field }}" class="control-label colon-after">{{ Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label }}</label>
+                                                        <label for="{{ $field }}_greater_than" class="control-label colon-after">{{ Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label }}</label>
                                                         <div class="input-group">
                                                             <input id="{{ $field }}_greater_than" name="{{ $field }}_greater_than" type="number" class="form-control"
-                                                                   placeholder="@lang('asset.greater_than')" value="{{ old($field . '_greater_than') }}"/>
+                                                                   placeholder="@lang('asset.greater_than')" value="{{ old($field . '_greater_than') }}" aria-label="{{ Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label }}"/>
                                                             <span class="input-group-addon">-</span>
                                                             <input id="{{ $field }}_less_than" name="{{ $field }}_less_than" type="number" class="form-control"
-                                                                   placeholder="@lang('asset.less_than')" value="{{ old($field . '_less_than') }}"/>
+                                                                   placeholder="@lang('asset.less_than')" value="{{ old($field . '_less_than') }}" aria-label="{{ Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label }}"/>
                                                         </div>
                                                     </div>
                                                 @endif
 
                                                 @if(in_array($field, array_merge($fieldCategories['float_less_greater'], $fieldCategories['shipment']['float_less_greater']), true))
                                                     <div class="form-group">
-                                                        <label for="{{ $field }}" class="control-label colon-after">{{ Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label }}</label>
+                                                        <label for="{{ $field }}_greater_than" class="control-label colon-after">{{ Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label }}</label>
                                                         <div class="input-group">
                                                             <input id="{{ $field }}_greater_than" name="{{ $field }}_greater_than" type="number" class="form-control"
-                                                                   placeholder="@lang('asset.greater_than')" step="0.01" value="{{ old($field . '_greater_than') }}"/>
+                                                                   placeholder="@lang('asset.greater_than')" step="0.01" value="{{ old($field . '_greater_than') }}" aria-label="{{ Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label }}" />
                                                             <span class="input-group-addon">-</span>
                                                             <input id="{{ $field }}_less_than" name="{{ $field }}_less_than" type="number" class="form-control"
-                                                                   placeholder="@lang('asset.less_than')" step="0.01" value="{{ old($field . '_less_than') }}"/>
+                                                                   placeholder="@lang('asset.less_than')" step="0.01" value="{{ old($field . '_less_than') }}" aria-label="{{ Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label }}" />
                                                         </div>
                                                     </div>
                                                 @endif
@@ -121,7 +121,7 @@
                                                     @if($field === 'vendor_client')
                                                         <div class="form-group">
                                                             <label for="vendor_client" class="control-label colon-after">{{ Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label }}</label>
-                                                            {{ Form::select($field, ['all' => Lang::get('common.all')] + $vendorClients, old($field), ['class' => 'selectpicker form-control']) }}
+                                                            {{ Form::select($field, ['all' => Lang::get('common.all')] + $vendorClients, old($field), ['id' => $field, 'class' => 'selectpicker form-control']) }}
                                                         </div>
                                                     @endif
                                                 @endif
@@ -153,7 +153,7 @@
                                                 @if(in_array($field, array_merge($fieldCategories['exact'], $fieldCategories['shipment']['exact']), true))
                                                     <div class="form-group">
                                                         <label for="{{ $field }}" class="control-label colon-after">{{ Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label }}</label>
-                                                        {{ Form::select($field, array_combine(${$field . '_values'}, ${$field . '_values'}), old($field), ['class' => 'selectpicker form-control', 'title' => trans('common.select'), 'data-live-search' => 'true', 'data-actions-box' => 'true']) }}
+                                                        {{ Form::select($field, array_combine(${$field . '_values'}, ${$field . '_values'}), old($field), ['id' => $field, 'class' => 'selectpicker form-control', 'title' => trans('common.select'), 'data-live-search' => 'true', 'data-actions-box' => 'true']) }}
 
                                                     </div>
                                                 @endif
@@ -167,14 +167,14 @@
 
                                                 @if(in_array($field, array_merge($fieldCategories['string_multi'], $fieldCategories['shipment']['string_multi']), true))
                                                     <div class="form-group">
-                                                        <label class="control-label colon-after">{{ Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label }}</label>
+                                                        <label for="{{ $field }}" class="control-label colon-after">{{ Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label }}</label>
                                                         <div class="input-group">
                                                             {{ Form::select($field . '_select',
                                                             ['equals' => Lang::get('common.equals'),
                                                             'begins_with' => Lang::get('common.begins_with'),
                                                             'contains' => Lang::get('common.contains'),
                                                             'ends_in' => Lang::get('common.ends_in')],
-                                                            old($field . '_select'), ['class' => 'selectpicker form-control no-float', 'data-width' => 'auto']) }}
+                                                            old($field . '_select'), ['id' => $field, 'class' => 'selectpicker form-control no-float', 'data-width' => 'auto']) }}
                                                             <span class="input-group-addon">-</span>
                                                             <input id="{{ $field }}" name="{{ $field }}" type="text" size="19" class="form-control" value="{{ old($field) }}">
                                                         </div>
@@ -183,15 +183,15 @@
 
                                                 @if(in_array($field, array_merge($fieldCategories['date_from_to'], $fieldCategories['shipment']['date_from_to']), true))
                                                     <div class="form-group">
-                                                        <label class="control-label colon-after">{{ Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label }}
+                                                        <label for="{{ $field }}_from" class="control-label colon-after">{{ Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label }}
                                                             <small>({{ Constants::DATE_FORMAT_LABEL }})</small>
                                                         </label>
                                                         <div class="input-group">
                                                             <input id="{{ $field }}_from" name="{{ $field }}_from" data-provide="datepicker" data-date-clear-btn="true" data-date-today-btn="linked" data-date-autoclose="true" data-date-format="{{ Constants::DATE_FORMAT_JS }}"
-                                                                   type="text" class="form-control" placeholder="@lang('common.from')" value="{{ old($field . '_from') }}"/>
+                                                                   type="text" class="form-control" placeholder="@lang('common.from')" value="{{ old($field . '_from') }}" aria-label="{{ Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label }}"/>
                                                             <span class="input-group-addon">-</span>
                                                             <input id="{{ $field }}_to" name="{{ $field }}_to" data-provide="datepicker" data-date-clear-btn="true" data-date-today-btn="linked" data-date-autoclose="true" data-date-format="{{ Constants::DATE_FORMAT_JS }}"
-                                                                   type="text" class="form-control" placeholder="@lang('common.to')" value="{{ old($field . '_to') }}"/>
+                                                                   type="text" class="form-control" placeholder="@lang('common.to')" value="{{ old($field . '_to') }}" aria-label="{{ Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label }}"/>
                                                         </div>
                                                     </div>
                                                 @endif
@@ -226,7 +226,7 @@
                                                     @if($field === 'vendor_client')
                                                         <div class="form-group">
                                                             <label for="vendor_client" class="control-label colon-after">{{ Lang::has('asset.'. $label) ? Lang::trans('asset.' . $label) : $label }}</label>
-                                                            {{ Form::select($field, ['all' => Lang::get('common.all')] + $vendorClients, old($field), ['class' => 'selectpicker form-control']) }}
+                                                            {{ Form::select($field, ['all' => Lang::get('common.all')] + $vendorClients, old($field), ['id' => $field, 'class' => 'selectpicker form-control']) }}
                                                         </div>
                                                     @endif
                                                 @endif
@@ -310,13 +310,13 @@
                     $('#{{ $field . '_from' }}').datepicker('setEndDate', null);
                 }
             });
-        @endif
-        @endforeach
+            @endif
+            @endforeach
 
-         $('.resetButton').click(function (event) {
-            $('#form')[0].reset();
-            $('select.selectpicker').selectpicker('val', null);
-        });
+           $('.resetButton').click(function (event) {
+                $('#form')[0].reset();
+                $('select.selectpicker').selectpicker('val', null);
+            });
     });
 </script>
 @endsection

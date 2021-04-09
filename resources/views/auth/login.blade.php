@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">@lang('auth.login.login')</div>
+                <div class="panel-heading"><h1>@lang('auth.login.login')</h1></div>
                 <div class="panel-body">
                     @if ($site)
                         <p class="bold">{{ $site->title }} @lang('auth.login.shipments_assets_access_login')</p>
